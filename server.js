@@ -1,5 +1,8 @@
+"use strict";
+
+require("./models/con.js");
+
 const express   = require("express");
-const mongsoose = require("mongoose");
 const helmet    = require("helmet");
 const app       = express();
 
@@ -14,10 +17,13 @@ app.use(helmet());
 
 
 app.use("/login", routes.login );
-app.use("/register", routes.register);
+//app.use("/register", routes.register);
 
 
 
 app.listen(app.get("PORT"), () => {
     console.log(`listening on port ${app.get("PORT")}`);
 });
+
+
+module.exports = app;
