@@ -1,8 +1,8 @@
-"use strict";
+const Validator         = require("../middlewares/validator.js");
 const http              = require("http");
 const constants         = require("../constants/");
 const Utils             = require("../utils/");
-const { users , admin } = require("../models/con.js");
+const { users }         = require("../models/dbmodels/");
 
 module.exports.login = async ( req ,res , next ) => {
     
@@ -10,7 +10,7 @@ module.exports.login = async ( req ,res , next ) => {
     
     try {
 	
-	const { exists , error, data, ex } = await Utils.DbUtils.ResourceExists([ users , admin ], { username } );
+	const { exists , error, data, ex } = await Utils.DbUtils.ResourceExists([ users  ], { username } );
 
 	if ( ! exists && error )
 	    return next(ex);

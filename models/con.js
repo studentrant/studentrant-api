@@ -12,7 +12,6 @@ mongoose.connect(
 	bufferMaxEntries: 0,
 	bufferCommands: 0,
 	keepAlive: true,
-	keepAliveInitialDeplay: 450000,
 	poolSize: 350
 
     },

@@ -21,9 +21,12 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "connect-mongodb-session": "^2.2.0",
     "convict": "^5.2.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "express-validator": "^6.3.1",
     "helmet": "^3.21.2",
     "istanbul": "^0.4.5",
     "mongoose": "^5.8.3",

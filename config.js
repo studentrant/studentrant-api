@@ -4,7 +4,7 @@ const convict = require("convict");
 
 const config  = convict({
 
-    dbConnectionString: {
+    dbConnectionString: { 
 
         doc: "Connection string for database",
 
@@ -23,7 +23,7 @@ const config  = convict({
         },
 
         replicaSetName: {
-	    default: "studentrant_set"
+	    default: "studentrant_test"
         },
 
         replOne: {
@@ -62,6 +62,10 @@ const config  = convict({
         format: [ "dev" , "prod", "test" ],
         default: "dev",
         env: "NODE_ENV"
+    },
+    session_secret: {
+	format: String,
+	default: "this_is_my_secret"
     }
 });
 
