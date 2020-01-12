@@ -29,7 +29,7 @@ app.use(bodyPars.json());
 
 
 app.use("/login", routes.login );
-//app.use("/register", routes.register);
+app.use("/register", routes.register);
 
 
 

@@ -5,5 +5,6 @@ module.exports = {
     INVALID_LOGIN_PASSWORD_NO_CHARS: "The password field must contain characters",
     INVALID_LOGIN_PASSWORD_NO_DIGIT: "The password field must contain digits",
     INVALID_LOGIN_USERNAME_NO_FIELD: "The username field cannot be empty",
-    INVALID_LOGIN_USERNAME_LENGTH: "The username field must not be more than five characters"
+    INVALID_LOGIN_USERNAME_LENGTH: "The username field must not be more than five characters",
+    INVALID_EMAIL                : "The email address provided is not valid"
 };
