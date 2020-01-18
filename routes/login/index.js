@@ -7,7 +7,7 @@ const middleware = require("../../middlewares/validator.js");
 //const middleware = require("../../middlewares/auth.js");
 
 login.post("/", [
-    middleware.UserNameValidator,
+    middleware.UserNameAndEmailValidator,
     middleware.PasswordValidator
 ], controller.login);
 

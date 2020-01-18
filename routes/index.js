@@ -1,5 +1,6 @@
 "use strict";
 
 module.exports = {
-    login: require("./login/")
+    login: require("./login/"),
+    register: require("./register/")
 };

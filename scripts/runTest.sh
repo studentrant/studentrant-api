@@ -31,7 +31,7 @@ if [[ ! -e "${HOME}/studentrant_test_db1/" ]] || \
     sleep 5
 
     mongo <<EOF
-use studentranttest
+use studentrant
 if ( rs.status().codeName === "NotYetInitialized" ) {
 
    rs.initiate();
@@ -58,11 +58,9 @@ pidof mongod
     sleep 5
 
 }
-mongo <<EOF
-use studentranttest
+mongo --port 27018 <<EOF
+use studentrant
 db.dropDatabase()
-use studentranttest
-db.createCollection('notes')
 EOF
 
 export DEFAULT_TIMEOUT_INTERVAL=50000

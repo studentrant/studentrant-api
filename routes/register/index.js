@@ -9,6 +9,10 @@ const ValidatorMiddleware = require("../../middlewares/validator.js");
 
 register.post(
     "/reg-first-step",
+    (req,res,next) => {
+        console.log(req.body);
+        next();
+    },
     [
 	ValidatorMiddleware.UserNameValidator,
 	ValidatorMiddleware.PasswordValidator,
@@ -16,15 +20,15 @@ register.post(
     ],
     controller.firstRegStep
 );
-register.post(
-    "/reg-last-step",
-    [
-	AuthMiddleware.CheckFirstRegStep,
-	ValidatorMiddleware.CheckAvatar,
-	ValidatorMiddleware.CheckCountry,
-	ValidatorMiddleware.CheckInterests
-    ],
-    controller.lastRegStep
-);
+// register.post(
+//     "/reg-last-step",
+//     [
+// 	AuthMiddleware.CheckFirstRegStep,
+// 	ValidatorMiddleware.CheckAvatar,
+// 	ValidatorMiddleware.CheckCountry,
+// 	ValidatorMiddleware.CheckInterests
+//     ],
+//     controller.lastRegStep
+// );
 
 module.exports = register;

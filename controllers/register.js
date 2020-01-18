@@ -24,13 +24,12 @@ module.exports.firstRegStep = async ( req , res , next ) => {
 	    new users({
 		password: await Utils.PasswordUtils.HashPassword(password),
 		username,
-		email,
+		email
 	    })
 	).save();
 
-	delete result.password;
-	delete result._id;
-
+	result._doc.password = undefined;
+	result._doc._id      = undefined;
 
 	return res.status(201).json({ status: 201 , message: result });
 

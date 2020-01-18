@@ -6,11 +6,11 @@ const { users }         = require("../models/dbmodels/");
 
 module.exports.login = async ( req ,res , next ) => {
     
-    const { username , password } = req.body;
+    const { username , email, password } = req.body;
     
     try {
 	
-	const { exists , error, data, ex } = await Utils.DbUtils.ResourceExists([ users  ], { username } );
+	const { exists , error, data, ex } = await Utils.DbUtils.ResourceExists([ users  ], ( () => username ? { username } : { email } ) );
 
 	if ( ! exists && error )
 	    return next(ex);

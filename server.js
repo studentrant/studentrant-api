@@ -32,6 +32,10 @@ app.use("/login", routes.login );
 app.use("/register", routes.register);
 
 
+app.use("*", (req,res,next) => {
+    return next(`route ${req.path} does not exists`);
+});
+
 
 app.listen(app.get("PORT"), () => {
     console.log(`listening on port ${app.get("PORT")}`);
