@@ -58,7 +58,7 @@ pidof mongod
     sleep 5
 
 }
-mongo --port 27018 <<EOF
+mongo <<EOF
 use studentrant
 db.dropDatabase()
 EOF

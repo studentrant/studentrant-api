@@ -5,7 +5,7 @@ const app       = require("../server.js");
 const agent     = supertest(app);
 
 
-const { loginConstants } = require("../constants/");
+const { loginConstants, authConstants } = require("../constants/");
 
 
 describe("POST /login", () => {
@@ -15,7 +15,7 @@ describe("POST /login", () => {
 	    .send({ password: "fakepassword" })
 	    .expect(412).end((err,res) => {
 		expect(err).toBeNull();
-		expect(res.body.message).toEqual(loginConstants.INVALID_LOGIN_USERNAME_NO_FIELD);
+		expect(res.body.message).toEqual(loginConstants.INVALID_LOGIN_USERNAME_EMAIL_NO_FIELD);
 		done();
 	    });
     });
@@ -75,11 +75,34 @@ describe("POST /login", () => {
 	    });
     });
 
+    it("status code of 412, if username field is present but invalid", done => {
+	agent
+	    .post("/login")
+	    .send({ username: "vict", password: "password1234" })
+	    .expect(412).end((err,res) => {
+		expect(err).toBeNull();
+		expect(res.body.message).toEqual(loginConstants.INVALID_LOGIN_USERNAME_LENGTH);
+		done();
+	    });
+    });
+
+    it("status code of 412, if email field is present but invalid", done => {
+	agent
+	    .post("/login")
+	    .send({ email: "vosikwemhe@", password: "123456abcdefgh" })
+	    .expect(412).end((err,res) => {
+		expect(err).toBeNull();
+		expect(res.body.message).toEqual(authConstants.INVALID_EMAIL);
+		done();
+	    });
+    });
+
     it("status code of 404 if username and/or password does not match any data in the database", done => {
 	agent
 	    .post("/login")
 	    .send({ username: "victory", password: "password1234" })
 	    .expect(404).end((err,res) => {
+		console.log(err);
 		expect(err).toBeNull();
 		expect(res.body.message).toEqual(loginConstants.INVALID_LOGIN_CREDENTIALS);
 		done();

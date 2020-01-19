@@ -10,7 +10,9 @@ module.exports.login = async ( req ,res , next ) => {
     
     try {
 	
-	const { exists , error, data, ex } = await Utils.DbUtils.ResourceExists([ users  ], ( () => username ? { username } : { email } ) );
+	const { exists , error, data, ex } = await Utils.DbUtils.ResourceExists(
+	    [users], username ? { username } : { email }
+	);
 
 	if ( ! exists && error )
 	    return next(ex);
@@ -20,7 +22,7 @@ module.exports.login = async ( req ,res , next ) => {
 
 	if ( ! Utils.PasswordUtils.VerifyHashPassword(password, data.password) )
 	    return res.status(404).json({ status: 404 , message: constants.loginConstants.INVALID_LOGIN_CREDENTIALS});
-
+	
 	delete data.password;
 	delete data._id;
 	

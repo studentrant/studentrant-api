@@ -1,14 +1,14 @@
 "use strict";
 
 module.exports = class DbUtils {
-    
+
     static async ResourceExists(coll = [], resource ) {
-	
+
 	coll                      = Array.isArray(coll) ? coll : [ coll ];
 	const [ [ key , value ] ] = Object.entries(resource);
-	
+
 	try {
-	    
+
 	    for ( let col of coll ) {
 		const val = await col.findOne({ [key]: value });
 		if ( val ) return {
@@ -23,7 +23,7 @@ module.exports = class DbUtils {
 		error  : false,
 		exists : false
 	    };
-	    
+
 	} catch(ex) {
 	    return {
 		ex,

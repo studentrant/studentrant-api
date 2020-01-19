@@ -17,13 +17,15 @@ module.exports = class ValidatorMiddleware {
 
     static UserNameValidator(req,res,next) {
 	if ( ! req.body.username )
-	    return res.status(412).json({status: 412 , message: constants.loginConstants.INVALID_LOGIN_USERNAME_NO_FIELD});
+	    return res.status(412).json({status: 412 , message: constants.loginConstants.INVALID_LOGIN_USERNAME_EMAIL_NO_FIELD});
 	if ( req.body.username.length < 5 )
 	    return res.status(412).json({ status: 412 , message: constants.loginConstants.INVALID_LOGIN_USERNAME_LENGTH });
 	return next();
     }
 
     static UserNameAndEmailValidator(req,res,next) {
+	if ( ! req.body.username && ! req.body.email )
+	    return res.status(412).json({ status: 412, message: constants.loginConstants.INVALID_LOGIN_USERNAME_EMAIL_NO_FIELD});
         if ( req.body.username && req.body.username.length < 5 )
 	    return res.status(412).json({ status: 412 , message: constants.loginConstants.INVALID_LOGIN_USERNAME_LENGTH });
         if ( req.body.email    && ! constants.registerConstants.EMAIL_REGEXP.test(req.body.email) )

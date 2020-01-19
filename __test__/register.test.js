@@ -22,7 +22,7 @@ describe("USE /register", () => {
 	        .expect(412).end((err,res) => {
                     console.log(err);
 		    expect(err).toBeNull();
-		    expect(res.body.message).toEqual(loginConstants.INVALID_LOGIN_USERNAME_NO_FIELD);
+		    expect(res.body.message).toEqual(loginConstants.INVALID_LOGIN_USERNAME_EMAIL_NO_FIELD);
 		    done();
 	        });
         });
@@ -139,8 +139,33 @@ describe("USE /register", () => {
 	        });
         });
 
-        it("should successfully login user, after registration", done => {
+        it("should successfully login user with username, after registration", done => {
+	    agent
+		.post("/login")
+		.send({ username: "zombieleet", password: "12345689234abcd" })
+		.expect(200).end((err,res) => {
+		    expect(err).toBeNull();
+		    expect(res.body.message).toEqual(jasmine.any(Object));
+		    expect(res.body.message.verified).toEqual(false);
+		    expect(res.body.message.username).toEqual("zombieleet");
+		    expect(res.body.message.email).toEqual("victory@example.com");
+		    done();
+		});
             
         });
+	
+	it("should succefully login user with email, after registration", done => {
+	    agent
+		.post("/login")
+		.send({ email: "victory@example.com", password: "12345689234abcd" })
+		.expect(200).end((err,res) => {
+		    expect(err).toBeNull();
+		    expect(res.body.message).toEqual(jasmine.any(Object));
+		    expect(res.body.message.verified).toEqual(false);
+		    expect(res.body.message.username).toEqual("zombieleet");
+		    expect(res.body.message.email).toEqual("victory@example.com");
+		    done();
+		});
+	});
     });
 });
