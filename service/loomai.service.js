@@ -10,19 +10,19 @@ class LoomAi {
     static async HTTPRequest(url,options) {
 	return await (await fetch( url, options )).json();
     }
-    
-    async getAccessToken() {
-	return this.access_token =
 
-	(await (await fetch(
-		"https://auth.loomai.com/oauth/token",
-		{
-		    method: "POST",
-		    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-		    body: `audience=https://api.loomai.com/&grant_type=client_credentials&client_id=${this.client_id}&client_secret=${this.client_secret}`
-		}
-	)).json()).access_token;
+    async getAccessToken() {
+	return this.access_token = await LoomAi.HTTPRequest(
+	    "https://auth.loomai.com/oauth/token",
+	    {
+		method: "POST",
+		headers: { "Content-Type": "application/x-www-form-urlencoded" },
+		body: `audience=https://api.loomai.com/&grant_type=client_credentials&client_id=${this.client_id}&client_secret=${this.client_secret}`
+	    }
+	).access_token;
     }
 
     
+
+
 }
