@@ -4,7 +4,15 @@ const convict = require("convict");
 
 const config  = convict({
 
-    dbConnectionString: { 
+    externalApis: {
+	doc: "Credentials for external apis",
+	loomai: {
+	    client_id: "jow7m83kI03ipUDcCrvDZKVqhinFTZbf",
+	    client_secret: "vPnhDLp-IC0iagencnnxjLSikRdSOBI1652RjuHUJMeIMsHJ4f1gfxnJXm3k0ZFl"
+	}
+    },
+
+    dbConnectionString: {
 
         doc: "Connection string for database",
 
