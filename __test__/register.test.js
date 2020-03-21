@@ -1,5 +1,6 @@
 "use strict";
 
+const async     = require("async");
 const supertest = require("supertest");
 const app       = require("../server.js");
 const agent     = supertest(app);
@@ -11,6 +12,7 @@ const {
     authConstants
 } = require("../constants/");
 
+let cookie;
 
 describe("USE /register", () => {
 
@@ -20,7 +22,6 @@ describe("USE /register", () => {
 	        .post("/register/reg-first-step")
 	        .send({ })
 	        .expect(412).end((err,res) => {
-                    console.log(err);
 		    expect(err).toBeNull();
 		    expect(res.body.message).toEqual(loginConstants.INVALID_LOGIN_USERNAME_EMAIL_NO_FIELD);
 		    done();
@@ -31,7 +32,6 @@ describe("USE /register", () => {
 	        .post("/register/reg-first-step")
 	        .send({ username: "test" })
 	        .expect(412).end((err,res) => {
-                    console.log(err);
 		    expect(err).toBeNull();
 		    expect(res.body.message).toEqual(loginConstants.INVALID_LOGIN_USERNAME_LENGTH);
 		    done();
@@ -42,7 +42,6 @@ describe("USE /register", () => {
 	        .post("/register/reg-first-step")
 	        .send({ username: "zombieleet" })
 	        .expect(412).end((err,res) => {
-                    console.log(err);
 		    expect(err).toBeNull();
 		    expect(res.body.message).toEqual(loginConstants.INVALID_LOGIN_PASSWORD_NO_FIELD);
 		    done();
@@ -53,7 +52,6 @@ describe("USE /register", () => {
 	        .post("/register/reg-first-step")
 	        .send({ username: "zombieleet", password: "12345" })
 	        .expect(412).end((err,res) => {
-                    console.log(err);
 		    expect(err).toBeNull();
 		    expect(res.body.message).toEqual(loginConstants.INVALID_LOGIN_PASSWORD_LENGTH);
 		    done();
@@ -64,7 +62,6 @@ describe("USE /register", () => {
 	        .post("/register/reg-first-step")
 	        .send({ username: "zombieleet", password: "abcdefghijklmnoq" })
 	        .expect(412).end((err,res) => {
-                    console.log(err);
 		    expect(err).toBeNull();
 		    expect(res.body.message).toEqual(loginConstants.INVALID_LOGIN_PASSWORD_NO_DIGIT);
 		    done();
@@ -75,7 +72,6 @@ describe("USE /register", () => {
 	        .post("/register/reg-first-step")
 	        .send({ username: "zombieleet", password: "12345689234" })
 	        .expect(412).end((err,res) => {
-                    console.log(err);
 		    expect(err).toBeNull();
 		    expect(res.body.message).toEqual(loginConstants.INVALID_LOGIN_PASSWORD_NO_CHARS);
 		    done();
@@ -86,7 +82,6 @@ describe("USE /register", () => {
 	        .post("/register/reg-first-step")
 	        .send({ username: "zombieleet", password: "12345689234abcd" })
 	        .expect(412).end((err,res) => {
-                    console.log(err);
 		    expect(err).toBeNull();
 		    expect(res.body.message).toEqual(authConstants.NO_EMAIL_FIELD);
 		    done();
@@ -97,7 +92,6 @@ describe("USE /register", () => {
 	        .post("/register/reg-first-step")
 	        .send({ username: "zombieleet", password: "12345689234abcd", email: "victory@" })
 	        .expect(412).end((err,res) => {
-                    console.log(err);
 		    expect(err).toBeNull();
 		    expect(res.body.message).toEqual(authConstants.INVALID_EMAIL);
 		    done();
@@ -108,10 +102,9 @@ describe("USE /register", () => {
 	        .post("/register/reg-first-step")
 	        .send({ username: "zombieleet", password: "12345689234abcd", email: "victory@example.com" })
 	        .expect(201).end((err,res) => {
-                    console.log(err);
+		    cookie = res.headers["set-cookie"];
 		    expect(err).toBeNull();
 		    expect(res.body.message).toEqual(jasmine.any(Object));
-                    console.log(res.body.message);
 		    done();
 	        });
         });
@@ -120,7 +113,6 @@ describe("USE /register", () => {
 	        .post("/register/reg-first-step")
 	        .send({ username: "zombieleet", password: "12345689234abcd", email: "victory@example.com" })
 	        .expect(409).end((err,res) => {
-                    console.log(err);
 		    expect(err).toBeNull();
 		    expect(res.body.message).toEqual(registerConstants.EMAIL_ALREADY_EXISTS);
 		    done();
@@ -132,40 +124,74 @@ describe("USE /register", () => {
 	        .post("/register/reg-first-step")
 	        .send({ username: "zombieleet", password: "12345689234abcd", email: "victory-developer@example.com" })
 	        .expect(409).end((err,res) => {
-                    console.log(err);
 		    expect(err).toBeNull();
 		    expect(res.body.message).toEqual(registerConstants.USERNAME_ALREADY_EXISTS);
 		    done();
 	        });
         });
 
-        it("should successfully login user with username, after registration", done => {
+        it("should return status of 200 and set completeReg to false for incomplete registration", done => {
 	    agent
 		.post("/login")
 		.send({ username: "zombieleet", password: "12345689234abcd" })
 		.expect(200).end((err,res) => {
 		    expect(err).toBeNull();
-		    expect(res.body.message).toEqual(jasmine.any(Object));
-		    expect(res.body.message.verified).toEqual(false);
-		    expect(res.body.message.username).toEqual("zombieleet");
-		    expect(res.body.message.email).toEqual("victory@example.com");
+		    expect(res.body.status).toEqual(200);
+		    expect(res.body.message.completeReg).toEqual(false);
 		    done();
 		});
-            
+
         });
-	
-	it("should succefully login user with email, after registration", done => {
+    });
+
+    describe("POST /reg-last-step", () => {
+    	it("should return status code of 412 if country is undefined", done => {
 	    agent
-		.post("/login")
-		.send({ email: "victory@example.com", password: "12345689234abcd" })
-		.expect(200).end((err,res) => {
+		.put("/register/reg-last-step")
+		.set("cookie", cookie)
+		.send({ country: undefined })
+		.expect(412).end((err,res) => {
 		    expect(err).toBeNull();
-		    expect(res.body.message).toEqual(jasmine.any(Object));
-		    expect(res.body.message.verified).toEqual(false);
-		    expect(res.body.message.username).toEqual("zombieleet");
-		    expect(res.body.message.email).toEqual("victory@example.com");
+		    expect(res.body.message).toEqual(authConstants.COUNTRY_PROPERTY_UNDEFINED);
+		    expect(res.body.status).toEqual(412);
 		    done();
 		});
-	});
+    	});
+    	it("should return status code of 412 if interests is undefined", done => {
+	    agent
+		.put("/register/reg-last-step")
+		.set("cookie", cookie)
+		.send({ country: "Nigeria", interests: undefined })
+		.expect(412).end((err,res) => {
+		    expect(err).toBeNull();
+		    expect(res.body.message).toEqual(authConstants.NO_INTEREST_FIELD);
+		    expect(res.body.status).toEqual(412);
+		    done();
+		});
+    	});
+    	it("should return status code of 412 if interests is not an array", done => {
+	    agent
+		.put("/register/reg-last-step")
+		.set("cookie", cookie)
+		.send({ country: "Nigeria", interests: "reading" })
+		.expect(412).end((err,res) => {
+		    expect(err).toBeNull();
+		    expect(res.body.message).toEqual(authConstants.NO_INTEREST_FIELD);
+		    expect(res.body.status).toEqual(412);
+		    done();
+		});
+    	});
+	it("should return status code of 412 if interests is an empty array", done => {
+	    agent
+		.put("/register/reg-last-step")
+		.set("cookie", cookie)
+		.send({ country: "Nigeria", interests: [] })
+		.expect(412).end((err,res) => {
+		    expect(err).toBeNull();
+		    expect(res.body.message).toEqual(authConstants.NO_INTEREST_FIELD);
+		    expect(res.body.status).toEqual(412);
+		    done();
+		});
+    	});
     });
 });

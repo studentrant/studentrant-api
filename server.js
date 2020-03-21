@@ -23,7 +23,7 @@ const sessionStore = session({
 
 app.set("PORT", process.env.PORT || 3000);
 
-
+app.use(sessionStore);
 app.use(helmet());
 app.use(bodyPars.json());
 
@@ -34,6 +34,10 @@ app.use("/register", routes.register);
 
 app.use("*", (req,res,next) => {
     return next(`route ${req.path} does not exists`);
+});
+
+app.use((err,req,res,next) => {
+    return res.status(500).json({ status: 500, message: err.message});
 });
 
 

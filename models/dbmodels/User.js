@@ -34,7 +34,11 @@ const UserSchema = new mongoose.Schema({
     verified: {
 	default  : false,
 	type     : Boolean
-    }
+    },
+    completeReg: {
+	default  : false,
+	type     : Boolean
+    },
 });
 
 module.exports = mongoose.model("Users", UserSchema);

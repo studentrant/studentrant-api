@@ -3,6 +3,9 @@
   "spec_files": [
     "__test__/*.js"
   ],
+  "helpers": [
+    "./loader.js"
+  ],
   "stopSpecOnExpectationFailure": false,
   "random": false
 }

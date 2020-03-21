@@ -22,7 +22,9 @@ class LoomAi {
 	).access_token;
     }
 
-    
+    async createAvatar() {
+	
+    }
 
 
 }

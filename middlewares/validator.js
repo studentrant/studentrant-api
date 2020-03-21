@@ -67,7 +67,7 @@ module.exports = class ValidatorMiddleware {
 	return next();
     }
 
-    static CheckInterest(req,res,next) {
+    static CheckInterests(req,res,next) {
 	if ( ! req.body.interests )
 	    return res.status(412).json({
 		status  : 412,
@@ -86,6 +86,12 @@ module.exports = class ValidatorMiddleware {
 		message : constants.authConstants.NO_INTEREST_LENGTH
 	    });
 
+	return next();
+    }
+    
+    static CheckCountry(req,res,next) {
+	if ( ! req.body.country )
+	    return res.status(412).json({ message: constants.authConstants.COUNTRY_PROPERTY_UNDEFINED, status: 412 });
 	return next();
     }
 
