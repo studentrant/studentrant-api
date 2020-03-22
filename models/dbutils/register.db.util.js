@@ -11,7 +11,7 @@ class RegisterDbUtils {
 	}).lean();
     }
     static async UpdateNewUserDetails({ criteria , data, options}) {
-	return await users.findOneAndUpdate(...criteria, ...data, ...options);
+	return await users.findOneAndUpdate(criteria, data, options);
     }
 }
 

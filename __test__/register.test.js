@@ -193,5 +193,18 @@ describe("USE /register", () => {
 		    done();
 		});
     	});
+	it("should return status code of 204 if all information in registration last step is valid", done => {
+	    agent
+		.put("/register/reg-last-step")
+		.set("cookie", cookie)
+		.send({ country: "Nigeria", interests: [ "scandal", "bribe" ] })
+		.expect(201).end((err,res) => {
+		    expect(err).toBeNull();
+		    expect(res.body.status).toEqual(201);
+		    console.log(res.body.message);
+		    //expect(res.body.message).toEqual(authConstants.NO_INTEREST_FIELD);
+		    done();
+		});
+    	});
     });
 });

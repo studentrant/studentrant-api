@@ -46,9 +46,9 @@ module.exports.lastRegStep = async ( req , res , next ) => {
 	const result = await RegisterDbUtils.UpdateNewUserDetails({
 	    criteria: { email },
 	    data    : { country, interests },
-	    options : { new: true, fields: { password: false } }
+	    options : { new: true, fields: { password: false, _id: false, __v: false, dateOfReg: false } }
 	});
-	return res.status(204).json({ status: 204  , message: result });
+	return res.status(201).json({ status: 201  , message: result });
     } catch(ex) {
 	return next(ex);
     }
