@@ -1,3 +1,4 @@
+const path    = require("path");
 const convict = require("convict");
 
 //${db_name}?replicaSet=${replica_set_name}&readPreference=primary&retryWrites=true&maxIdleTimeMS=10000&compressors=zlib`
@@ -74,27 +75,21 @@ const config  = convict({
     session_secret: {
 	format: String,
 	default: "this_is_my_secret"
-    }
+    },
+    sendGrid: {
+	api_key: {
+	    formt  : String
+	},
+	templateIds: {
+	    email_verification: {
+		type: String
+	    }
+	}
+    },
 });
 
 
-if ( config.get("env") === "prod" ) {
-    config.set("dbConnectionString.replOne.host", "");
-    config.set("dbConnectionString.replTwo.host", "");
-    config.set("dbConnectionString.replThree.host", "");
-
-    config.set("dbConnectionString.replOne.port", "");
-    config.set("dbConnectionString.replTwo.port", "");
-    config.set("dbConnectionString.replThree.port", "");
-    config.set("dbConnectionString.replicaSetName", "");
-    config.set("dbConnectionString.extraArgument", "ssl=true&authSource=admin");
-}
-
-if ( config.get("env") === "test" ) {
-    config.set("dbConnectionString.replOne.port", 27017);
-    config.set("dbConnectionString.replTwo.port", 27018);
-    config.set("dbConnectionString.replThree.port", 27019);
-}
+config.loadFile(".", path.join(config.get("env"), ".json"));
 
 
 

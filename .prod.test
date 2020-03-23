@@ -1,0 +1,7 @@
+{
+	"dbConnectionString.replOne.port"   : 27017,
+	"dbConnectionString.replTwo.port"   : 27018,
+	"dbConnectionString.replThree.port" : 27019,
+	"sendGrid.api_key"                  : "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",
+	"sendGrid.templateIds.email_verification" : ""
+}

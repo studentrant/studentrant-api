@@ -1,0 +1,12 @@
+{
+    "dbConnectionString.replOne.host"   : "",
+    "dbConnectionString.replTwo.host"   : "",
+    "dbConnectionString.replThree.host" : "",
+    "dbConnectionString.replOne.port"   : "",
+    "dbConnectionString.replTwo.port"   : "",
+    "dbConnectionString.replThree.port" : "",
+    "dbConnectionString.replicaSetName" : "",
+    "dbConnectionString.extraArgument"  : "ssl=true&authSource=admin",
+    "sendGrid.api_key": "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",
+    "sendGrid.templateIds.email_verification": "d-fe3609a65b7645fbade633294231b55f"
+}
