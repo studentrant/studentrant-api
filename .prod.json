@@ -1,12 +1,31 @@
 {
-    "dbConnectionString.replOne.host"   : "",
-    "dbConnectionString.replTwo.host"   : "",
-    "dbConnectionString.replThree.host" : "",
-    "dbConnectionString.replOne.port"   : "",
-    "dbConnectionString.replTwo.port"   : "",
-    "dbConnectionString.replThree.port" : "",
-    "dbConnectionString.replicaSetName" : "",
-    "dbConnectionString.extraArgument"  : "ssl=true&authSource=admin",
-    "sendGrid.api_key": "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",
-    "sendGrid.templateIds.email_verification": "d-fe3609a65b7645fbade633294231b55f"
+    "dbConnectionString": {
+	"replOne" : {
+	    "port" : 27017
+	}
+    },
+
+    "dbConnectionString" : {
+	"replTwo": {
+	    "port"   : 27018
+	}
+    },
+
+    "dbConnectionString" : {
+	"replThree" : {
+	    "port" : 27019
+	}
+    },
+
+    "SERVER" : {
+	"HOST" : "http://localhost",
+	"PORT" : 3000
+    },
+
+    "sendGrid" : {
+	"api_key": "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",
+	"templateIds" : {
+	    "email_verification": "d-f1cc6e6d0a254e3fa0eb020bcc4c2db1"
+	}
+    }
 }

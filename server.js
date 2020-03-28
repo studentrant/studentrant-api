@@ -21,7 +21,7 @@ const sessionStore = session({
 });
 
 
-app.set("PORT", process.env.PORT || 3000);
+app.set("PORT", config.get("SERVER.PORT"));
 
 app.use(sessionStore);
 app.use(helmet());

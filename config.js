@@ -1,4 +1,3 @@
-const path    = require("path");
 const convict = require("convict");
 
 //${db_name}?replicaSet=${replica_set_name}&readPreference=primary&retryWrites=true&maxIdleTimeMS=10000&compressors=zlib`
@@ -78,19 +77,31 @@ const config  = convict({
     },
     sendGrid: {
 	api_key: {
-	    formt  : String
+	    format  : String,
+	    default : ""
 	},
 	templateIds: {
 	    email_verification: {
-		type: String
+		format  : String,
+		default : ""
 	    }
 	}
     },
+    SERVER: {
+	HOST: {
+	    format  : String,
+	    default : "localhost"
+	},
+	PORT: {
+	    format  : Number,
+	    default : 3000
+	}
+    }
 });
 
 
-config.loadFile(".", path.join(config.get("env"), ".json"));
-
+config.loadFile(`./.${config.get("env")}.json`);
+config.validate( { allowed: "strict" } );
 
 
 const [
