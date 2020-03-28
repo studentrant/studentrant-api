@@ -13,6 +13,13 @@ class RegisterDbUtils {
     static async UpdateNewUserDetails({ criteria , data, options}) {
 	return await users.findOneAndUpdate(criteria, data, options);
     }
+    static async VerifyUserRegTokenAndGetData(token) {
+	return await users.findOneAndUpdate(
+	    { verificationLink: token },
+	    { $unset: { verificationLink: 1 } },
+	    { new: false, fields: { password: false, _id: false, __v: false , dateOfReg: false} }
+	).lean();
+    }
 }
 
 module.exports = RegisterDbUtils;
