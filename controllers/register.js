@@ -1,7 +1,9 @@
 const crypto    = require("crypto");
 const constants = require("../constants/");
+const config    = require("../config.js");
 const Utils     = require("../utils/");
 const RegisterDbUtils = require("../models/dbutils/register.db.util.js");
+const Email     = require("../service/email.service.js");
 const { users } = require("../models/dbmodels/");
 
 module.exports.firstRegStep = async ( req , res , next ) => {

@@ -1,6 +1,5 @@
 const http      = require("http");
 const constants = require("../constants/");
-const { check } = require("express-validator");
 
 module.exports = class ValidatorMiddleware {
     static PasswordValidator(req,res,next) {

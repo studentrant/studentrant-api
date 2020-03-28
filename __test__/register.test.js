@@ -5,6 +5,8 @@ const supertest = require("supertest");
 const app       = require("../server.js");
 const agent     = supertest(app);
 
+const { users } = require("../models/dbmodels/");
+
 
 const {
     registerConstants,
@@ -12,7 +14,7 @@ const {
     authConstants
 } = require("../constants/");
 
-let cookie;
+let cookie, verificationLink;
 
 describe("USE /register", () => {
 
@@ -100,7 +102,7 @@ describe("USE /register", () => {
         it("status code of 201 if user account is created", done => {
             agent
 	        .post("/register/reg-first-step")
-	        .send({ username: "zombieleet", password: "12345689234abcd", email: "victory@example.com" })
+	        .send({ username: "zombieleet", password: "12345689234abcd", email: "zombieleetnca@gmail.com" })
 	        .expect(201).end((err,res) => {
 		    cookie = res.headers["set-cookie"];
 		    expect(err).toBeNull();
@@ -111,7 +113,7 @@ describe("USE /register", () => {
         it("should return provided email address is not available", done => {
             agent
 	        .post("/register/reg-first-step")
-	        .send({ username: "zombieleet", password: "12345689234abcd", email: "victory@example.com" })
+	        .send({ username: "zombieleet", password: "12345689234abcd", email: "zombieleetnca@gmail.com" })
 	        .expect(409).end((err,res) => {
 		    expect(err).toBeNull();
 		    expect(res.body.message).toEqual(registerConstants.EMAIL_ALREADY_EXISTS);
