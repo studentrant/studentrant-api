@@ -94,4 +94,12 @@ module.exports = class ValidatorMiddleware {
 	return next();
     }
 
+    static CheckVerificationToken(req,res,next) {
+	const { token } = req.params;
+	if ( ! token ) {
+	    return res.status(412).json( { message: constants.registerConstants.INVALID_VERIFICATION_TOKEN, status: 412 });
+	}
+	return next();
+    }
+
 };

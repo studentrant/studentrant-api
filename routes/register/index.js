@@ -25,5 +25,12 @@ register.put(
     ],
     controller.lastRegStep
 );
+register.get(
+    "/verification/:token",
+    [
+	ValidatorMiddleware.CheckVerificationToken
+    ],
+    controller.verifcationToken
+);
 
 module.exports = register;
