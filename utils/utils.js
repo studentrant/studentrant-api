@@ -1,3 +1,6 @@
+const UIDGenerator = require("uid-generator");
+const uuid         = new UIDGenerator(512, UIDGenerator.BASE62);
+
 class Utils {
     static ExtractSessionObjectData(req,type) {
 	if ( ! (type in req.session.user) )
@@ -9,6 +12,9 @@ class Utils {
     }
     static UpdateSessionObject(req,data) {
 	Object.assign(req.session.user, ...data);
+    }
+    static async UniqueCodeGenerator(req,email) {
+	return await uuid.generate();
     }
 }
 
