@@ -203,10 +203,28 @@ describe("USE /register", () => {
 		.expect(201).end((err,res) => {
 		    expect(err).toBeNull();
 		    expect(res.body.status).toEqual(201);
-		    console.log(res.body.message);
-		    //expect(res.body.message).toEqual(authConstants.NO_INTEREST_FIELD);
+		    expect(res.body.message.verified).toEqual(false);
+		    expect(res.body.message.completeReg).toEqual(true);
+		    expect(res.body.message.email).toEqual("zombieleetnca@gmail.com");
+		    expect(res.body.message.username).toEqual("zombieleet");
+		    verificationLink = res.body.message.verificationLink;
 		    done();
 		});
     	});
+	it("should return status code of 200 after verifing users email address", done => {
+	    agent
+		.get(`/register/verification/${verificationLink}`)
+		.expect(200).end( async (err,res) => {
+		    expect(err).toBeNull();
+		    expect(res.body.status).toEqual(200);
+		    expect(res.body.message.verified).toEqual(true);
+		    expect(res.body.message.completeReg).toEqual(true);
+		    expect(res.body.message.email).toEqual("zombieleetnca@gmail.com");
+		    expect(res.body.message.username).toEqual("zombieleet");
+		    const result = await users.findOne({ email: "zombieleetnca@gmail.com" }, { verificationLink: true }).lean();
+		    expect(result.verificationLink).toBeUndefined();
+		    done();
+		});
+	});
     });
 });
