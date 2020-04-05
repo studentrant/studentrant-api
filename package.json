@@ -6,7 +6,7 @@
   "scripts": {
     "test": "./scripts/runTest.sh",
     "server": "nodemon server.js --env dev",
-    "lint"  : "npx eslint controllers/ middlewares/ routes/ models/ service/ utils/",
+    "lint": "npx eslint controllers/ middlewares/ routes/ models/ service/ utils/",
     "lint:fix": "npx eslint --fix controllers/ middlewares/ routes/ models/ service/ utils/"
   },
   "repository": {
@@ -39,6 +39,7 @@
     "uid-generator": "^2.0.0"
   },
   "devDependencies": {
+    "apidoc": "^0.20.1",
     "async": "^3.2.0",
     "eslint": "^6.8.0",
     "jasmine": "^3.5.0",
