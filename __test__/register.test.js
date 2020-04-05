@@ -159,6 +159,18 @@ describe("USE /register", () => {
 		    done();
 		});
     	});
+	it("should return status code of 412 if country does not exists", done => {
+	    agent
+		.put("/register/reg-last-step")
+		.set("cookie", cookie)
+		.send( { country: "a" } )
+		.expect(412).end((err,res) => {
+		    expect(err).toBeNull();
+		    expect(res.body.message).toEqual(authConstants.INVALID_COUNTRY_LENGTH);
+		    expect(res.body.status).toEqual(412);
+		    done();
+		});
+	});
     	it("should return status code of 412 if interests is undefined", done => {
 	    agent
 		.put("/register/reg-last-step")

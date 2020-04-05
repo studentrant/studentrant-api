@@ -53,7 +53,7 @@ module.exports = class ValidatorMiddleware {
         if ( ! req.body.country )
 	    return res.status(412).json({
                 status : 412,
-                message : constants.authConstants.NO_COUNTRY_FIELD
+                message : constants.authConstants.COUNTRY_PROPERTY_UNDEFINED
 	    });
 
         if ( req.body.country.length < 2 )
@@ -94,4 +94,5 @@ module.exports = class ValidatorMiddleware {
         }
         return next();
     }
+
 };
