@@ -6,8 +6,10 @@
   "scripts": {
     "test": "./scripts/runTest.sh",
     "server": "nodemon server.js --env dev",
-    "lint": "npx eslint controllers/ middlewares/ routes/ models/ service/ utils/",
-    "lint:fix": "npx eslint --fix controllers/ middlewares/ routes/ models/ service/ utils/"
+    "lint": "eslint controllers/ middlewares/ routes/ models/ service/ utils/",
+    "lint:fix": "eslint --fix controllers/ middlewares/ routes/ models/ service/ utils/",
+    "doc":  "apidoc -i controllers/ -o doc/html-page",
+    "doc:watch": "nodemon  --watch controllers/ --exec npm run doc"  
   },
   "repository": {
     "type": "git",

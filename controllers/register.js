@@ -6,6 +6,33 @@ const RegisterDbUtils = require("../models/dbutils/register.db.util.js");
 const Email     = require("../service/email.service.js");
 const { users } = require("../models/dbmodels/");
 
+/**
+ * @api { post } /register/reg-first-step First registration step of user
+ * @apiName firstRegStep
+ * @apiGroup Register
+ *
+ *
+ * @apiParam {object} req.body body data
+ * @apiParam {string} req.body[email] email address of user
+ * @apiParam {string{5..}} req.body[username] username of user
+ * @apiParam {password{8..}} req.body[password] password of user
+ * @apiSuccess {Object} res.body response body
+ * @apiSuccess {Number} res.body[status] http status code response
+ * @apiSuccess {Object} res.body[message] response message to be consumed by the client
+ * @apiSuccess {String} res.body.message[email] email address of the user
+ * @apiSuccess {String} res.body.message[username] username of the suer
+ * @apiSuccess {Boolean=false} res.body.message[completeReg] This value is set to false because the user has not completed the second registration step, if user decides to logout and login back, this property should be check first to know if the user should be taken to the dashboard or the second registration step
+ * @apiSuccess {Boolean=false} res.body.message[verified] This value is set to false until the user has verified their email address, if the user has not verified the email address, they should always see a message on their dashboard telling them to verify their email address
+ *
+ *
+ * @apiError INVALID_LOGIN_USERNAME_EMAIL_NO_FIELD username/email field is undefined
+ * @apiError INVALID_LOGIN_USERNAME_LENGTH         username length is less than 5
+ * @apiError INVALID_LOGIN_PASSWORD_NO_FIELD       password field is undefined
+ * @apiError INVALID_LOGIN_PASSWORD_LENGTH         password field is less than 8
+ * @apiError INVALID_LOGIN_PASSWORD_NO_DIGIT       password does not contain any number
+ * @apiError INVALID_LOGIN_PASSWORD_NO_CHARS       password does not contain any characters
+ **/
+
 module.exports.firstRegStep = async ( req , res , next ) => {
 
     const { email , username, password } = req.body;
