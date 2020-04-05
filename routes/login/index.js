@@ -4,7 +4,6 @@ const login      = express.Router();
 
 const controller = require("../../controllers/login.js");
 const middleware = require("../../middlewares/validator.js");
-const authMiddleware = require("../../middlewares/auth.js");
 
 login.post("/", [
     middleware.UserNameAndEmailValidator,

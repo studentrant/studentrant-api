@@ -4,15 +4,15 @@ const config   = require("../config.js");
 mongoose.connect(
     config.get("dbConnectionString.connString"),
     {
-	useFindAndModify: false,
-	useNewUrlParser: true,
-	useCreateIndex: true,
+        useFindAndModify: false,
+        useNewUrlParser: true,
+        useCreateIndex: true,
 
-	autoReconnect: true,
-	bufferMaxEntries: 0,
-	bufferCommands: 0,
-	keepAlive: true,
-	poolSize: 350
+        autoReconnect: true,
+        bufferMaxEntries: 0,
+        bufferCommands: 0,
+        keepAlive: true,
+        poolSize: 350
 
     },
     error => error && console.log(error)

@@ -13,35 +13,35 @@ const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
     username: {
-	required : true,
-	unique   : true,
-	type     : String
+        required : true,
+        unique   : true,
+        type     : String
     },
     email: {
-	required : true,
-	unique   : true,
-	type     : String
+        required : true,
+        unique   : true,
+        type     : String
     },
     password: {
-	required : true,
-	type     : String
+        required : true,
+        type     : String
     },
     avatar: String,
     dateOfReg: {
-	default: Date.now(),
-	type   : Number
+        default: Date.now(),
+        type   : Number
     },
     verified: {
-	default  : false,
-	type     : Boolean
+        default  : false,
+        type     : Boolean
     },
     completeReg: {
-	default  : false,
-	type     : Boolean
+        default  : false,
+        type     : Boolean
     },
     verificationLink: {
-	type     : String,
-	index    : true
+        type     : String,
+        index    : true
     }
 });
 
