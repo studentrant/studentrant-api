@@ -68,6 +68,34 @@ module.exports.firstRegStep = async ( req , res , next ) => {
 };
 
 
+
+/**
+ * @api { post } /register/reg-last-step Last registration step of user
+ * @apiName lastRegStep
+ * @apiGroup Register
+ *
+ *
+ * @apiParam {object} req.body body data
+ * @apiParam {string} req.body[country] country of the user
+ * @apiParam {array}  req.body[interests] what the user is interested in (we would use their interest to show them rants)
+ * @apiSuccess {Object} res.body response body
+ * @apiSuccess {Number} res.body[status] http status code response
+ * @apiSuccess {Object} res.body[message] response message to be consumed by the client
+ * @apiSuccess {String} res.body.message[email] email address of the user
+ * @apiSuccess {String} res.body.message[username] username of the suer
+ * @apiSuccess {Boolean=true} res.body.message[completeReg] This value is set to true because the user has completed the registration step
+ * @apiSuccess {Boolean=false} res.body.message[verified] This value is set to false until the user has verified their email address, if the user has not verified the email address, they should always see a message on their dashboard telling them to verify their email address
+ *
+ *
+ * @apiError COUNTRY_PROPERTY_UNDEFINED      country is undefined
+ * @apiError INVALID_COUNTRY_LENGTH          country length is less than 1
+ * @apiError NO_INTEREST_FIELD               interests is undefined
+ * @apiError NO_ARRAY_INTEREST               interests is not an array field
+ * @apiError NO_INTEREST_LENGTH              interest array length is 0
+ **/
+
+
+
 module.exports.lastRegStep = async ( req , res , next ) => {
 
     const { country, interests } = req.body;
