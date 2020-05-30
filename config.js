@@ -1,4 +1,4 @@
-const convict = require("convict");
+import convict from "convict";
 
 //${db_name}?replicaSet=${replica_set_name}&readPreference=primary&retryWrites=true&maxIdleTimeMS=10000&compressors=zlib`
 

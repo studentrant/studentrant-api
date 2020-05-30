@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const config   = require("../config.js");
+import * as mongoose from "mongoose";
+import * as config from "../config.js";
 
 mongoose.connect(
     config.get("dbConnectionString.connString"),

@@ -1,3 +1,1 @@
-module.exports = {
-    users : require("../dbmodels/User.js")
-};
+export default "../dbmodels/User.js";

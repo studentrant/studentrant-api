@@ -1,8 +1,5 @@
-/* eslint-disable */
-const http      = require("http");
-const constants = require("../constants/");
-const Utils     = require("../utils/");
-class Auth {}
+import * as http from "http";
+import * as constants from "../constants/index.js";
+import * as Utils from "../utils/index.js";
 
-
-module.exports = Auth;
+export class Auth {}

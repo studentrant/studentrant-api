@@ -1,5 +1,3 @@
-module.exports = {
-    DbUtils : require("./dbUtils.js"),
-    PasswordUtils : require("./passwordUtils.js"),
-    Utils         : require("./utils.js")
-};
+export * from "./dbUtils.js";
+export * from  "./passwordUtils.js";
+export * from "./utils.js";

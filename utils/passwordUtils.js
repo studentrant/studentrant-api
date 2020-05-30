@@ -1,9 +1,7 @@
-"use strict";
+import * as bcrypt from "bcryptjs";
+import * as constants from "../constants/index.js";
 
-const bcrypt = require("bcryptjs");
-const constants = require("../constants/");
-
-module.exports = class PasswordUtils {
+export class PasswordUtils {
     static HashPassword(password) {
         try {
 	    return bcrypt.hashSync(password,constants.registerConstants.BCRYPT_SALT);

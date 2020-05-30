@@ -1,13 +1,11 @@
-"use strict";
-const express    = require("express");
-const login      = express.Router();
 
-const controller = require("../../controllers/login.js");
-const middleware = require("../../middlewares/validator.js");
+import * as express from "express";
+import * as controller from "../../controllers/login.js";
+import * as middleware from "../../middlewares/validator.js";
+
+export const login = express.Router();
 
 login.post("/", [
     middleware.UserNameAndEmailValidator,
     middleware.PasswordValidator,
-],controller.login);
-
-module.exports = login;
+], controller.login);

@@ -1,6 +1,7 @@
-const constants = require("../constants/");
 
-module.exports = class ValidatorMiddleware {
+import * as constants from "../constants/index.js";
+
+export class ValidatorMiddleware {
     static PasswordValidator(req,res,next) {
         if ( ! req.body.password )
 	    return res.status(412).json({ status: 412 , message: constants.loginConstants.INVALID_LOGIN_PASSWORD_NO_FIELD});

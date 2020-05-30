@@ -66,4 +66,4 @@ EOF
 export DEFAULT_TIMEOUT_INTERVAL=50000
 export JASMINE_CONFIG_PATH="jasmine.json"
 
-istanbul --config=.istanbul.yml cover jasmine --color
+node --experimental-modules ./node_modules/.bin/istanbul --config=.istanbul.yml cover ./jasmine-run-test.js 

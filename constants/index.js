@@ -1,7 +1,3 @@
-"use strict";
-
-module.exports = {
-    loginConstants    : require("./login.constants.js"),
-    registerConstants : require("./register.constants.js"),
-    authConstants     : require("./auth.constants.js")
-};
+export * from "./login.constants.js";
+export * from "./register.constants.js";
+export * from "./auth.constants.js";

@@ -1,14 +1,12 @@
 "use strict";
 
-const supertest = require("supertest");
-const app       = require("../server.js");
-const agent     = supertest(app);
+import * as supertest                    from "supertest";
+import app                               from "../server.js";
+import { loginConstants, authConstants } from "../constants/index.js";
 
+const agent = supertest(app);
 
-const { loginConstants, authConstants } = require("../constants/");
-
-
-describe("POST /login", () => {
+describe("[Login]", () => {
     it("status code of 412 if username field is not present", done => {
 	agent
 	    .post("/login")

@@ -1,22 +1,19 @@
 "use strict";
 
-const async     = require("async");
-const supertest = require("supertest");
-const app       = require("../server.js");
-const agent     = supertest(app);
-
-const { users } = require("../models/dbmodels/");
-
-
-const {
+import * as async from "async";
+import * as supertest from "supertest";
+import app from "../server.js";
+import { users } from "../models/dbmodels/index.js";
+import {
     registerConstants,
     loginConstants,
     authConstants
-} = require("../constants/");
+} from "../constants/index.js";
 
+const agent     = supertest(app);
 let cookie, verificationLink;
 
-describe("USE /register", () => {
+describe("[Register]", () => {
 
     describe("POST /reg-first-step", () => {
         it("status code of 412 if username field is not present", done => {

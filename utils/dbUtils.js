@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = class DbUtils {
+export class DbUtils {
 
     static async ResourceExists(coll = [], resource ) {
 

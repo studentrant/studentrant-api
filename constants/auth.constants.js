@@ -1,4 +1,4 @@
-module.exports = {
+ export const authConstants = {
     INCOMPLETE_REGISTRATION  : "Registration is not complete yet",
     UNVERIFIED_EMAIL         : "Email address is not verified yet, check your mail box for a verification link, or click the below button to get a verification link",
     INVALID_EMAIL            : "Format of email address is not supported",

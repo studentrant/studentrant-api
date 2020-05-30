@@ -1,9 +1,8 @@
-const express  = require("express");
-const register = express.Router();
+import * as express from "express";
+import * as controller from "../../controllers/login.js";
+import * as ValidatorMiddleware from "../../middlewares/validator.js";
 
-const controller          = require("../../controllers/register.js");
-const ValidatorMiddleware = require("../../middlewares/validator.js");
-
+export const register = express.Router();
 
 register.post(
     "/reg-first-step",
@@ -14,7 +13,7 @@ register.post(
     ],
     controller.firstRegStep
 );
-register.put(
+register.patch(
     "/reg-last-step",
     [
         ValidatorMiddleware.CheckCountry,
@@ -22,12 +21,10 @@ register.put(
     ],
     controller.lastRegStep
 );
-register.get(
+register.patch(
     "/verification/:token",
     [
         ValidatorMiddleware.CheckVerificationToken
     ],
     controller.verifcationToken
 );
-
-module.exports = register;

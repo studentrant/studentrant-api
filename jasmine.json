@@ -1,10 +1,10 @@
 {
   "spec_dir": "/",
   "spec_files": [
-    "__test__/*.js"
+    "__test__/*.mjs"
   ],
   "helpers": [
-    "./loader.js"
+    "./__test__/loader.js"
   ],
   "stopSpecOnExpectationFailure": false,
   "random": false

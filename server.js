@@ -1,15 +1,15 @@
-"use strict";
 
-require("./models/con.js");
-const config       = require("./config.js");
-const express      = require("express");
-const bodyPars     = require("body-parser");
-const helmet       = require("helmet");
-const session      = require("express-session");
-const MongoStore   = require("connect-mongodb-session")(session);
-const app          = express();
+import * as express    from "express";
+import * as bodyParser from "body-parser";
+import * as helmet     from "helmet";
+import * as session    from "express-session";
+import * as MongoStore from "connect-mongodb-session";
+import * as con        from "./models/con.js";
+import * as routes     from "./routes/index.js";
+import * as config     from "./config.js";
 
-const routes       = require("./routes/");
+const app = express();
+
 const sessionStore = session({
     secret: config.get("session_secret"),
     resave: true,
@@ -25,19 +25,18 @@ app.set("PORT", config.get("SERVER.PORT"));
 
 app.use(sessionStore);
 app.use(helmet());
-app.use(bodyPars.json());
+app.use(bodyParser.json());
 
-
-app.use("/login", routes.login );
+app.use("/login", routes.login);
 app.use("/register", routes.register);
 
 
-app.use("*", (req,res,next) => {
+app.use("*", (req, res, next) => {
     return next(`route ${req.path} does not exists`);
 });
 
-app.use((err,req,res,next) => {
-    return res.status(500).json({ status: 500, message: err.message});
+app.use((err, req, res, next) => {
+    return res.status(500).json({ status: 500, message: err.message });
 });
 
 
@@ -46,4 +45,4 @@ app.listen(app.get("PORT"), () => {
 });
 
 
-module.exports = app;
+export default app;

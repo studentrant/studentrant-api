@@ -1,6 +1,2 @@
-"use strict";
-
-module.exports = {
-    login: require("./login/"),
-    register: require("./register/")
-};
+export * from "./login/index.js";
+export * from "./register/index.js";

@@ -1,4 +1,4 @@
-module.exports = {
+export const loginConstants = {
     INVALID_LOGIN_CREDENTIALS: "The provided username/email and/or password is incorrect",
     INVALID_LOGIN_PASSWORD_NO_FIELD: "The password field cannot be emtpy",
     INVALID_LOGIN_PASSWORD_LENGTH: "The password field must not be less than 8",

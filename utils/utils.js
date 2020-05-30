@@ -1,5 +1,7 @@
-const UIDGenerator = require("uid-generator");
-const uuid         = new UIDGenerator(512, UIDGenerator.BASE62);
+
+import * as UIDGenerator from "uid-generator";
+
+const uuid = new UIDGenerator(512, UIDGenerator.BASE62);
 
 class Utils {
     static ExtractSessionObjectData(req,type) {

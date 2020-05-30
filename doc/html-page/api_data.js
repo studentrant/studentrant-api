@@ -1,5 +1,132 @@
 define({ "api": [
   {
+    "type": " patch ",
+    "url": "/register/reg-last-step",
+    "title": "Last validate verification token",
+    "name": "verificationToken",
+    "group": "EmailVerification",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "object",
+            "optional": false,
+            "field": "req.params",
+            "description": "<p>param data</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "req.params[token]",
+            "description": "<p>verification token</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "res.body",
+            "description": "<p>response body</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "res.body[status]",
+            "description": "<p>http status code response</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "res.body[message]",
+            "description": "<p>response message to be consumed by the client</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "res.body.message[email]",
+            "description": "<p>email address of the user</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "res.body.message[username]",
+            "description": "<p>username of the suer</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "allowedValues": [
+              "true"
+            ],
+            "optional": false,
+            "field": "res.body.message[completeReg]",
+            "description": "<p>This value is set to true because the user has completed the registration step</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "allowedValues": [
+              "true"
+            ],
+            "optional": false,
+            "field": "res.body.message[verified]",
+            "description": "<p>This value is set to true because user has verified their email address</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "COUNTRY_PROPERTY_UNDEFINED",
+            "description": "<p>country is undefined</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "INVALID_COUNTRY_LENGTH",
+            "description": "<p>country length is less than 1</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "NO_INTEREST_FIELD",
+            "description": "<p>interests is undefined</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "NO_ARRAY_INTEREST",
+            "description": "<p>interests is not an array field</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "NO_INTEREST_LENGTH",
+            "description": "<p>interest array length is 0</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "controllers/register.js",
+    "groupTitle": "EmailVerification"
+  },
+  {
     "type": " post ",
     "url": "/register/reg-first-step",
     "title": "First registration step of user",
@@ -149,7 +276,7 @@ define({ "api": [
     "groupTitle": "Register"
   },
   {
-    "type": " post ",
+    "type": " patch ",
     "url": "/register/reg-last-step",
     "title": "Last registration step of user",
     "name": "lastRegStep",

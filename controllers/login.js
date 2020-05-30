@@ -1,41 +1,41 @@
-const constants         = require("../constants/");
-const Utils             = require("../utils/");
-const { users }         = require("../models/dbmodels/");
+import * as constants from "../constants/index.js";
+import * as Utils from "../utils/index.js";
+import users from "../models/dbmodels/index.js";
 
-module.exports.login = async ( req ,res , next ) => {
+export const login = async (req, res, next) => {
 
-    const { username , email, password } = req.body;
+    const { username, email, password } = req.body;
 
     try {
 
-        const { exists , error, data, ex } = await Utils.DbUtils.ResourceExists(
-	    [users], username ? { username } : { email }
+        const { exists, error, data, ex } = await Utils.DbUtils.ResourceExists(
+            [users], username ? { username } : { email }
         );
 
-        if ( ! exists && error )
-	    return next(ex);
+        if (!exists && error)
+            return next(ex);
 
-        if ( ! exists && ! error )
-	    return res.status(404).json({ status: 404 , message: constants.loginConstants.INVALID_LOGIN_CREDENTIALS});
+        if (!exists && !error)
+            return res.status(404).json({ status: 404, message: constants.loginConstants.INVALID_LOGIN_CREDENTIALS });
 
-        if ( ! Utils.PasswordUtils.VerifyHashPassword(password, data.password) )
-	    return res.status(404).json({ status: 404 , message: constants.loginConstants.INVALID_LOGIN_CREDENTIALS});
+        if (!Utils.PasswordUtils.VerifyHashPassword(password, data.password))
+            return res.status(404).json({ status: 404, message: constants.loginConstants.INVALID_LOGIN_CREDENTIALS });
 
 
-        Utils.Utils.SetSessionObject(req,{
-	    email       : data.email,
-	    username    : data.username,
-	    userId      : data.userId,
-	    verified    : data.verified,
-	    completeReg : data.completeReg
+        Utils.Utils.SetSessionObject(req, {
+            email: data.email,
+            username: data.username,
+            userId: data.userId,
+            verified: data.verified,
+            completeReg: data.completeReg
         });
 
         delete data.password;
         delete data._id;
 
-        return res.status(200).json({ status: 200 , message: data });
+        return res.status(200).json({ status: 200, message: data });
 
-    } catch(ex) {
+    } catch (ex) {
         return next(ex);
     }
 };
