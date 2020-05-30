@@ -1,0 +1,31 @@
+{
+    "dbConnectionString": {
+	"replOne" : {
+	    "port" : 27017
+	}
+    },
+
+    "dbConnectionString" : {
+	"replTwo": {
+	    "port"   : 27018
+	}
+    },
+
+    "dbConnectionString" : {
+	"replThree" : {
+	    "port" : 27019
+	}
+    },
+
+    "SERVER" : {
+	"HOST" : "http://localhost",
+	"PORT" : 3000
+    },
+
+    "sendGrid" : {
+	"api_key": "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",
+	"templateIds" : {
+	    "email_verification": "d-f1cc6e6d0a254e3fa0eb020bcc4c2db1"
+	}
+    }
+}
