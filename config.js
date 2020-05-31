@@ -121,4 +121,4 @@ config.set(
     `mongodb://${hostp1},${hostp2},${hostp3}/${config.get("dbConnectionString.dbName")}?${config.get("dbConnectionString.extraArgument")}&replicaSet=${config.get("dbConnectionString.replicaSetName")}`
 );
 
-module.exports = config;
+export default config;

@@ -1,1 +1,1 @@
-export default "../dbmodels/User.js";
+export * from "../dbmodels/User.js";

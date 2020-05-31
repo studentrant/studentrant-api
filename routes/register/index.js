@@ -1,30 +1,30 @@
-import * as express from "express";
-import * as controller from "../../controllers/login.js";
-import * as ValidatorMiddleware from "../../middlewares/validator.js";
+import express          from "express";
+import * as controller  from "../../controllers/register.js";
+import middleware       from "../../middlewares/validator.js";
 
 export const register = express.Router();
 
 register.post(
     "/reg-first-step",
     [
-        ValidatorMiddleware.UserNameValidator,
-        ValidatorMiddleware.PasswordValidator,
-        ValidatorMiddleware.EmailValidator,
+        middleware.UserNameValidator,
+        middleware.PasswordValidator,
+        middleware.EmailValidator,
     ],
     controller.firstRegStep
 );
 register.patch(
     "/reg-last-step",
     [
-        ValidatorMiddleware.CheckCountry,
-        ValidatorMiddleware.CheckInterests
+        middleware.CheckCountry,
+        middleware.CheckInterests
     ],
     controller.lastRegStep
 );
 register.patch(
     "/verification/:token",
     [
-        ValidatorMiddleware.CheckVerificationToken
+        middleware.CheckVerificationToken
     ],
     controller.verifcationToken
 );

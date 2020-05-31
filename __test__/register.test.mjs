@@ -1,9 +1,10 @@
 "use strict";
 
-import * as async from "async";
-import * as supertest from "supertest";
-import app from "../server.js";
+import * as async     from "async";
+import supertest from "supertest";
+import app       from "../server.js";
 import { users } from "../models/dbmodels/index.js";
+
 import {
     registerConstants,
     loginConstants,
@@ -146,7 +147,7 @@ describe("[Register]", () => {
     describe("POST /reg-last-step", () => {
     	it("should return status code of 412 if country is undefined", done => {
 	    agent
-		.put("/register/reg-last-step")
+		.patch("/register/reg-last-step")
 		.set("cookie", cookie)
 		.send({ country: undefined })
 		.expect(412).end((err,res) => {
@@ -158,7 +159,7 @@ describe("[Register]", () => {
     	});
 	it("should return status code of 412 if country does not exists", done => {
 	    agent
-		.put("/register/reg-last-step")
+		.patch("/register/reg-last-step")
 		.set("cookie", cookie)
 		.send( { country: "a" } )
 		.expect(412).end((err,res) => {
@@ -170,7 +171,7 @@ describe("[Register]", () => {
 	});
     	it("should return status code of 412 if interests is undefined", done => {
 	    agent
-		.put("/register/reg-last-step")
+		.patch("/register/reg-last-step")
 		.set("cookie", cookie)
 		.send({ country: "Nigeria", interests: undefined })
 		.expect(412).end((err,res) => {
@@ -182,7 +183,7 @@ describe("[Register]", () => {
     	});
     	it("should return status code of 412 if interests is not an array", done => {
 	    agent
-		.put("/register/reg-last-step")
+		.patch("/register/reg-last-step")
 		.set("cookie", cookie)
 		.send({ country: "Nigeria", interests: "reading" })
 		.expect(412).end((err,res) => {
@@ -194,7 +195,7 @@ describe("[Register]", () => {
     	});
 	it("should return status code of 412 if interests is an empty array", done => {
 	    agent
-		.put("/register/reg-last-step")
+		.patch("/register/reg-last-step")
 		.set("cookie", cookie)
 		.send({ country: "Nigeria", interests: [] })
 		.expect(412).end((err,res) => {
@@ -206,7 +207,7 @@ describe("[Register]", () => {
     	});
 	it("should return status code of 204 if all information in registration last step is valid", done => {
 	    agent
-		.put("/register/reg-last-step")
+		.patch("/register/reg-last-step")
 		.set("cookie", cookie)
 		.send({ country: "Nigeria", interests: [ "scandal", "bribe" ] })
 		.expect(201).end((err,res) => {
@@ -222,7 +223,7 @@ describe("[Register]", () => {
     	});
 	it("should return status code of 200 after verifing users email address", done => {
 	    agent
-		.get(`/register/verification/${verificationLink}`)
+		.patch(`/register/verification/${verificationLink}`)
 		.expect(200).end( async (err,res) => {
 		    expect(err).toBeNull();
 		    expect(res.body.status).toEqual(200);

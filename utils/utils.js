@@ -1,9 +1,9 @@
 
-import * as UIDGenerator from "uid-generator";
+import UIDGenerator from "uid-generator";
 
 const uuid = new UIDGenerator(512, UIDGenerator.BASE62);
 
-class Utils {
+export class Utils {
     static ExtractSessionObjectData(req,type) {
         if ( ! (type in req.session.user) )
 	    throw new Error(`${type} does not exists on session object`);
@@ -19,5 +19,3 @@ class Utils {
         return await uuid.generate();
     }
 }
-
-module.exports = Utils;

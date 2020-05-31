@@ -1,13 +1,14 @@
-const sendgrid     = require("@sendgrid/mail");
-const config       = require("../config.js");
-const { users }    = require("../models/dbmodels/");
+import sendgrid  from "@sendgrid/mail";
+import config    from "../config.js";
+import { users } from "../models/dbmodels/index.js";
 
-sendgrid.setApiKey(config.get("sendGrid.api_key"));
 
-class Email {
+export default class Email {
 
     constructor(req) {
-        console.log(config.get("sendGrid.api_key"), "hello world");
+	
+        sendgrid.setApiKey(config.get("sendGrid.api_key"));
+	
         this.req       = req;
         this.sendEmail = sendgrid;
         this.fromEmail = "studentranters@studentrant.com";
@@ -42,5 +43,3 @@ class Email {
         }
     }
 }
-
-module.exports = Email;

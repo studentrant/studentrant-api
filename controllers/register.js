@@ -1,10 +1,13 @@
-import * as crypto          from "crypto";
-import * as constants       from "../constants/index.js";
-import * as config          from "../config.js";
-import * as Utils           from "../utils/index.js";
-import * as RegisterDbUtils from "../models/dbutils/register.db.util.js";
-import * as Email           from "./service/email.service.js";
-import { users }            from "../models/dbmodels/";
+import * as crypto     from "crypto";
+import * as Utils      from "../utils/index.js";
+import * as constants  from "../constants/index.js";
+
+import  config from "../config.js";
+import  Email  from "../service/email.service.js";
+
+import RegisterDbUtils from "../models/dbutils/register.db.util.js";
+import { users }       from "../models/dbmodels/index.js";
+
 
 /**
  * @api { post } /register/reg-first-step First registration step of user
@@ -105,14 +108,29 @@ export const lastRegStep = async (req, res, next) => {
         const email = await Utils.Utils.ExtractSessionObjectData(req, "email");
         const result = await RegisterDbUtils.UpdateNewUserDetails({
             criteria: { email },
-            data: { $set: { country, interests, completeReg: true, verificationLink: await Utils.Utils.UniqueCodeGenerator(req, email) } },
-            options: { new: true, fields: { password: false, _id: false, __v: false, dateOfReg: false } }
+            data: {
+                $set: {
+		    country,
+		    interests,
+		    completeReg: true,
+		    verificationLink: await Utils.Utils.UniqueCodeGenerator(req, email)
+                }
+	    },
+            options: {
+                new: true,
+                fields: {
+		    password: false,
+		    dateOfReg: false,
+		    _id: false,
+		    __v: false,
+                }
+	    }
         });
 
         if (config.get("env") !== "test")
             delete result.verificationLink;
 
-        await (new Email(req)).sendEmailVerification(email);
+        Promise.resolve((new Email(req)).sendEmailVerification(email));
         return res.status(201).json({ status: 201, message: result });
 
     } catch (ex) {

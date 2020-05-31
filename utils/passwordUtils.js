@@ -1,4 +1,4 @@
-import * as bcrypt from "bcryptjs";
+import      bcrypt from "bcryptjs";
 import * as constants from "../constants/index.js";
 
 export class PasswordUtils {
@@ -19,4 +19,4 @@ export class PasswordUtils {
 	    throw ex;
         }
     }
-};
+}

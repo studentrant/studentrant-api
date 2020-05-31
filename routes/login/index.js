@@ -1,7 +1,6 @@
-
-import * as express from "express";
+import express         from "express";
+import middleware      from "../../middlewares/validator.js";
 import * as controller from "../../controllers/login.js";
-import * as middleware from "../../middlewares/validator.js";
 
 export const login = express.Router();
 

@@ -1,6 +1,6 @@
 import * as constants from "../constants/index.js";
 import * as Utils from "../utils/index.js";
-import users from "../models/dbmodels/index.js";
+import { users } from "../models/dbmodels/index.js";
 
 export const login = async (req, res, next) => {
 

@@ -1,7 +1,19 @@
 import glob from "glob";
 import Jasmine from "jasmine";
+import jSpecReporter from "jasmine-spec-reporter";
 
 const jasmine = new Jasmine();
+
+function specReport() {
+    jasmine.jasmine.getEnv().clearReporters();
+    jasmine.jasmine.getEnv().addReporter(new jSpecReporter.SpecReporter());
+    jasmine.jasmine.getEnv().DEFAULT_TIMEOUT_INTERVAL = 50000;
+    jasmine.jasmine.DEFAULT_TIMEOUT_INTERVAL = 50000;
+}
+
+specReport();
+
+jasmine.requires.push("esm");
 jasmine.loadConfigFile("./jasmine.json");
 
 glob("./__test__/*.mjs", async (err,files)=> {
@@ -14,5 +26,5 @@ glob("./__test__/*.mjs", async (err,files)=> {
 		    process.exit(1);
 		});
 	})
-    ).then(() => jasmine.execute());
+    ).then(() => jasmine.execute()).catch(ex => console.log(ex));
 });

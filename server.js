@@ -1,12 +1,11 @@
-
-import * as express    from "express";
-import * as bodyParser from "body-parser";
-import * as helmet     from "helmet";
-import * as session    from "express-session";
-import * as MongoStore from "connect-mongodb-session";
-import * as con        from "./models/con.js";
-import * as routes     from "./routes/index.js";
-import * as config     from "./config.js";
+import con         from "./models/con.js";
+import express     from "express";
+import bodyParser  from "body-parser";
+import helmet      from "helmet";
+import session     from "express-session";
+import mongoStore  from "connect-mongodb-session";
+import config      from "./config.js";
+import * as routes from "./routes/index.js";
 
 const app = express();
 
@@ -14,7 +13,7 @@ const sessionStore = session({
     secret: config.get("session_secret"),
     resave: true,
     saveUninitialized: true,
-    store: new MongoStore({
+    store: new (mongoStore(session))({
         uri: config.get("dbConnectionString.connString"),
         collection: "session"
     })

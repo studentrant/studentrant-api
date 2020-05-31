@@ -1,6 +1,6 @@
-const { users } = require("../../models/dbmodels/");
+import { users } from "../../models/dbmodels/index.js";
 
-class RegisterDbUtils {
+export default class RegisterDbUtils {
     static async SaveNewUser(data) {
         await (new users(data).save());
         return await users.findOne( { email: data.email } , {
@@ -21,5 +21,3 @@ class RegisterDbUtils {
         ).lean();
     }
 }
-
-module.exports = RegisterDbUtils;

@@ -1,7 +1,7 @@
 "use strict";
 
-import * as supertest                    from "supertest";
-import app                               from "../server.js";
+import supertest from "supertest";
+import app       from "../server.js";
 import { loginConstants, authConstants } from "../constants/index.js";
 
 const agent = supertest(app);
