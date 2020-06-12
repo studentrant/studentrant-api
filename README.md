@@ -21,10 +21,20 @@
 ### start up mongodb database
 
 ```bash
-$ chmod +x ./script/replicaSet.sh
-$ ./script/replicaSet.sh
+$ npm run mongodb:start
 ```
 
+### stop mongodb database
+
+```bash
+$ npm run mongodb:stop
+```
+
+### purge mongodb database (deletes the entire database)
+
+```bash
+$ npm run mongodb:purge:force
+```
 ### start local server
 
 `npm run server`

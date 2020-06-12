@@ -6,6 +6,9 @@
     "type": "module",
     "scripts": {
 	"test": "./scripts/runTest.sh",
+	"mongodb:purge:force": "./scripts/replicaSet.sh purge --force",
+	"mongodb:start": "./scripts/replicaSet.sh",
+	"mongodb:stop": "./scripts/replicaSet.sh killProc",
 	"server": "nodemon server.js --env dev",
 	"lint": "eslint controllers/ middlewares/ routes/ models/ service/ utils/",
 	"lint:fix": "eslint --fix controllers/ middlewares/ routes/ models/ service/ utils/",

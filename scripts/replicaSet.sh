@@ -23,12 +23,12 @@ createProcess() {
             for port in "${PORTS[@]}";do
                 dbPath="${HOME}/studentrant_db_${port}"
                 if [[ -e "${dbPath}" ]];then
-                    mongod --dbpath "${dbPath}" --fork --syslog --port $port --replSet studentrant_set
+                    mongod --dbpath "${dbPath}" --fork --syslog --port $port --replSet studentrant_dev
                     sleep 5
                     continue;
                 fi
                 mkdir "${dbPath}"
-                mongod --dbpath "${dbPath}"  --fork --syslog --port $port --replSet studentrant_set
+                mongod --dbpath "${dbPath}"  --fork --syslog --port $port --replSet studentrant_dev
                 sleep 5
             done
         }
@@ -39,7 +39,7 @@ createProcess() {
 
             mongo  <<EOF
 
-load("./util.js")
+load("./scripts/util.js")
 
 const admin = db.getSiblingDB("admin");
 
@@ -102,7 +102,7 @@ killAndRun() {
         kill ${__proc[*]} 2>/dev/null
         sleep 5;
         printf "restarting mongodb process on %d\n" "$port"
-        mongod --dbpath "${dbPath}" --auth --fork --syslog --port $port --keyFile keyfile --replSet studentrant_set
+        mongod --dbpath "${dbPath}" --auth --fork --syslog --port $port --keyFile keyfile --replSet studentrant_dev
     done
 }
 

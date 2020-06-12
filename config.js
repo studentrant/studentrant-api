@@ -34,6 +34,15 @@ const config  = convict({
 	    default: "studentrant_test"
         },
 
+	db_user: {
+	    format: String,
+	    default: "nil"
+	},
+	
+	db_pass: {
+	    format: String,
+	    default: "nil"
+	},
         replOne: {
 	    host: {
                 format: String,
@@ -110,15 +119,13 @@ const [
     hostp3
 ] = [
     `${config.get("dbConnectionString.replOne.host")}:${config.get("dbConnectionString.replOne.port")}`,
-
     `${config.get("dbConnectionString.replTwo.host")}:${config.get("dbConnectionString.replTwo.port")}`,
-
     `${config.get("dbConnectionString.replThree.host")}:${config.get("dbConnectionString.replThree.port")}`,
 ];
 
 config.set(
     "dbConnectionString.connString",
-    `mongodb://${hostp1},${hostp2},${hostp3}/${config.get("dbConnectionString.dbName")}?${config.get("dbConnectionString.extraArgument")}&replicaSet=${config.get("dbConnectionString.replicaSetName")}`
+    `mongodb://${config.get("dbConnectionString.db_user")}:${config.get("dbConnectionString.db_pass")}@${hostp1},${hostp2},${hostp3}/${config.get("dbConnectionString.dbName")}?${config.get("dbConnectionString.extraArgument")}&replicaSet=${config.get("dbConnectionString.replicaSetName")}`
 );
 
 export default config;
