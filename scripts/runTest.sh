@@ -50,11 +50,11 @@ fi
 pidof mongod
 
 [[ $? == 1 ]] && {
-    mongod --dbpath "${HOME}/studentrant_test_db1/" --port 27017  --replSet studentrant_test --fork --syslog
+    mongod --dbpath "${HOME}/studentrant_test_db1/" --port 1037  --replSet studentrant_test --fork --syslog
     sleep 5
-    mongod --dbpath "${HOME}/studentrant_test_db2/" --port 27018 --replSet studentrant_test --fork --syslog
+    mongod --dbpath "${HOME}/studentrant_test_db2/" --port 1038 --replSet studentrant_test --fork --syslog
     sleep 5
-    mongod --dbpath "${HOME}/studentrant_test_db3/" --port 27019 --replSet studentrant_test --fork --syslog
+    mongod --dbpath "${HOME}/studentrant_test_db3/" --port 1039 --replSet studentrant_test --fork --syslog
     sleep 5
 
 }

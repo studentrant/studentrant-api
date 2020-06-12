@@ -123,9 +123,15 @@ const [
     `${config.get("dbConnectionString.replThree.host")}:${config.get("dbConnectionString.replThree.port")}`,
 ];
 
-config.set(
-    "dbConnectionString.connString",
-    `mongodb://${config.get("dbConnectionString.db_user")}:${config.get("dbConnectionString.db_pass")}@${hostp1},${hostp2},${hostp3}/${config.get("dbConnectionString.dbName")}?${config.get("dbConnectionString.extraArgument")}&replicaSet=${config.get("dbConnectionString.replicaSetName")}`
-);
+if ( config.get("env") === "test" )
+    config.set(
+	"dbConnectionString.connString",
+	`mongodb://${hostp1},${hostp2},${hostp3}/${config.get("dbConnectionString.dbName")}?${config.get("dbConnectionString.extraArgument")}&replicaSet=${config.get("dbConnectionString.replicaSetName")}`
+    );
+else
+    config.set(
+	"dbConnectionString.connString",
+	`mongodb://${config.get("dbConnectionString.db_user")}:${config.get("dbConnectionString.db_pass")}@${hostp1},${hostp2},${hostp3}/${config.get("dbConnectionString.dbName")}?${config.get("dbConnectionString.extraArgument")}&replicaSet=${config.get("dbConnectionString.replicaSetName")}`
+    );
 
 export default config;
