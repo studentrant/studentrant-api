@@ -1,19 +1,19 @@
 {
     "dbConnectionString": {
 	"replOne" : {
-	    "port" : 27017
+	    "port" : 27071
 	}
     },
 
     "dbConnectionString" : {
 	"replTwo": {
-	    "port"   : 27018
+	    "port"   : 27081
 	}
     },
 
     "dbConnectionString" : {
 	"replThree" : {
-	    "port" : 27019
+	    "port" : 27091
 	}
     },
 

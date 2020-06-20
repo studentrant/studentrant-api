@@ -1,10 +1,24 @@
 import express         from "express";
 import middleware      from "../../middlewares/validator.js";
-import * as controller from "../../controllers/login.js";
+import * as Utils      from "../../utils/index.js";
+import Login           from "../../controllers/login.js";
 
-export const login = express.Router();
+export class LoginRoute {
+    constructor(routeHandler) {
+	this.controller = new Login(
+	    Utils
+	);
+	routeHandler.post("/", this.loginUser());
+	return routeHandler;
+    }
 
-login.post("/", [
-    middleware.UserNameAndEmailValidator,
-    middleware.PasswordValidator,
-], controller.login);
+    static API_PATH = "/login";
+    
+    loginUser() {
+	return [
+	    middleware.UserNameAndEmailValidator,
+	    middleware.PasswordValidator,
+	    this.controller.login.bind(this.controller)
+	];
+    }
+}

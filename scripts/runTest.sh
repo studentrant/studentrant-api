@@ -6,7 +6,7 @@ export NODE_ENV=test
 if [[ ! -e "${HOME}/studentrant_test_db1/" ]] || \
        [[ ! -e "${HOME}/studentrant_test_db2/" ]]  || [[ ! -e "${HOME}/studentrant_test_db3/" ]]; then
 
-    proces=(27017 27018 27019);
+    proces=(27071 27081 27091);
 
     for i in "${proces[@]}";do
 	mapfile procs <<<$(lsof -t -i:$i)
@@ -23,26 +23,29 @@ if [[ ! -e "${HOME}/studentrant_test_db1/" ]] || \
     mkdir -p "${HOME}/studentrant_test_db2/"
     mkdir -p "${HOME}/studentrant_test_db3/"
 
-    mongod --dbpath "${HOME}/studentrant_test_db1/" --port 27017  --replSet studentrant_test --fork --syslog
+    mongod --dbpath "${HOME}/studentrant_test_db1/" --port 27071  --replSet studentrant_test --fork --syslog &>/dev/null
     sleep 5
-    mongod --dbpath "${HOME}/studentrant_test_db2/" --port 27018 --replSet studentrant_test --fork --syslog
+    mongod --dbpath "${HOME}/studentrant_test_db2/" --port 27081 --replSet studentrant_test --fork --syslog &>/dev/null
     sleep 5
-    mongod --dbpath "${HOME}/studentrant_test_db3/" --port 27019 --replSet studentrant_test --fork --syslog
+    mongod --dbpath "${HOME}/studentrant_test_db3/" --port 27091 --replSet studentrant_test --fork --syslog &>/dev/null
     sleep 5
 
-    mongo <<EOF
+    mongo --port 27071 <<EOF
 use studentrant
 if ( rs.status().codeName === "NotYetInitialized" ) {
 
-   rs.initiate();
-   print(sleep);
-   sleep(1500); // sleep for 5 minutes
-
-   rs.add("127.0.0.1:27018");
-   rs.add("127.0.0.1:27019");
+   rs.initiate({
+      _id: "studentrant_test",
+      members: [
+         { _id: 0, host: "127.0.0.1:27071", priority: 1   },
+         { _id: 1, host: "127.0.0.1:27081", priority: 0.5 },
+	 { _id: 2, host: "127.0.0.1:27091", priority: 0.5 }
+      ]
+   });
+   sleep(1500); // sleep for 5 seconds
 }
-
-db.dropDatabase()
+sleep(15000);
+db.dropDatabase();
 
 EOF
 fi
@@ -50,15 +53,15 @@ fi
 pidof mongod
 
 [[ $? == 1 ]] && {
-    mongod --dbpath "${HOME}/studentrant_test_db1/" --port 1037  --replSet studentrant_test --fork --syslog
+    mongod --dbpath "${HOME}/studentrant_test_db1/" --port 27071  --replSet studentrant_test --fork --syslog
     sleep 5
-    mongod --dbpath "${HOME}/studentrant_test_db2/" --port 1038 --replSet studentrant_test --fork --syslog
+    mongod --dbpath "${HOME}/studentrant_test_db2/" --port 27081 --replSet studentrant_test --fork --syslog
     sleep 5
-    mongod --dbpath "${HOME}/studentrant_test_db3/" --port 1039 --replSet studentrant_test --fork --syslog
+    mongod --dbpath "${HOME}/studentrant_test_db3/" --port 27091 --replSet studentrant_test --fork --syslog
     sleep 5
 
 }
-mongo <<EOF
+mongo --port 27071 <<EOF
 use studentrant
 db.dropDatabase()
 EOF

@@ -5,6 +5,7 @@ import helmet      from "helmet";
 import session     from "express-session";
 import mongoStore  from "connect-mongodb-session";
 import config      from "./config.js";
+import mountRoutes from "./mountRoutes.js";
 import * as routes from "./routes/index.js";
 
 const app = express();
@@ -21,14 +22,17 @@ const sessionStore = session({
 
 
 app.set("PORT", config.get("SERVER.PORT"));
-
 app.use(sessionStore);
 app.use(helmet());
 app.use(bodyParser.json());
 
-app.use("/login", routes.login);
-app.use("/register", routes.register);
-
+mountRoutes(
+    app,
+    [
+	routes.RegisterRoute,
+	routes.LoginRoute
+    ]
+);
 
 app.use("*", (req, res, next) => {
     return next(`route ${req.path} does not exists`);

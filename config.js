@@ -50,7 +50,7 @@ const config  = convict({
 	    },
 	    port: {
                 format: Number,
-                default: 27017
+                default: 27071
 	    }
         },
         replTwo: {
@@ -60,7 +60,7 @@ const config  = convict({
 	    },
 	    port: {
                 format: Number,
-                default: 27018
+                default: 27081
 	    }
         },
         replThree: {
@@ -70,7 +70,7 @@ const config  = convict({
 	    },
 	    port: {
                 format: Number,
-                default: 27019
+                default: 27091
 	    }
         }
     },
