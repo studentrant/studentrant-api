@@ -3,3 +3,5 @@ coverage/
 .prod.json
 .test.json
 .dev.json
+keyfile
+assets/
