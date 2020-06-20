@@ -4,5 +4,6 @@
     INVALID_EMAIL            : "Format of email address is not supported",
     NO_EMAIL_FIELD           : "Email field is required",
     COUNTRY_PROPERTY_UNDEFINED: "country value is required",
-    INVALID_COUNTRY_LENGTH    : "specified country does not exists"
+     INVALID_COUNTRY_LENGTH    : "specified country does not exists",
+     USER_NOT_LOGGED_IN: "You are not currently logged in to carry out this operation"
 };

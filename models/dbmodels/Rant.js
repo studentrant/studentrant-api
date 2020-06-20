@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const RantSchema = new mongoose.Schema({
-    tag: {
+    tags: {
         type    : Array,
         default : [ "general" ]
     },
@@ -12,6 +12,9 @@ const RantSchema = new mongoose.Schema({
     rantPoster: {
         type  : String,
         index : true
+    },
+    rant: {
+	type : String
     },
     rantComments: [{
         rantcommentId      : String,

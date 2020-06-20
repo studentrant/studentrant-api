@@ -100,7 +100,6 @@ describe("[Login]", () => {
 	    .post("/login")
 	    .send({ username: "victory", password: "password1234" })
 	    .expect(404).end((err,res) => {
-		console.log(err);
 		expect(err).toBeNull();
 		expect(res.body.message).toEqual(loginConstants.INVALID_LOGIN_CREDENTIALS);
 		done();

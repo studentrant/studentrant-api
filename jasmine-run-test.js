@@ -1,4 +1,4 @@
-import glob from "glob";
+//import glob from "glob";
 import Jasmine from "jasmine";
 import jSpecReporter from "jasmine-spec-reporter";
 
@@ -16,15 +16,22 @@ specReport();
 jasmine.requires.push("esm");
 jasmine.loadConfigFile("./jasmine.json");
 
-glob("./__test__/*.mjs", async (err,files)=> {
-    Promise.all(
-	files.map( f => {
-	    return import(f)
-		.catch(e => {
-		    console.error("error loading " , f);
-		    console.error(e);
-		    process.exit(1);
-		});
-	})
-    ).then(() => jasmine.execute()).catch(ex => console.log(ex));
-});
+
+
+const testFiles = [
+    "./__test__/register.test.mjs",
+    "./__test__/login.test.mjs",
+    "./__test__/postrant.test.mjs"
+];
+
+async function loadFiles() {
+    for ( let file of testFiles ) {
+	await import(file).catch(e => {
+	    console.error("error loading " , file);
+	    console.error(e);
+	    process.exit(1);
+	});
+    }
+}
+
+loadFiles().then(() => jasmine.execute()).catch( ex => console.log(ex));

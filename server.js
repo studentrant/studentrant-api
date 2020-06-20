@@ -30,7 +30,8 @@ mountRoutes(
     app,
     [
 	routes.RegisterRoute,
-	routes.LoginRoute
+	routes.LoginRoute,
+	routes.RantRoute
     ]
 );
 
