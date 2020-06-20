@@ -5,26 +5,25 @@ import * as constants  from "../constants/index.js";
 import  config from "../config.js";
 import  Email  from "../service/email.service.js";
 
-import RegisterDbUtils from "../models/dbutils/register.db.util.js";
 import { users }       from "../models/dbmodels/index.js";
 
 export class Registration {
     
     constructor(register,utils) {
-	this.register = register;
-	this.utils    = utils;
+        this.register = register;
+        this.utils    = utils;
     }
 
     async __checkForUserExistence(res, { username, email }) {
 
-	let { exists, error, ex }   = await this.utils.DbUtils.ResourceExists([users], { email });
+        let { exists, error, ex }   = await this.utils.DbUtils.ResourceExists([users], { email });
 
         if (!exists && error) throw ex;
 
         if (exists && !error)
 	    return res.status(409).json({
-		status: 409,
-		message: constants.registerConstants.EMAIL_ALREADY_EXISTS
+                status: 409,
+                message: constants.registerConstants.EMAIL_ALREADY_EXISTS
 	    });
 
         ({ exists, error, ex } = await this.utils.DbUtils.ResourceExists([users], { username }));
@@ -33,11 +32,11 @@ export class Registration {
 
         if (exists && !error)
 	    return res.status(409).json({
-		status: 409,
-		message: constants.registerConstants.USERNAME_ALREADY_EXISTS
+                status: 409,
+                message: constants.registerConstants.USERNAME_ALREADY_EXISTS
 	    });
 
-	return true;
+        return true;
     }
     
     /**
@@ -68,21 +67,21 @@ export class Registration {
      **/
 
     async firstRegStep(req,res,next) {
-	try {
+        try {
 	    const { email, username, password } = req.body;
 	    await this.__checkForUserExistence(res, { username, email });
 	    if ( res.headersSent ) return false;
             const result = await this.register.SaveNewUser({
-		password: await Utils.PasswordUtils.HashPassword(password),
-		userId: crypto.createHash("sha256").update(`${username}${email}`).digest("hex"),
-		username,
-		email
+                password: await Utils.PasswordUtils.HashPassword(password),
+                userId: crypto.createHash("sha256").update(`${username}${email}`).digest("hex"),
+                username,
+                email
             });
             this.utils.Utils.SetSessionObject(req, result);
             return res.status(201).json({ status: 201, message: result });
-	} catch(ex) {
+        } catch(ex) {
 	    return next(ex);
-	}
+        }
     }
 
     
@@ -113,54 +112,54 @@ export class Registration {
     
     async lastRegStep(req,res,next) {
 	
-	const { country, interests } = req.body;
+        const { country, interests } = req.body;
 	
-	try {
+        try {
 
             const email = await this.utils.Utils.ExtractSessionObjectData(req, "email");
             const result = await this.register.UpdateNewUserDetails({
-		criteria: { email },
-		data: {
+                criteria: { email },
+                data: {
                     $set: {
-			country,
-			interests,
-			completeReg: true,
-			verificationLink: await this.utils.Utils.UniqueCodeGenerator(req, email)
+                        country,
+                        interests,
+                        completeReg: true,
+                        verificationLink: await this.utils.Utils.UniqueCodeGenerator(req, email)
                     }
-		},
-		options: {
+                },
+                options: {
                     new: true,
                     fields: {
-			password: false,
-			dateOfReg: false,
-			_id: false,
-			__v: false,
+                        password: false,
+                        dateOfReg: false,
+                        _id: false,
+                        __v: false,
                     }
-		}
+                }
             });
 
             if (config.get("env") !== "test")
-		delete result.verificationLink;
+                delete result.verificationLink;
 
             Promise.resolve((new Email(req)).sendEmailVerification(email));
             return res.status(201).json({ status: 201, message: result });
 	    
-	} catch (ex) {
+        } catch (ex) {
             return next(ex);
-	}
+        }
     }
     
     async verificationToken (req, res, next) {
-	const { token } = req.params;
-	try {
+        const { token } = req.params;
+        try {
             const userData = await this.register.UpdateNewUserDetails({
-		criteria: { verificationLink: token },
-		data: { $unset: { verificationLink: 1 }, $set: { verified: true } },
-		options: { new: true, fields: { password: false, _id: false, __v: false, dateOfReg: false } }
+                criteria: { verificationLink: token },
+                data: { $unset: { verificationLink: 1 }, $set: { verified: true } },
+                options: { new: true, fields: { password: false, _id: false, __v: false, dateOfReg: false } }
             });
             return res.status(200).json({ status: 200, message: userData });
-	} catch (ex) {
+        } catch (ex) {
             return next(ex);
-	}
-    };
+        }
+    }
 }

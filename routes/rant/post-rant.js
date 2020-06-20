@@ -5,41 +5,41 @@ import * as Utils  from "../../utils/index.js";
 
 export class PostRantRoute {
     constructor(routeHandler) {
-	this.controller = new PostRant(
+        this.controller = new PostRant(
 	    RantDbUtils,
 	    Utils
-	);
-	routeHandler.post("/", this.postRant());
-	//routeHandler.delete("/delete/:rant-id", this.deleteRant());
-	//routeHandler.patch("/edit/:rant-id", this.editRant());
-	//routeHandler.post("/reply/:rant-id", this.replyRant());
-	return routeHandler;
+        );
+        routeHandler.post("/", this.postRant());
+        //routeHandler.delete("/delete/:rant-id", this.deleteRant());
+        //routeHandler.patch("/edit/:rant-id", this.editRant());
+        //routeHandler.post("/reply/:rant-id", this.replyRant());
+        return routeHandler;
     }
 
     postRant() {
-	return [
+        return [
 	    RantValidators.VerifyRant,
 	    RantValidators.VerifyRantTags,
 	    this.controller.postRant.bind(this.controller)
-	];
+        ];
     }
 
     deletRant() {
-	return [
+        return [
 
-	];
+        ];
     }
 
     editRant() {
-	return [
+        return [
 
-	];
+        ];
     }
 
     replyRant() {
-	return [
+        return [
 
-	];
+        ];
     }
 
 }

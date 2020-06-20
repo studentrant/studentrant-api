@@ -14,7 +14,7 @@ const RantSchema = new mongoose.Schema({
         index : true
     },
     rant: {
-	type : String
+        type : String
     },
     rantComments: [{
         rantcommentId      : String,
