@@ -2,6 +2,7 @@ import convict from "convict";
 
 //${db_name}?replicaSet=${replica_set_name}&readPreference=primary&retryWrites=true&maxIdleTimeMS=10000&compressors=zlib`
 
+console.log(process.env.NODE_ENV);
 const config  = convict({
 
     externalApis: {

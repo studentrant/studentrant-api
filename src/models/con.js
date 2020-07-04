@@ -7,8 +7,7 @@ mongoose.connect(
         useFindAndModify: false,
         useNewUrlParser: true,
         useCreateIndex: true,
-
-        autoReconnect: true,
+	useUnifiedTopology: true,
         bufferMaxEntries: 0,
         bufferCommands: 0,
         keepAlive: true,
@@ -27,5 +26,4 @@ db.on("disconnected", () => console.log(
 ));
 
 db.on("error", () => console.error.bind(console, `error while connecting to db - ${config.get("dbConnectionString.connString")}`));
-
 export default db;

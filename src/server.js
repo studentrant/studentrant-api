@@ -4,6 +4,7 @@ import bodyParser  from "body-parser";
 import helmet      from "helmet";
 import session     from "express-session";
 import mongoStore  from "connect-mongodb-session";
+import betterLogging from "better-logging";
 import config      from "./config.js";
 import mountRoutes from "./mountRoutes.js";
 import * as routes from "./routes/index.js";
@@ -20,6 +21,8 @@ const sessionStore = session({
     })
 });
 
+
+betterLogging(console);
 
 app.set("PORT", config.get("SERVER.PORT"));
 app.use(sessionStore);
@@ -47,6 +50,5 @@ app.use((err, req, res, next) => {
 app.listen(app.get("PORT"), () => {
     console.log(`listening on port ${app.get("PORT")}`);
 });
-
 
 export default app;
