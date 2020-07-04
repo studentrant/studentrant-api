@@ -6,11 +6,11 @@ console.log(process.env.NODE_ENV);
 const config  = convict({
 
     externalApis: {
-	doc: "Credentials for external apis",
-	loomai: {
+        doc: "Credentials for external apis",
+        loomai: {
 	    client_id: "jow7m83kI03ipUDcCrvDZKVqhinFTZbf",
 	    client_secret: "vPnhDLp-IC0iagencnnxjLSikRdSOBI1652RjuHUJMeIMsHJ4f1gfxnJXm3k0ZFl"
-	}
+        }
     },
 
     dbConnectionString: {
@@ -35,15 +35,15 @@ const config  = convict({
 	    default: "studentrant_test"
         },
 
-	db_user: {
+        db_user: {
 	    format: String,
 	    default: "nil"
-	},
+        },
 	
-	db_pass: {
+        db_pass: {
 	    format: String,
 	    default: "nil"
-	},
+        },
         replOne: {
 	    host: {
                 format: String,
@@ -82,30 +82,30 @@ const config  = convict({
         env: "NODE_ENV"
     },
     session_secret: {
-	format: String,
-	default: "this_is_my_secret"
+        format: String,
+        default: "this_is_my_secret"
     },
     sendGrid: {
-	api_key: {
+        api_key: {
 	    format  : String,
 	    default : ""
-	},
-	templateIds: {
+        },
+        templateIds: {
 	    email_verification: {
-		format  : String,
-		default : ""
+                format  : String,
+                default : ""
 	    }
-	}
+        }
     },
     SERVER: {
-	HOST: {
+        HOST: {
 	    format  : String,
 	    default : "localhost"
-	},
-	PORT: {
+        },
+        PORT: {
 	    format  : Number,
 	    default : 3000
-	}
+        }
     }
 });
 
@@ -126,13 +126,13 @@ const [
 
 if ( config.get("env") === "test" )
     config.set(
-	"dbConnectionString.connString",
-	`mongodb://${hostp1},${hostp2},${hostp3}/${config.get("dbConnectionString.dbName")}?${config.get("dbConnectionString.extraArgument")}&replicaSet=${config.get("dbConnectionString.replicaSetName")}`
+        "dbConnectionString.connString",
+        `mongodb://${hostp1},${hostp2},${hostp3}/${config.get("dbConnectionString.dbName")}?${config.get("dbConnectionString.extraArgument")}&replicaSet=${config.get("dbConnectionString.replicaSetName")}`
     );
 else
     config.set(
-	"dbConnectionString.connString",
-	`mongodb://${config.get("dbConnectionString.db_user")}:${config.get("dbConnectionString.db_pass")}@${hostp1},${hostp2},${hostp3}/${config.get("dbConnectionString.dbName")}?${config.get("dbConnectionString.extraArgument")}&replicaSet=${config.get("dbConnectionString.replicaSetName")}`
+        "dbConnectionString.connString",
+        `mongodb://${config.get("dbConnectionString.db_user")}:${config.get("dbConnectionString.db_pass")}@${hostp1},${hostp2},${hostp3}/${config.get("dbConnectionString.dbName")}?${config.get("dbConnectionString.extraArgument")}&replicaSet=${config.get("dbConnectionString.replicaSetName")}`
     );
 
 export default config;

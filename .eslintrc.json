@@ -7,7 +7,8 @@
     "extends": "eslint:recommended",
     "ignorePatterns": [
 	"loader.js",
-	"node_modules/"
+	"node_modules/",
+	"doc/"
     ],
     "globals": {
         "Atomics": "readonly",

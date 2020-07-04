@@ -16,10 +16,10 @@ export const jasmine = new Jasmine();
 export async function loadFiles(config,testFiles) {
     jasmine.loadConfigFile(config);
     for ( let file of testFiles ) {
-	await import(file).catch(e => {
+        await import(file).catch(e => {
 	    console.error("error loading " , file);
 	    console.error(e);
 	    process.exit(1);
-	});
+        });
     }
 }

@@ -14,8 +14,8 @@
 	"mongodb:start": "./scripts/replicaSet.sh",
 	"mongodb:stop": "./scripts/replicaSet.sh killProc",
 	"server": "nodemon server.js --env dev",
-	"lint": "eslint **/*.{mjs,js}",
-	"lint:fix": "eslint --fix **/*.{mjs,js}",
+	"lint": "eslint '**/*.js'",
+	"lint:fix": "eslint --fix '**/*.js'",
 	"doc": "apidoc -i controllers/ -o doc/html-page",
 	"doc:watch": "nodemon  --watch controllers/ --exec npm run doc"
     },

@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 function sleep(delay) {
     var start = (new Date().getTime()) / 1000;
     while (

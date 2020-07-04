@@ -1,4 +1,4 @@
-import con         from "./models/con.js";
+import con         from "./models/con.js"; // eslint-disable-line
 import express     from "express";
 import bodyParser  from "body-parser";
 import helmet      from "helmet";
@@ -32,9 +32,9 @@ app.use(bodyParser.json());
 mountRoutes(
     app,
     [
-	routes.RegisterRoute,
-	routes.LoginRoute,
-	routes.RantRoute
+        routes.RegisterRoute,
+        routes.LoginRoute,
+        routes.RantRoute
     ]
 );
 
@@ -42,6 +42,7 @@ app.use("*", (req, res, next) => {
     return next(`route ${req.path} does not exists`);
 });
 
+// eslint-disable-next-line
 app.use((err, req, res, next) => {
     return res.status(500).json({ status: 500, message: err.message });
 });
