@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
-export NODE_ENV=test
-
-
 
 if [[ ! -e "${HOME}/studentrant_test_db1/" ]] || \
        [[ ! -e "${HOME}/studentrant_test_db2/" ]]  || [[ ! -e "${HOME}/studentrant_test_db3/" ]]; then
@@ -10,7 +7,7 @@ if [[ ! -e "${HOME}/studentrant_test_db1/" ]] || \
 
     for i in "${proces[@]}";do
 	mapfile procs <<<$(lsof -t -i:$i)
-	procLen=${#procs[@]} # cjtrl + back tick no dey respond eform my p.c
+	procLen=${#procs[@]}
 	(( procLen >= 1 )) && {
             for j in "${procs[@]}";do
 		echo "$j"
@@ -42,11 +39,7 @@ if ( rs.status().codeName === "NotYetInitialized" ) {
 	 { _id: 2, host: "127.0.0.1:27091", priority: 0.5 }
       ]
    });
-   sleep(1500); // sleep for 5 seconds
 }
-sleep(15000);
-db.dropDatabase();
-
 EOF
 fi
 
@@ -61,11 +54,3 @@ pidof mongod
     sleep 5
 
 }
-mongo --port 27071 <<EOF
-use studentrant
-db.dropDatabase()
-EOF
-
-export DEFAULT_TIMEOUT_INTERVAL=50000
-
-./node_modules/.bin/nyc node ./jasmine-run-test.js

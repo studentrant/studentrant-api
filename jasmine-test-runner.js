@@ -2,29 +2,19 @@
 import Jasmine from "jasmine";
 import jSpecReporter from "jasmine-spec-reporter";
 
-const jasmine = new Jasmine();
+export const jasmine = new Jasmine();
 
-function specReport() {
+(function specReport() {
     const jasmineEnv = jasmine.jasmine.getEnv();
     jasmineEnv.clearReporters();
     jasmineEnv.addReporter(new jSpecReporter.SpecReporter());
     jasmineEnv.DEFAULT_TIMEOUT_INTERVAL = 50000;
-}
+    jasmineEnv.random = false;
+    jasmine.requires.push("esm");
+})();
 
-specReport();
-
-jasmine.requires.push("esm");
-jasmine.loadConfigFile("./.jasmine.e2e.json");
-
-
-
-const testFiles = [
-    "./__test__/register.test.mjs",
-    "./__test__/login.test.mjs",
-    "./__test__/postrant.test.mjs"
-];
-
-async function loadFiles() {
+export async function loadFiles(config,testFiles) {
+    jasmine.loadConfigFile(config);
     for ( let file of testFiles ) {
 	await import(file).catch(e => {
 	    console.error("error loading " , file);
@@ -33,5 +23,3 @@ async function loadFiles() {
 	});
     }
 }
-
-loadFiles().then(() => jasmine.execute()).catch( ex => console.log(ex));

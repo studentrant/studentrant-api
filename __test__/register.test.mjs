@@ -1,20 +1,18 @@
 "use strict";
-
 import * as async     from "async";
 import supertest from "supertest";
-import app       from "../server.js";
-import { users } from "../models/dbmodels/index.js";
+import app       from "../src/server.js";
+import { users } from "../src/models/dbmodels/index.js";
 
 import {
     registerConstants,
     loginConstants,
     authConstants
-} from "../constants/index.js";
-
+} from "../src/constants/index.js";
 const agent     = supertest(app);
 let cookie, verificationLink;
 
-describe("[Register]", () => {
+describe("Register [Integration]", () => {
 
     describe("POST /reg-first-step", () => {
         it("status code of 412 if username field is not present", done => {
@@ -40,7 +38,7 @@ describe("[Register]", () => {
         it("status code of 412 if password is not defined", done => {
             agent
 	        .post("/register/reg-first-step")
-	        .send({ username: "zombieleet" })
+	        .send({ username: "studentrant" })
 	        .expect(412).end((err,res) => {
 		    expect(err).toBeNull();
 		    expect(res.body.message).toEqual(loginConstants.INVALID_LOGIN_PASSWORD_NO_FIELD);
@@ -50,7 +48,7 @@ describe("[Register]", () => {
         it("stauts code of 412 if password length is less than 8", done => {
             agent
 	        .post("/register/reg-first-step")
-	        .send({ username: "zombieleet", password: "12345" })
+	        .send({ username: "studentrant", password: "12345" })
 	        .expect(412).end((err,res) => {
 		    expect(err).toBeNull();
 		    expect(res.body.message).toEqual(loginConstants.INVALID_LOGIN_PASSWORD_LENGTH);
@@ -60,7 +58,7 @@ describe("[Register]", () => {
         it("status code of 412 if password has no digit", done => {
             agent
 	        .post("/register/reg-first-step")
-	        .send({ username: "zombieleet", password: "abcdefghijklmnoq" })
+	        .send({ username: "studentrant", password: "abcdefghijklmnoq" })
 	        .expect(412).end((err,res) => {
 		    expect(err).toBeNull();
 		    expect(res.body.message).toEqual(loginConstants.INVALID_LOGIN_PASSWORD_NO_DIGIT);
@@ -70,7 +68,7 @@ describe("[Register]", () => {
         it("status code of 412 if password contains no charactes", done => {
             agent
 	        .post("/register/reg-first-step")
-	        .send({ username: "zombieleet", password: "12345689234" })
+	        .send({ username: "studentrant", password: "12345689234" })
 	        .expect(412).end((err,res) => {
 		    expect(err).toBeNull();
 		    expect(res.body.message).toEqual(loginConstants.INVALID_LOGIN_PASSWORD_NO_CHARS);
@@ -80,7 +78,7 @@ describe("[Register]", () => {
         it("status code of 412 if email field is undefined", done => {
             agent
 	        .post("/register/reg-first-step")
-	        .send({ username: "zombieleet", password: "12345689234abcd" })
+	        .send({ username: "studentrant", password: "12345689234abcd" })
 	        .expect(412).end((err,res) => {
 		    expect(err).toBeNull();
 		    expect(res.body.message).toEqual(authConstants.NO_EMAIL_FIELD);
@@ -90,7 +88,7 @@ describe("[Register]", () => {
         it("status code of 412 if email does not match define regex", done => {
             agent
 	        .post("/register/reg-first-step")
-	        .send({ username: "zombieleet", password: "12345689234abcd", email: "victory@" })
+	        .send({ username: "studentrant", password: "12345689234abcd", email: "victory@" })
 	        .expect(412).end((err,res) => {
 		    expect(err).toBeNull();
 		    expect(res.body.message).toEqual(authConstants.INVALID_EMAIL);
@@ -100,7 +98,7 @@ describe("[Register]", () => {
         it("status code of 201 if user account is created", done => {
             agent
 	        .post("/register/reg-first-step")
-	        .send({ username: "zombieleet", password: "12345689234abcd", email: "zombieleetnca@gmail.com" })
+	        .send({ username: "studentrant", password: "12345689234abcd", email: "studentrant@example.com" })
 	        .expect(201).end((err,res) => {
 		    cookie = res.headers["set-cookie"];
 		    expect(err).toBeNull();
@@ -111,7 +109,7 @@ describe("[Register]", () => {
         it("should return provided email address is not available", done => {
             agent
 	        .post("/register/reg-first-step")
-	        .send({ username: "zombieleet", password: "12345689234abcd", email: "zombieleetnca@gmail.com" })
+	        .send({ username: "studentrant", password: "12345689234abcd", email: "studentrant@example.com" })
 	        .expect(409).end((err,res) => {
 		    expect(err).toBeNull();
 		    expect(res.body.message).toEqual(registerConstants.EMAIL_ALREADY_EXISTS);
@@ -122,7 +120,7 @@ describe("[Register]", () => {
         it("should return provided username is not available", done => {
             agent
 	        .post("/register/reg-first-step")
-	        .send({ username: "zombieleet", password: "12345689234abcd", email: "victory-developer@example.com" })
+	        .send({ username: "studentrant", password: "12345689234abcd", email: "victory-developer@example.com" })
 	        .expect(409).end((err,res) => {
 		    expect(err).toBeNull();
 		    expect(res.body.message).toEqual(registerConstants.USERNAME_ALREADY_EXISTS);
@@ -133,7 +131,7 @@ describe("[Register]", () => {
         it("should return status of 200 and set completeReg to false for incomplete registration", done => {
 	    agent
 		.post("/login")
-		.send({ username: "zombieleet", password: "12345689234abcd" })
+		.send({ username: "studentrant", password: "12345689234abcd" })
 		.expect(200).end((err,res) => {
 		    expect(err).toBeNull();
 		    expect(res.body.status).toEqual(200);
@@ -215,8 +213,8 @@ describe("[Register]", () => {
 		    expect(res.body.status).toEqual(201);
 		    expect(res.body.message.verified).toEqual(false);
 		    expect(res.body.message.completeReg).toEqual(true);
-		    expect(res.body.message.email).toEqual("zombieleetnca@gmail.com");
-		    expect(res.body.message.username).toEqual("zombieleet");
+		    expect(res.body.message.email).toEqual("studentrant@example.com");
+		    expect(res.body.message.username).toEqual("studentrant");
 		    verificationLink = res.body.message.verificationLink;
 		    done();
 		});
@@ -229,9 +227,9 @@ describe("[Register]", () => {
 		    expect(res.body.status).toEqual(200);
 		    expect(res.body.message.verified).toEqual(true);
 		    expect(res.body.message.completeReg).toEqual(true);
-		    expect(res.body.message.email).toEqual("zombieleetnca@gmail.com");
-		    expect(res.body.message.username).toEqual("zombieleet");
-		    const result = await users.findOne({ email: "zombieleetnca@gmail.com" }, { verificationLink: true }).lean();
+		    expect(res.body.message.email).toEqual("studentrant@example.com");
+		    expect(res.body.message.username).toEqual("studentrant");
+		    const result = await users.findOne({ email: "studentrant@example.com" }, { verificationLink: true }).lean();
 		    expect(result.verificationLink).toBeUndefined();
 		    done();
 		});

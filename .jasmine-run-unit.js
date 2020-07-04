@@ -2,12 +2,8 @@ import glob from "glob";
 import { loadFiles, jasmine } from "./jasmine-test-runner.js";
 
 let [ config, specFiles] = process.argv.slice(2);
-
-
-specFiles = glob.sync(specFiles);
-specFiles.unshift("./__test__/index.test.mjs");
-
+console.log(glob.sync(specFiles));
 loadFiles(
     config,
-    specFiles
+    glob.sync(specFiles)
 ).then(() => jasmine.execute()).catch( ex => console.log(ex));

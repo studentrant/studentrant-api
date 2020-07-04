@@ -1,0 +1,15 @@
+{
+  "extension": [".js"],
+  "include": [
+    "src/**"
+  ],
+  "exclude": ["controllers/*", "__test__/*"],
+  "reporter": [ "html" ],
+  "all": true,
+  "watermarks": {
+    "lines": [65, 75],
+    "functions": [0, 0],
+    "branches": [65, 75],
+    "statements": [0, 0]
+  }
+}

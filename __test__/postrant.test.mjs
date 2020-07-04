@@ -1,13 +1,13 @@
 "use strict";
 
 import supertest from "supertest";
-import app       from "../server.js";
-import { authConstants , rantConstants } from "../constants/index.js";
+import app       from "../src/server.js";
+import { authConstants , rantConstants } from "../src/constants/index.js";
 
 const agent = supertest(app);
 let cookie;
 
-describe("[PostRant] Integration", () => {
+describe("PostRant [Integration]", () => {
 
     describe("Unauthenticated User", () => {
 	it("should return 401 unauthroized access if user is not logged in", done => {
@@ -28,7 +28,7 @@ describe("[PostRant] Integration", () => {
 	beforeAll(done => {
 	    agent
 	        .post("/login")
-	        .send({ username: "zombieleet", password: "12345689234abcd" })
+	        .send({ username: "testaccount", password: "12345689234abcd" })
 	        .expect(200).end((err,res) => {
 		    cookie = res.headers["set-cookie"];
 		    expect(err).toBeNull();
