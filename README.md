@@ -7,7 +7,15 @@
 
 ### test
 
-`npm run test`
+**e2e test**
+`npm run test:e2e`
+
+**unit test**
+`npm run test:unit`
+
+
+**run both e2e and unit test together**
+`npm test`
 
 ### lint
 
