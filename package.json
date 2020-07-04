@@ -1,58 +1,59 @@
 {
-			"name": "studentrant",
-			"version": "1.0.0",
-			"description": "",
-			"main": "index.js",
-			"type": "module",
-			"scripts": {
-						"test": "./scripts/runTest.sh",
-						"mongodb:purge:force": "./scripts/replicaSet.sh purge --force",
-						"mongodb:start": "./scripts/replicaSet.sh",
-						"mongodb:stop": "./scripts/replicaSet.sh killProc",
-						"server": "nodemon server.js --env dev",
-						"lint": "eslint controllers/ middlewares/ routes/ models/ service/ utils/",
-						"lint:fix": "eslint --fix controllers/ middlewares/ routes/ models/ service/ utils/",
-						"doc": "apidoc -i controllers/ -o doc/html-page",
-						"doc:watch": "nodemon  --watch controllers/ --exec npm run doc"
-			},
-			"repository": {
-						"type": "git",
-						"url": "git+https://github.com/studentrant/studentrant.git"
-			},
-			"keywords": [],
-			"author": "",
-			"license": "ISC",
-			"bugs": {
-						"url": "https://github.com/studentrant/studentrant/issues"
-			},
-			"homepage": "https://github.com/studentrant/studentrant#readme",
-			"dependencies": {
-						"@sendgrid/mail": "^6.5.5",
-						"bcryptjs": "^2.4.3",
-						"body-parser": "^1.19.0",
-						"connect-mongodb-session": "^2.2.0",
-						"convict": "^5.2.0",
-						"cors": "^2.8.5",
-						"express": "^4.17.1",
-						"express-session": "^1.17.0",
-						"express-validator": "^6.3.1",
-						"helmet": "^3.21.2",
-						"istanbul": "^0.4.5",
-						"mongoose": "^5.8.3",
-						"node-fetch": "^2.6.0",
-						"sendgrid": "^5.2.3",
-						"supertest": "^4.0.2",
-						"uid-generator": "^2.0.0",
-						"uuid": "^8.1.0"
-			},
-			"devDependencies": {
-						"apidoc": "^0.20.1",
-						"async": "^3.2.0",
-						"babel-eslint": "^10.1.0",
-						"eslint": "^6.8.0",
-						"esm": "^3.2.25",
-						"jasmine": "^3.5.0",
-						"jasmine-spec-reporter": "^4.2.1",
-						"nodemon": "^2.0.2"
-			}
+    "name": "studentrant",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+	"test:e2e": "./scripts/runTest.sh",
+	"test:unit": "JASMIN_CONFIG_PATH=.jasmine.unit.json ; nyc jasmine",
+	"mongodb:purge:force": "./scripts/replicaSet.sh purge --force",
+	"mongodb:start": "./scripts/replicaSet.sh",
+	"mongodb:stop": "./scripts/replicaSet.sh killProc",
+	"server": "nodemon server.js --env dev",
+	"lint": "eslint controllers/ middlewares/ routes/ models/ service/ utils/",
+	"lint:fix": "eslint --fix controllers/ middlewares/ routes/ models/ service/ utils/",
+	"doc": "apidoc -i controllers/ -o doc/html-page",
+	"doc:watch": "nodemon  --watch controllers/ --exec npm run doc"
+    },
+    "repository": {
+	"type": "git",
+	"url": "git+https://github.com/studentrant/studentrant.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+	"url": "https://github.com/studentrant/studentrant/issues"
+    },
+    "homepage": "https://github.com/studentrant/studentrant#readme",
+    "dependencies": {
+	"@sendgrid/mail": "^6.5.5",
+	"bcryptjs": "^2.4.3",
+	"body-parser": "^1.19.0",
+	"connect-mongodb-session": "^2.2.0",
+	"convict": "^5.2.0",
+	"cors": "^2.8.5",
+	"express": "^4.17.1",
+	"express-session": "^1.17.0",
+	"express-validator": "^6.3.1",
+	"helmet": "^3.21.2",
+	"mongoose": "^5.8.3",
+	"node-fetch": "^2.6.0",
+	"sendgrid": "^5.2.3",
+	"supertest": "^4.0.2",
+	"uid-generator": "^2.0.0",
+	"uuid": "^8.1.0"
+    },
+    "devDependencies": {
+	"apidoc": "^0.20.1",
+	"async": "^3.2.0",
+	"babel-eslint": "^10.1.0",
+	"eslint": "^6.8.0",
+	"esm": "^3.2.25",
+	"jasmine": "^3.5.0",
+	"jasmine-spec-reporter": "^4.2.1",
+	"nodemon": "^2.0.2",
+	"nyc": "^15.1.0"
+    }
 }

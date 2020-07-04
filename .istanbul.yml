@@ -1,4 +1,0 @@
-reporting:
-	dir: "coverage"
-instrumentation:
-	root: __test__

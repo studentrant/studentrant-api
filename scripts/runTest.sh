@@ -67,6 +67,5 @@ db.dropDatabase()
 EOF
 
 export DEFAULT_TIMEOUT_INTERVAL=50000
-export JASMINE_CONFIG_PATH="jasmine.json"
 
-node --experimental-modules ./node_modules/.bin/istanbul --config=.istanbul.yml cover ./jasmine-run-test.js
+./node_modules/.bin/nyc node ./jasmine-run-test.js

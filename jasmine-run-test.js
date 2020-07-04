@@ -5,16 +5,16 @@ import jSpecReporter from "jasmine-spec-reporter";
 const jasmine = new Jasmine();
 
 function specReport() {
-    jasmine.jasmine.getEnv().clearReporters();
-    jasmine.jasmine.getEnv().addReporter(new jSpecReporter.SpecReporter());
-    jasmine.jasmine.getEnv().DEFAULT_TIMEOUT_INTERVAL = 50000;
-    jasmine.jasmine.DEFAULT_TIMEOUT_INTERVAL = 50000;
+    const jasmineEnv = jasmine.jasmine.getEnv();
+    jasmineEnv.clearReporters();
+    jasmineEnv.addReporter(new jSpecReporter.SpecReporter());
+    jasmineEnv.DEFAULT_TIMEOUT_INTERVAL = 50000;
 }
 
 specReport();
 
 jasmine.requires.push("esm");
-jasmine.loadConfigFile("./jasmine.json");
+jasmine.loadConfigFile("./.jasmine.e2e.json");
 
 
 

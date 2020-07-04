@@ -5,3 +5,5 @@ coverage/
 .dev.json
 keyfile
 assets/
+.nyc_output/
+*~
