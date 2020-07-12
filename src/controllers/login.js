@@ -1,30 +1,23 @@
 import * as constants from "../constants/index.js";
-import { users } from "../models/dbmodels/index.js";
-
 
 export default class Login {
 
-    constructor(utils) {
+    constructor(utils,usersCollection) {
         this.utils = utils;
+        this.usersCollection = usersCollection;
     }
 
     async __checkForUserExistence(res,next, { email, username , password }) {
+
         const { exists, error, data, ex } = await this.utils.DbUtils.ResourceExists(
-	    [users], username ? { username } : { email }
+	    [this.usersCollection], username ? { username } : { email }
         );
 
-        if (!exists && error)return next(ex);
-        if (!exists && !error)
-	    return res.status(404).json({
-                status: 404,
-                message: constants.loginConstants.INVALID_LOGIN_CREDENTIALS
-	    });
-
-        if (!this.utils.PasswordUtils.VerifyHashPassword(password, data.password))
-	    return res.status(404).json({
-                status: 404,
-                message: constants.loginConstants.INVALID_LOGIN_CREDENTIALS
-	    });
+        if (!exists && error) throw ex;
+        if (!exists && !error) return constants.loginConstants.INVALID_LOGIN_CREDENTIALS;
+	
+        if (!await this.utils.PasswordUtils.VerifyHashPassword(password, data.password))
+	    return constants.loginConstants.INVALID_LOGIN_CREDENTIALS;
 
         return data;
     }
@@ -37,7 +30,11 @@ export default class Login {
 
 	    const data = await this.__checkForUserExistence(res,next, { username, email, password } );
 
-	    if ( res.headersSent ) return res;
+	    if ( typeof(data) === "string" )
+                return res.status(404).json({
+                    status: 404,
+                    message: data
+                });
 
             this.utils.Utils.SetSessionObject(req, {
                 email       : data.email,

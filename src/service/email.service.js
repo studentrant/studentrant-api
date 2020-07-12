@@ -1,6 +1,6 @@
 import sendgrid  from "@sendgrid/mail";
 import config    from "../config.js";
-import { users } from "../models/dbmodels/index.js";
+import { usersCollection } from "../models/dbmodels/index.js";
 
 
 export default class Email {
@@ -18,7 +18,7 @@ export default class Email {
 
 
     static async GetUserTemplateData(to_email) {
-        return await users.findOne({ email: to_email }, { verificationLink: true , username: true }).lean();
+        return await usersCollection.findOne({ email: to_email }, { verificationLink: true , username: true }).lean();
     }
 
 

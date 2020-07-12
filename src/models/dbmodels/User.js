@@ -45,4 +45,4 @@ const UserSchema = new mongoose.Schema({
     }
 });
 
-export const users = mongoose.model("Users", UserSchema);
+export const usersCollection = mongoose.model("Users", UserSchema);

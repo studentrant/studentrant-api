@@ -5,40 +5,15 @@ import * as constants  from "../constants/index.js";
 import  config from "../config.js";
 import  Email  from "../service/email.service.js";
 
-import { users }       from "../models/dbmodels/index.js";
 
 export class Registration {
     
-    constructor(register,utils) {
-        this.register = register;
-        this.utils    = utils;
+    constructor(RegisterDbUtils,Utils,usersCollection) {
+        this.register = new RegisterDbUtils(usersCollection);
+        this.utils    = Utils;
+        this.usersCollection = usersCollection;
     }
 
-    async __checkForUserExistence(res, { username, email }) {
-
-        let { exists, error, ex }   = await this.utils.DbUtils.ResourceExists([users], { email });
-
-        if (!exists && error) throw ex;
-
-        if (exists && !error)
-	    return res.status(409).json({
-                status: 409,
-                message: constants.registerConstants.EMAIL_ALREADY_EXISTS
-	    });
-
-        ({ exists, error, ex } = await this.utils.DbUtils.ResourceExists([users], { username }));
-
-        if (!exists && error) throw ex;
-
-        if (exists && !error)
-	    return res.status(409).json({
-                status: 409,
-                message: constants.registerConstants.USERNAME_ALREADY_EXISTS
-	    });
-
-        return true;
-    }
-    
     /**
      * @api { post } /register/reg-first-step First registration step of user
      * @apiName firstRegStep
@@ -69,9 +44,24 @@ export class Registration {
     async firstRegStep(req,res,next) {
         try {
 	    const { email, username, password } = req.body;
-	    await this.__checkForUserExistence(res, { username, email });
-	    if ( res.headersSent ) return false;
-            const result = await this.register.SaveNewUser({
+	    /**
+	     * check for the existence of email
+	     * if it does exists the left hand part of the logical or operatior will fill data
+	     * if it is null the right part of the logical or operator will fill data
+	     *
+	     **/
+	    const data = await this.register.checkEmail(email) || await this.register.checkUserName(username);
+
+	    if ( data ) return res.status(409).json(
+                {
+                    status: 409,
+                    message: data.email ?
+                        constants.registerConstants.EMAIL_ALREADY_EXISTS :
+                        constants.registerConstants.USERNAME_ALREADY_EXISTS
+                }
+	    );
+
+            const result = await this.register.saveNewUser({
                 password: await Utils.PasswordUtils.HashPassword(password),
                 userId: crypto.createHash("sha256").update(`${username}${email}`).digest("hex"),
                 username,
@@ -84,7 +74,7 @@ export class Registration {
         }
     }
 
-    
+
     /**
      * @api { patch } /register/reg-last-step Last registration step of user
      * @apiName lastRegStep
@@ -109,15 +99,15 @@ export class Registration {
      * @apiError NO_ARRAY_INTEREST               interests is not an array field
      * @apiError NO_INTEREST_LENGTH              interest array length is 0
      **/
-    
+
     async lastRegStep(req,res,next) {
-	
+
         const { country, interests } = req.body;
-	
+
         try {
 
             const email = await this.utils.Utils.ExtractSessionObjectData(req, "email");
-            const result = await this.register.UpdateNewUserDetails({
+            const result = await this.register.updateNewUserDetails({
                 criteria: { email },
                 data: {
                     $set: {
@@ -143,16 +133,16 @@ export class Registration {
 
             Promise.resolve((new Email(req)).sendEmailVerification(email));
             return res.status(201).json({ status: 201, message: result });
-	    
+
         } catch (ex) {
             return next(ex);
         }
     }
-    
+
     async verificationToken (req, res, next) {
         const { token } = req.params;
         try {
-            const userData = await this.register.UpdateNewUserDetails({
+            const userData = await this.register.updateNewUserDetails({
                 criteria: { verificationLink: token },
                 data: { $unset: { verificationLink: 1 }, $set: { verified: true } },
                 options: { new: true, fields: { password: false, _id: false, __v: false, dateOfReg: false } }

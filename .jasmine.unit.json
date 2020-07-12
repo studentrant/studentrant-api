@@ -1,8 +1,5 @@
 {
-    "spec_dir": "src",
-    "spec_files": [
-        "./src/controllers/login.test.js"
-    ],
+    "spec_dir": "/",
     "stopSpecOnExpectationFailure": false,
     "random": false
 }

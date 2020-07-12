@@ -2,7 +2,7 @@
 import * as async     from "async";
 import supertest from "supertest";
 import app       from "../src/server.js";
-import { users } from "../src/models/dbmodels/index.js";
+import { usersCollection } from "../src/models/dbmodels/index.js";
 
 import {
     registerConstants,
@@ -229,7 +229,7 @@ describe("Register [Integration]", () => {
 		    expect(res.body.message.completeReg).toEqual(true);
 		    expect(res.body.message.email).toEqual("studentrant@example.com");
 		    expect(res.body.message.username).toEqual("studentrant");
-		    const result = await users.findOne({ email: "studentrant@example.com" }, { verificationLink: true }).lean();
+		    const result = await usersCollection.findOne({ email: "studentrant@example.com" }, { verificationLink: true }).lean();
 		    expect(result.verificationLink).toBeUndefined();
 		    done();
 		});
