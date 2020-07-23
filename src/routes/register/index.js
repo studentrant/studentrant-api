@@ -1,4 +1,5 @@
 import middleware        from "../../middlewares/validator.js";
+import  Email            from "../../service/email.service.js";
 import {Registration}    from "../../controllers/register.js";
 import RegisterDbUtils   from "../../models/dbutils/register.db.util.js";
 import { usersCollection } from "../../models/dbmodels/index.js";
@@ -10,6 +11,7 @@ export class RegisterRoute {
     constructor(routeHandler) {
         this.controller    = new Registration(
 	    RegisterDbUtils,
+	    Email,
 	    Utils,
 	    usersCollection
         );

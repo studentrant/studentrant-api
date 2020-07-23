@@ -1,17 +1,24 @@
-import * as crypto     from "crypto";
-import * as Utils      from "../utils/index.js";
 import * as constants  from "../constants/index.js";
 
 import  config from "../config.js";
-import  Email  from "../service/email.service.js";
-
+import { RegisterService } from "../service/register.service.js";
+import { ExistsException } from "../service/exceptions.service.js";
 
 export class Registration {
-    
-    constructor(RegisterDbUtils,Utils,usersCollection) {
-        this.register = new RegisterDbUtils(usersCollection);
-        this.utils    = Utils;
+
+    constructor(
+	RegisterDbUtils,
+	Email,
+	Utils,
+	usersCollection
+    ) {
+	this.utils = Utils;
         this.usersCollection = usersCollection;
+	this.registerService = new RegisterService(
+	    new RegisterDbUtils(usersCollection),
+	    Utils
+	);
+	this.email = Email;
     }
 
     /**
