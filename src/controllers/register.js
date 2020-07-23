@@ -126,6 +126,26 @@ export class Registration {
         }
     }
 
+    /**
+     * @api { patch } /register/verification/:token Last registration step of user
+     * @apiName tokenVerification
+     * @apiGroup Register
+     *
+     *
+     * @apiParam {object} req.params params data
+     * @apiParam {string} req.body[token] verification token
+     * @apiSuccess {Object} res.body response body
+     * @apiSuccess {Number} res.body[status] http status code response
+     * @apiSuccess {Object} res.body[message] response message to be consumed by the client
+     * @apiSuccess {String} res.body.message[email] email address of the user
+     * @apiSuccess {String} res.body.message[username] username of the suer
+     * @apiSuccess {Boolean=true} res.body.message[completeReg] This value is set to true because the user has completed the registration step
+     * @apiSuccess {Boolean=true} res.body.message[verified] This value is set to false until the user has verified their email address, if the user has not verified the email address, they should always see a message on their dashboard telling them to verify their email address
+     *
+     *
+     * @apiError INVALID_VERIFICATION_TOKEN
+     **/
+
     async verificationToken (req, res, next) {
         const { token } = req.params;
         try {
