@@ -1,5 +1,4 @@
 import "./models/con.js"; // eslint-disable-line
-import "express-async-error";
 import express     from "express";
 import bodyParser  from "body-parser";
 import helmet      from "helmet";
