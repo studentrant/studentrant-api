@@ -106,48 +106,31 @@ export class Registration {
 
         try {
 
-            const email = await this.utils.Utils.ExtractSessionObjectData(req, "email");
-            const result = await this.register.updateNewUserDetails({
-                criteria: { email },
-                data: {
-                    $set: {
-                        country,
-                        interests,
-                        completeReg: true,
-                        verificationLink: await this.utils.Utils.UniqueCodeGenerator(req, email)
-                    }
-                },
-                options: {
-                    new: true,
-                    fields: {
-                        password: false,
-                        dateOfReg: false,
-                        _id: false,
-                        __v: false,
-                    }
-                }
-            });
+	    const email            = await this.utils.Utils.ExtractSessionObjectData(req, "email");
+	    const verificationLink = await this.utils.Utils.UniqueCodeGenerator(email);
+            const result           = await this.registerService.updateUserAndCompletetReg({email, country, interests , verificationLink });
 
             if (config.get("env") !== "test")
                 delete result.verificationLink;
 
-            Promise.resolve((new Email(req)).sendEmailVerification(email));
+	    const sendEmail = new this.email(req);
+
+	    Promise.resolve(
+		sendEmail.sendEmailVerification(email)
+	    );
+
             return res.status(201).json({ status: 201, message: result });
 
         } catch (ex) {
-            return next(ex);
+	    return next(ex);
         }
     }
 
     async verificationToken (req, res, next) {
         const { token } = req.params;
         try {
-            const userData = await this.register.updateNewUserDetails({
-                criteria: { verificationLink: token },
-                data: { $unset: { verificationLink: 1 }, $set: { verified: true } },
-                options: { new: true, fields: { password: false, _id: false, __v: false, dateOfReg: false } }
-            });
-            return res.status(200).json({ status: 200, message: userData });
+            const userData = await this.registerService.verifyValidationTokenAndSetVerified(token);
+	    return res.status(200).json({ status: 200, message: userData });
         } catch (ex) {
             return next(ex);
         }
