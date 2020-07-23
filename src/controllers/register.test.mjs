@@ -1,103 +1,86 @@
 import * as Utils        from "../utils/index.js";
 import * as constants from "../constants/index.js";
 import { Registration } from "./register.js";
+import { RegisterService } from "../service/register.service.js";
+import { ExistsException } from "../service/exceptions.service.js";
 import RegisterDbUtils   from "../models/dbutils/register.db.util.js";
+import  Email            from "../service/email.service.js";
 import { usersCollection } from "../models/dbmodels/index.js";
 import { req } from "../../__test__/fakes/req.fake.js";
 import { res } from "../../__test__/fakes/res.fake.js";
 import * as nextValue from "../../__test__/fakes/next.fake.js";
 
+const sucessfullyRegistered = {
+    username: "notexistsusername",
+    email: "notexists@example.com",
+    completeReg: false,
+    verified: false
+};
 
 describe("Registration [Unit]", () => {
     const registerController = new Registration(
 	RegisterDbUtils,
+	Email,
 	Utils,
 	usersCollection
     );
 
-    let findOneSpy;
-    let checkUserNameSpy;
-    let checkEmailSpy;
-    let checkUserExistsSpy;
-
     afterEach(() => {
 	req.body = {};
-	findOneSpy.calls.reset();
-	checkUserExistsSpy.calls.reset();
-	checkUserNameSpy.calls.reset();
-	checkUserExistsSpy.calls.reset();
     });
 
-    beforeEach(() => {
-	findOneSpy = spyOn(usersCollection , "findOne");
-	checkUserExistsSpy = spyOn(registerController.register, "checkUserExists").and.callThrough();
-	checkUserNameSpy = spyOn(registerController.register, "checkUserName").and.callThrough();
-	checkEmailSpy = spyOn(registerController.register, "checkEmail").and.callThrough();
-    });
 
-    it("should return email address as already existing when trying to register", async () => {
+    describe("::firstRegStep", () => {
 
-	req.body = { email: "exists@example.com", password: "password", username: "notexistsusername" };
+	let checkUserExistenceSpy, saveUserSpy;
 
-	findOneSpy.and.resolveTo({ email: "exists@example.com" });
+	beforeEach(() => {
+	    checkUserExistenceSpy = spyOn(registerController.registerService, "checkUserExistence");;
+	    saveUserSpy = spyOn(registerController.registerService, "saveUser");
+	});
 
-	const register = JSON.parse(await registerController.firstRegStep(req,res,nextValue.next));
+	afterEach(() => {
+	    checkUserExistenceSpy.calls.reset();
+	    saveUserSpy.calls.reset();
+	});
 
+	it("should throw ExistsException error when searching email that already exists", async () => {
+	    req.body = { email: "exists@example.com", password: "password" , username: "notexists"};
+	    checkUserExistenceSpy.and.resolveTo({ email: "exists@example.com" });
+	    const result = await registerController.firstRegStep(req,res,nextValue.next);
+	    expect(result.status).toEqual(409);
+	    expect(result.message).toEqual(constants.registerConstants.EMAIL_ALREADY_EXISTS);
+	    expect(registerController.registerService.checkUserExistence).toHaveBeenCalled();
+	    expect(registerController.registerService.checkUserExistence).toHaveBeenCalledWith(req.body.email, req.body.username);
+	});
 
-	expect(usersCollection.findOne).toHaveBeenCalled();
-	expect(usersCollection.findOne).toHaveBeenCalledWith({ email: "exists@example.com" }, { email: true });
-	
-	expect(registerController.register.checkUserExists).toHaveBeenCalled();
-	expect(registerController.register.checkUserExists).toHaveBeenCalledWith("email", "exists@example.com");
+	it("should return username if it already exists", async () => {
+	    req.body = { email: "notexists@example.com", password: "password" , username: "existsusername"};
+	    checkUserExistenceSpy.and.resolveTo({ username: "existsusername" });
+	    const register = await registerController.firstRegStep(req,res,nextValue.next);
+	    expect(register.status).toEqual(409);
+	    expect(register.message).toEqual(constants.registerConstants.USERNAME_ALREADY_EXISTS);
+	    expect(registerController.registerService.checkUserExistence).toHaveBeenCalled();
+	    expect(registerController.registerService.checkUserExistence).toHaveBeenCalledWith(req.body.email, req.body.username);
+	});
 
-	expect(registerController.register.checkUserName).not.toHaveBeenCalled();
-	expect(registerController.register.checkEmail).toHaveBeenCalled();
-	expect(registerController.register.checkEmail).toHaveBeenCalledWith("exists@example.com");
+	it("should register user", async () => {
 
-	expect(register.status).toEqual(409);
-	expect(register.message).toEqual(constants.registerConstants.EMAIL_ALREADY_EXISTS);
-    });
+	    req.body = { email: "notexists@example.com", password: "password" , username: "notexistsusername" };
 
-    it("should return username if it already exists", async () => {
+	    checkUserExistenceSpy.and.resolveTo(undefined);
+	    saveUserSpy.and.resolveTo(sucessfullyRegistered);
 
-	req.body = { email: "notexists@example.com", password: "password" , username: "existsusername"};
+	    const result = JSON.parse(await registerController.firstRegStep(req,res,nextValue.next));
 
-	checkEmailSpy.and.resolveTo(false);
-	checkUserNameSpy.and.resolveTo({username: "existsusername"});
+	    expect(result.status).toEqual(201);
+	    expect(result.message.password).toBeUndefined();
+	    expect(result.message._id).toBeUndefined();
+	    expect(result.message.__v).toBeUndefined();
+	    expect(req.session.user).toBeDefined();
+	    expect(req.session.user).toEqual(result.message);
+	    expect(result.message).toEqual(sucessfullyRegistered);
 
-	const register = JSON.parse(await registerController.firstRegStep(req,res,nextValue.next));
-
-	expect(registerController.register.checkUserName).toHaveBeenCalled();
-	expect(registerController.register.checkUserName).toHaveBeenCalledWith("existsusername");
-	expect(registerController.register.checkEmail).toHaveBeenCalled();
-	expect(registerController.register.checkEmail).toHaveBeenCalledWith("notexists@example.com");
-	
-	expect(register.status).toEqual(409);
-	expect(register.message).toEqual(constants.registerConstants.USERNAME_ALREADY_EXISTS);
-
-    });
-
-    xit("should register user", async () => {
-	
-	req.body = { email: "notexists@example.com", password: "password" , username: "notexistsusername"};
-
-	
-	findOneSpy.and.resolveTo(null);
-
-	const register = JSON.parse(await registerController.firstRegStep(req,res,nextValue.next));
-
-
-	expect(usersCollection.findOne).toHaveBeenCalled();
-	expect(usersCollection.findOne).toHaveBeenCalledWith({ email: "notexists@example.com" }, { email: true });
-	
-	expect(registerController.register.checkUserExists).toHaveBeenCalled();
-	expect(registerController.register.checkUserExists).toHaveBeenCalledWith("email", "notexists@example.com");
-	console.log(checkUserExistsSpy.call.all())
-	expect(registerController.register.checkUserName).not.toHaveBeenCalled();
-	expect(registerController.register.checkEmail).toHaveBeenCalled();
-	expect(registerController.register.checkEmail).toHaveBeenCalledWith("exists@example.com");
-
-	expect(register.status).toEqual(409);
-	expect(register.message).toEqual(constants.registerConstants.EMAIL_ALREADY_EXISTS);
+	});
     });
 });
