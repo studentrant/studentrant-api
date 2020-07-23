@@ -42,33 +42,26 @@ export class Registration {
      **/
 
     async firstRegStep(req,res,next) {
+
         try {
+
 	    const { email, username, password } = req.body;
-	    /**
-	     * check for the existence of email
-	     * if it does exists the left hand part of the logical or operatior will fill data
-	     * if it is null the right part of the logical or operator will fill data
-	     *
-	     **/
-	    const data = await this.register.checkEmail(email) || await this.register.checkUserName(username);
+	    const data = await this.registerService.checkUserExistence(email,username);
 
-	    if ( data ) return res.status(409).json(
-                {
-                    status: 409,
-                    message: data.email ?
-                        constants.registerConstants.EMAIL_ALREADY_EXISTS :
-                        constants.registerConstants.USERNAME_ALREADY_EXISTS
-                }
-	    );
+	    if ( data ) {
+		throw ExistsException(
+		    data.email ?
+			constants.registerConstants.EMAIL_ALREADY_EXISTS :
+			constants.registerConstants.USERNAME_ALREADY_EXISTS
+		);
+	    }
 
-            const result = await this.register.saveNewUser({
-                password: await Utils.PasswordUtils.HashPassword(password),
-                userId: crypto.createHash("sha256").update(`${username}${email}`).digest("hex"),
-                username,
-                email
-            });
+            const result = await this.registerService.saveUser({ username, password , email });
+
             this.utils.Utils.SetSessionObject(req, result);
+
             return res.status(201).json({ status: 201, message: result });
+
         } catch(ex) {
 	    return next(ex);
         }

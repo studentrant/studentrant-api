@@ -1,4 +1,5 @@
-import con         from "./models/con.js"; // eslint-disable-line
+import "./models/con.js"; // eslint-disable-line
+import "express-async-error";
 import express     from "express";
 import bodyParser  from "body-parser";
 import helmet      from "helmet";
@@ -7,6 +8,8 @@ import mongoStore  from "connect-mongodb-session";
 import betterLogging from "better-logging";
 import config      from "./config.js";
 import mountRoutes from "./mountRoutes.js";
+
+import { badExceptionConstants }  from "./constants/index.js";
 import * as routes from "./routes/index.js";
 
 const app = express();
@@ -44,7 +47,15 @@ app.use("*", (req, res, next) => {
 
 // eslint-disable-next-line
 app.use((err, req, res, next) => {
-    return res.status(500).json({ status: 500, message: err.message });
+    const { status, message } = err.errorDetails ?
+	err.errorDetails :
+	{
+	    status: 500,
+	    message: process.env.NODE_ENV === "production" ?
+		badExceptionConstants :
+		err.message
+	};
+    return res.status(status).json({ status, message });
 });
 
 
