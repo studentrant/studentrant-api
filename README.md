@@ -26,6 +26,12 @@
 
 `npm run lint:fix`
 
+
+### generate html documentation
+
+`npm run doc`
+
+
 ### start up mongodb database
 
 ```bash
