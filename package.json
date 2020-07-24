@@ -16,7 +16,7 @@
 	"server": "nodemon server.js --env dev",
 	"lint": "eslint '**/*.js'",
 	"lint:fix": "eslint --fix '**/*.js'",
-	"doc": "apidoc -i controllers/ -o doc/html-page",
+	"doc": "apidoc -i src/ -o doc/html-page",
 	"doc:watch": "nodemon  --watch controllers/ --exec npm run doc"
     },
     "repository": {

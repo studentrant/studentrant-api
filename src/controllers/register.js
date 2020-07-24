@@ -127,7 +127,7 @@ export class Registration {
     }
 
     /**
-     * @api { patch } /register/verification/:token Last registration step of user
+     * @api { patch } /register/verification/:token Verify user token
      * @apiName tokenVerification
      * @apiGroup Register
      *
