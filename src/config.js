@@ -5,13 +5,7 @@ import convict from "convict";
 console.log(process.env.NODE_ENV);
 const config  = convict({
 
-    externalApis: {
-        doc: "Credentials for external apis",
-        loomai: {
-	    client_id: "jow7m83kI03ipUDcCrvDZKVqhinFTZbf",
-	    client_secret: "vPnhDLp-IC0iagencnnxjLSikRdSOBI1652RjuHUJMeIMsHJ4f1gfxnJXm3k0ZFl"
-        }
-    },
+    externalApis: {},
 
     dbConnectionString: {
 
@@ -39,7 +33,7 @@ const config  = convict({
 	    format: String,
 	    default: "nil"
         },
-	
+
         db_pass: {
 	    format: String,
 	    default: "nil"
@@ -77,8 +71,8 @@ const config  = convict({
     },
     env: {
         doc: "Environment",
-        format: [ "dev" , "prod", "test" ],
-        default: "dev",
+        format: [ "dev" , "prod", "test", undefined ],
+        default: undefined,
         env: "NODE_ENV"
     },
     session_secret: {
@@ -109,8 +103,8 @@ const config  = convict({
     }
 });
 
+if ( config.get("env") !== undefined) config.loadFile(`./.${config.get("env")}.json`);
 
-config.loadFile(`./.${config.get("env")}.json`);
 config.validate( { allowed: "strict" } );
 
 
@@ -130,9 +124,10 @@ if ( config.get("env") === "test" )
         `mongodb://${hostp1},${hostp2},${hostp3}/${config.get("dbConnectionString.dbName")}?${config.get("dbConnectionString.extraArgument")}&replicaSet=${config.get("dbConnectionString.replicaSetName")}`
     );
 else
-    config.set(
-        "dbConnectionString.connString",
-        `mongodb://${config.get("dbConnectionString.db_user")}:${config.get("dbConnectionString.db_pass")}@${hostp1},${hostp2},${hostp3}/${config.get("dbConnectionString.dbName")}?${config.get("dbConnectionString.extraArgument")}&replicaSet=${config.get("dbConnectionString.replicaSetName")}`
-    );
+    if ( config.get("env") !== undefined )
+	config.set(
+            "dbConnectionString.connString",
+            `mongodb://${config.get("dbConnectionString.db_user")}:${config.get("dbConnectionString.db_pass")}@${hostp1},${hostp2},${hostp3}/${config.get("dbConnectionString.dbName")}?${config.get("dbConnectionString.extraArgument")}&replicaSet=${config.get("dbConnectionString.replicaSetName")}`
+	);
 
 export default config;
