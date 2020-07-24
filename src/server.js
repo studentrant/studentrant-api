@@ -47,13 +47,13 @@ app.use("*", (req, res, next) => {
 // eslint-disable-next-line
 app.use((err, req, res, next) => {
     const { status, message } = err.errorDetails ?
-	err.errorDetails :
-	{
+        err.errorDetails :
+        {
 	    status: 500,
 	    message: process.env.NODE_ENV === "production" ?
-		badExceptionConstants :
-		err.message
-	};
+                badExceptionConstants :
+                err.message
+        };
     return res.status(status).json({ status, message });
 });
 

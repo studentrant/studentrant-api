@@ -1,8 +1,8 @@
 class Exceptions extends Error {
     constructor(message,errorName,errorDetails) {
-	super(message);
-	this.name = errorName;
-	this.errorDetails = errorDetails;
+        super(message);
+        this.name = errorName;
+        this.errorDetails = errorDetails;
     }
 }
 
@@ -10,11 +10,11 @@ class Exceptions extends Error {
 
 export const ExistsException = message => {
     return new Exceptions(
-	message,
-	"ExistsException",
-	{
+        message,
+        "ExistsException",
+        {
 	    status: 409,
 	    message
-	}
+        }
     );
 };

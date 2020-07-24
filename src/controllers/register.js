@@ -7,18 +7,18 @@ import { ExistsException } from "../service/exceptions.service.js";
 export class Registration {
 
     constructor(
-	RegisterDbUtils,
-	Email,
-	Utils,
-	usersCollection
+        RegisterDbUtils,
+        Email,
+        Utils,
+        usersCollection
     ) {
-	this.utils = Utils;
+        this.utils = Utils;
         this.usersCollection = usersCollection;
-	this.registerService = new RegisterService(
+        this.registerService = new RegisterService(
 	    new RegisterDbUtils(usersCollection),
 	    Utils
-	);
-	this.email = Email;
+        );
+        this.email = Email;
     }
 
     /**
@@ -56,11 +56,11 @@ export class Registration {
 	    const data = await this.registerService.checkUserExistence(email,username);
 
 	    if ( data ) {
-		throw ExistsException(
+                throw ExistsException(
 		    data.email ?
-			constants.registerConstants.EMAIL_ALREADY_EXISTS :
-			constants.registerConstants.USERNAME_ALREADY_EXISTS
-		);
+                        constants.registerConstants.EMAIL_ALREADY_EXISTS :
+                        constants.registerConstants.USERNAME_ALREADY_EXISTS
+                );
 	    }
 
             const result = await this.registerService.saveUser({ username, password , email });
@@ -116,7 +116,7 @@ export class Registration {
 	    const sendEmail = new this.email(req);
 
 	    Promise.resolve(
-		sendEmail.sendEmailVerification(email)
+                sendEmail.sendEmailVerification(email)
 	    );
 
             return res.status(201).json({ status: 201, message: result });
