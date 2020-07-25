@@ -18,3 +18,36 @@ export const ExistsException = message => {
         }
     );
 };
+
+export const UnAuthorizedAccessException = message => {
+    return new Exceptions(
+	message,
+	"UnAuthorizedAccessException",
+	{
+	    status: 401,
+	    message
+	}
+    );
+};
+
+export const BadValueException = message => {
+    return new Exceptions(
+	message,
+	"BadValueException",
+	{
+	    status: 412,
+	    message
+	}
+    );
+};
+
+export const NotFoundException = message => {
+    return new Exceptions(
+	message,
+	"NotFoundException",
+	{
+	    status: 404,
+	    message
+	}
+    );
+};
