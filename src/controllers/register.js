@@ -63,7 +63,11 @@ export class Registration {
                 );
 	    }
 
-            const result = await this.registerService.saveUser({ username, password , email });
+            const result = await this.registerService.saveUser({
+                username,
+                password : await this.utils.PasswordUtils.HashPassword(password),
+                email
+	    });
 
             this.utils.Utils.SetSessionObject(req, result);
 

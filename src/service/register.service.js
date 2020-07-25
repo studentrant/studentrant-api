@@ -4,7 +4,7 @@ export class RegisterService {
         RegisterService.__DBUTILS = this.registerDbUtils = registerDbUtils;
         this.utils = Utils;
     }
-    
+
     static async UpdateUserDetails(lookup,updateOperation) {
         return await RegisterService.__DBUTILS.updateNewUserDetails({
             criteria: { [lookup[0]]: lookup[1] },
@@ -26,11 +26,10 @@ export class RegisterService {
     }
 
     async saveUser({ username, password, email }) {
-        const hashedPassword = await this.utils.PasswordUtils.HashPassword(password);
         const result   = await this.registerDbUtils.saveNewUser({
 	    username,
 	    email,
-	    password: hashedPassword
+	    password
         });
         return result;
     }
@@ -43,7 +42,6 @@ export class RegisterService {
                 $set: { verified: true }
 	    }
         );
-
     }
 
     async updateUserAndCompletetReg(values) {
