@@ -46,7 +46,7 @@ describe("Login [Unit]", () => {
     it("should not allow invalid logins for username", async () => {
 	req.body = { username: "fake", password: "fake" };
 	findOneSpy.and.resolveTo(false);
-	const login = JSON.parse(await loginController.login(req,res,nextValue.next));
+	const login = await loginController.login(req,res,nextValue.next);
 	expect(usersCollection.findOne).toHaveBeenCalled();
 	expect(usersCollection.findOne).toHaveBeenCalledWith({ username: "fake"});
 	expect(login.status).toEqual(404);
@@ -57,7 +57,7 @@ describe("Login [Unit]", () => {
     it("should not allow invalid logins for email", async () => {
 	req.body = { email: "fake@example.com", password: "fake" };
 	findOneSpy.and.resolveTo(false);
-	const login = JSON.parse(await loginController.login(req,res,nextValue.next));
+	const login = await loginController.login(req,res,nextValue.next);
 	expect(usersCollection.findOne).toHaveBeenCalled();
 	expect(usersCollection.findOne).toHaveBeenCalledWith({ email: "fake@example.com"});
 	expect(login.status).toEqual(404);
@@ -68,7 +68,7 @@ describe("Login [Unit]", () => {
 	req.body = { email: "real", password: "fake" };
 	findOneSpy.and.resolveTo({ data: { password: "fake" } });
 	verifyPasswordUtilsSpy.and.resolveTo(false);
-	const login = JSON.parse(await loginController.login(req,res,nextValue.next));
+	const login = await loginController.login(req,res,nextValue.next);
 	expect(usersCollection.findOne).toHaveBeenCalled();
 	expect(usersCollection.findOne).toHaveBeenCalledWith({ email: "real"});
 	expect(login.status).toEqual(404);
