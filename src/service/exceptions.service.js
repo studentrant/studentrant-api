@@ -6,8 +6,6 @@ class Exceptions extends Error {
     }
 }
 
-
-
 export const ExistsException = message => {
     return new Exceptions(
         message,
@@ -21,33 +19,33 @@ export const ExistsException = message => {
 
 export const UnAuthorizedAccessException = message => {
     return new Exceptions(
-	message,
-	"UnAuthorizedAccessException",
-	{
+        message,
+        "UnAuthorizedAccessException",
+        {
 	    status: 401,
 	    message
-	}
+        }
     );
 };
 
 export const BadValueException = message => {
     return new Exceptions(
-	message,
-	"BadValueException",
-	{
+        message,
+        "BadValueException",
+        {
 	    status: 412,
 	    message
-	}
+        }
     );
 };
 
 export const NotFoundException = message => {
     return new Exceptions(
-	message,
-	"NotFoundException",
-	{
+        message,
+        "NotFoundException",
+        {
 	    status: 404,
 	    message
-	}
+        }
     );
 };

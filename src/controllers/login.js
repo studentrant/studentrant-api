@@ -32,7 +32,7 @@ export default class Login {
 	    const data = await this.__checkForUserExistence(res,next, { username, email, password } );
 
 	    if ( typeof(data) === "string" )
-		throw NotFoundException(data);
+                throw NotFoundException(data);
 	    
             this.utils.Utils.SetSessionObject(req, {
                 email       : data.email,
