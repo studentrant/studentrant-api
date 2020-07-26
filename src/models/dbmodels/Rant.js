@@ -24,4 +24,4 @@ const RantSchema = new mongoose.Schema({
     rantDownvote : Number,
 });
 
-export const rants = mongoose.model("Rants", RantSchema);
+export const rantsCollection = mongoose.model("Rants", RantSchema);
