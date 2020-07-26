@@ -6,6 +6,11 @@ export default class RantValidators {
         if ( ! req.body.rant )
 	    throw BadValueException(rantConstants.RANT_BODY_UNDEFINED);
 
+	/**
+	 * TODO: split on white space to test if content is <= 20
+	 * instead of trimming out white space and counting by words
+	 *
+	 **/
         if ( req.body.rant.trim().length <= 20 )
 	    throw BadValueException(rantConstants.RANT_LENGTH_NOT_MORE_THAN_TWENTY);
         return next();
