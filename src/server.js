@@ -24,7 +24,8 @@ const sessionStore = session({
 });
 
 
-betterLogging(console);
+if ( process.env.NODE_ENV !== "test" )
+    betterLogging(console);
 
 app.set("PORT", config.get("SERVER.PORT"));
 app.use(sessionStore);
@@ -54,6 +55,8 @@ app.use((err, req, res, next) => {
                 badExceptionConstants :
                 err.message
         };
+    if ( process.env.NODE_ENV !== "production" && status === 500 )
+	console.error(err);
     return res.status(status).json({ status, message });
 });
 
