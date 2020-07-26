@@ -56,7 +56,7 @@ app.use((err, req, res, next) => {
                 err.message
         };
     if ( process.env.NODE_ENV !== "production" && status === 500 )
-	console.error(err);
+        console.error(err);
     return res.status(status).json({ status, message });
 });
 

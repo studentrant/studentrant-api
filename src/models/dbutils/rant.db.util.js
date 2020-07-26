@@ -1,6 +1,6 @@
 export default class RantDbUtils {
     constructor(rantsCollection) {
-	this.rantsCollection = rantsCollection;
+        this.rantsCollection = rantsCollection;
     }
     async saveRant(data) {
         await (new this.rantsCollection(data).save());
