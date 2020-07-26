@@ -1,21 +1,26 @@
-import { v4 as uuidv4 } from "uuid";
+import { PostRantService } from "../service/post-rant.service.js";
 
 export default class PostRant {
-    contructor(rantDbUtils) {
-        this.rantDbUtils = rantDbUtils;
+    constructor(RantDbUtils,Utils,rantsCollection) {
+	this.utils = Utils;
+	this.postRantService = new PostRantService(
+	    new RantDbUtils(rantsCollection)
+	);
     }
-    
-    async postRant(req,res,next) {
+
+    async createRant(req,res,next) {
+
         const { rant, tags } = req.body;
-        const rantId = uuidv4();
+
+	if ( tags.length === 0 ) tags.push("general");
+
         try {
-	    const result = await this.register({
-                rant,
-                tags,
-                rantId
+	    const result = await this.postRantService.createRant({
+		rant,
+		tags
 	    });
 	    return res.status(201).json({ status: 201, message: result });
-        } catch(ex) { 
+        } catch(ex) {
 	    return next(ex);
         }
     }
