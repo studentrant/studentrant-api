@@ -2,8 +2,7 @@ import mongoose from "mongoose";
 
 const RantSchema = new mongoose.Schema({
     tags: {
-        type    : Array,
-        default : [ "general" ]
+        type   : Array,
     },
     rantId: {
         type   : String,
