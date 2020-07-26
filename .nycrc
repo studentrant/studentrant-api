@@ -1,10 +1,10 @@
 {
   "extension": [".js"],
   "include": [
-    "src/**"
+    "src/**/*.js"
   ],
-  "exclude": ["controllers/*", "__test__/*"],
-  "reporter": [ "html" ],
+  "exclude": ["**/**/*.mjs"],
+  "reporter": [ "html", "text" ],
   "all": true,
   "watermarks": {
     "lines": [65, 75],
