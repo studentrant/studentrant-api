@@ -1,26 +1,28 @@
-import RantDbUtils from "../../models/dbutils/rant.utils.js";
+import RantDbUtils from "../../models/dbutils/rant.db.util.js";
 import PostRant    from "../../controllers/post-rant.js";
 import RantValidators from "../../middlewares/rant.js";
+import { rantsCollection } from "../../models/dbmodels/index.js";
 import * as Utils  from "../../utils/index.js";
 
 export class PostRantRoute {
     constructor(routeHandler) {
         this.controller = new PostRant(
 	    RantDbUtils,
-	    Utils
+	    Utils,
+	    rantsCollection
         );
-        routeHandler.post("/", this.postRant());
+        routeHandler.post("/", this.createRant());
         //routeHandler.delete("/delete/:rant-id", this.deleteRant());
         //routeHandler.patch("/edit/:rant-id", this.editRant());
         //routeHandler.post("/reply/:rant-id", this.replyRant());
         return routeHandler;
     }
 
-    postRant() {
+    createRant() {
         return [
 	    RantValidators.VerifyRant,
 	    RantValidators.VerifyRantTags,
-	    this.controller.postRant.bind(this.controller)
+	    this.controller.createRant.bind(this.controller)
         ];
     }
 
