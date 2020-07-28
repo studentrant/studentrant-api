@@ -12,11 +12,13 @@ export class PostRantRoute {
 	    rantsCollection
         );
         routeHandler.post("/", this.createRant());
-        //routeHandler.delete("/delete/:rant-id", this.deleteRant());
+        routeHandler.delete("/delete/", this.deleteRant());
         //routeHandler.patch("/edit/:rant-id", this.editRant());
         //routeHandler.post("/reply/:rant-id", this.replyRant());
         return routeHandler;
     }
+
+    static API_PATH = "/post"
 
     createRant() {
         return [
@@ -26,9 +28,10 @@ export class PostRantRoute {
         ];
     }
 
-    deletRant() {
+    deleteRant() {
         return [
-
+	    RantValidators.VerifyRantId,
+	    this.controller.deleteRant.bind(this.controller)
         ];
     }
 

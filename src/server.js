@@ -32,6 +32,7 @@ app.use(sessionStore);
 app.use(helmet());
 app.use(bodyParser.json());
 
+
 mountRoutes(
     app,
     [
@@ -56,7 +57,7 @@ app.use((err, req, res, next) => {
                 err.message
         };
     if ( process.env.NODE_ENV !== "production" && status === 500 )
-        console.error(err);
+        console.error(err,message);
     return res.status(status).json({ status, message });
 });
 

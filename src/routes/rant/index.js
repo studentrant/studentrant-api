@@ -9,7 +9,7 @@ export class RantRoute {
         const post   = new PostRantRoute(router);
         //const reply  = new ReplyRantRoute(router);
         routeHandler.use(Auth.IsLogin);
-        routeHandler.use("/post", post);
+        routeHandler.use(PostRantRoute.API_PATH, post);
         //routeHandler.use("/reply", reply);
         return routeHandler;
     }
