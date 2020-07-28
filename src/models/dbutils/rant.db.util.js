@@ -13,16 +13,16 @@ export default class RantDbUtils {
     }
 
     async findOneRant(ops) {
-	return await this.rantsCollection.findOne(
+        return await this.rantsCollection.findOne(
 	    ops.query,
 	    ops.project
-	).lean();
+        ).lean();
     }
 
     async deleteOneRant(rantId) {
-	return await this.rantsCollection.updateOne(
+        return await this.rantsCollection.updateOne(
 	    { rantId },
 	    { $set: { deleted: true } }
-	).lean();
+        ).lean();
     }
 }

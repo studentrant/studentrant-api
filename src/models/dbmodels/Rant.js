@@ -10,7 +10,7 @@ const RantSchema = new mongoose.Schema({
     },
     rantPoster: {
         type  : String,
-	ref   : "Users",
+        ref   : "Users",
         index : true
     },
     rant: {
@@ -22,8 +22,8 @@ const RantSchema = new mongoose.Schema({
         childrenCommentId  : [{type: String}]
     }],
     deleted      : {
-	type     : Boolean,
-	default  : false
+        type     : Boolean,
+        default  : false
     },
     rantUpvote   : Number,
     rantDownvote : Number,

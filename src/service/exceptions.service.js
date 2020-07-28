@@ -53,10 +53,10 @@ export const NotFoundException = message => {
 // thrown when trying to access a deleted resource
 export const GoneException = message => {
     throw new Exceptions(
-	message,
-	"GoneException",
-	{
+        message,
+        "GoneException",
+        {
 	    message
-	}
+        }
     );
-}
+};

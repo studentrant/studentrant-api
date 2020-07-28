@@ -8,23 +8,23 @@ export class PostRantService {
         return await this.rantDbUtils.saveRant({ ...data , rantId });
     }
     async validateRantExistence(rantId) {
-	return await this.rantDbUtils.findOneRant(
+        return await this.rantDbUtils.findOneRant(
 	    {
-		query   : { rantId },
-		project : { deleted: true}
+                query   : { rantId },
+                project : { deleted: true}
 	    }
-	);
+        );
     }
 
     async validateRantCreator(username,rantId) {
-	return await this.rantDbUtils.findOneRant(
+        return await this.rantDbUtils.findOneRant(
 	    {
-		query : { rantId , rantPoster: username }
+                query : { rantId , rantPoster: username }
 	    }
-	);
+        );
     }
 
     async deleteRant(rantId) {
-	return await this.rantDbUtils.deleteOneRant(rantId);
+        return await this.rantDbUtils.deleteOneRant(rantId);
     }
 }
