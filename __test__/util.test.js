@@ -1,4 +1,4 @@
-// eslint-disable no-undef
+/* eslint-disable no-undef */
 export const login = (agent,cb) => {
     agent
         .post("/login")
