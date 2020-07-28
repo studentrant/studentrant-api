@@ -1,4 +1,3 @@
-"use strict";
 
 import supertest from "supertest";
 import app       from "../src/server.js";
@@ -142,6 +141,7 @@ describe("CreateRant [Integration]", () => {
 		    expect(res.body.message.tags).toEqual([ "abuse", "student", "auchipoly"]);
 		    expect(res.body.message.rantComments).toEqual([]);
 		    expect(res.body.message.rantId).toBeDefined();
+		    expect(res.body.message.rantPoster).toEqual("testaccount");
 		    expect(res.body.message.rant).toEqual("This is a rant about abuse in a school and how it has affected students");
 		    done();
 	        });
@@ -162,6 +162,7 @@ describe("CreateRant [Integration]", () => {
 		    expect(res.body.message.tags).toEqual([ "general"]);
 		    expect(res.body.message.rantComments).toEqual([]);
 		    expect(res.body.message.rantId).toBeDefined();
+		    expect(res.body.message.rantPoster).toEqual("testaccount");
 		    expect(res.body.message.rant).toEqual("This is a rant about abuse in a school and how it has affected students");
 		    done();
 	        });
