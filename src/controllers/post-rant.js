@@ -35,7 +35,9 @@ export default class PostRant {
         if ( tags.length === 0 ) tags.push("general");
 
         try {
-	    const result = await this.postRantService.createRant({
+	    const username = await this.utils.Utils.ExtractSessionObjectData(req, "username");
+	    const result   = await this.postRantService.createRant({
+		rantPoster: username,
                 rant,
                 tags
 	    });
