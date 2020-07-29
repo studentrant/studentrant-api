@@ -1,3 +1,4 @@
+import Diff from "diff";
 import * as constants from "../constants/index.js";
 import { PostRantService } from "../service/post-rant.service.js";
 import { NotFoundException, GoneException, UnAuthorizedAccessException } from "../service/exceptions.service.js";
@@ -15,7 +16,7 @@ export default class PostRant {
      * if someone tries to find a way to delete a rant
      * not created by them
      **/
-    static async ValidateRantForDeletion(username,rantId) {
+    static async ValidateRantForModification(username,rantId) {
         const __postRantService = PostRant.__POST_SERVICE_RANT;
         const validateAndGetRant = await __postRantService.validateRantExistence(rantId);
 
@@ -23,9 +24,19 @@ export default class PostRant {
         if ( validateAndGetRant.deleted ) throw GoneException(constants.rantConstants.RANT_HAS_ALREADY_BEEN_DELETED);
 
         if ( ! (await __postRantService.validateRantCreator(username,rantId)) )
-	    throw UnAuthorizedAccessException(constants.rantConstants.RANT_DELETE_NOT_USER);
+	    throw UnAuthorizedAccessException(constants.rantConstants.RANT_NOT_USER);
 
         return false;
+    }
+
+    /**
+     * currentRant is what is on the
+     *
+     *
+     **/
+    static async DiffRants(currentRant,replaceRant) {
+	const diffValues = Diff.diffChars(currentRant, replaceRant);
+	return { diff: diffValues , diffAgainst: currentRant };
     }
 
     async createRant(req,res,next) {
@@ -55,7 +66,7 @@ export default class PostRant {
 
 	    const username = await this.utils.Utils.ExtractSessionObjectData(req, "username");
 
-	    await PostRant.ValidateRantForDeletion(username,rantId);
+	    await PostRant.ValidateRantForModification(username,rantId);
 	    await this.postRantService.deleteRant(rantId);
 
 	    return res.status(200).json({ status: 200, message: constants.rantConstants.RANT_SUCCESSFULLY_DELETED});
@@ -63,5 +74,29 @@ export default class PostRant {
         } catch(ex) {
 	    return next(ex);
         }
+    }
+
+    async editRant(req,res,next) {
+	const { rantId }     = req.params;
+	const { tags, rant, when } = req.body;
+
+	try {
+
+	    const username     = await this.utils.Utils.ExtractSessionObjectData(req, "username");
+	    const modification = await PostRant.ValidateRantForModification(username,rantId); // eslint-disable-line
+	    const currentRant  = await this.postRantService.getRant(rantId).rant;
+	    const diff         = PostRant.DiffRants(currentRant, rant);
+
+	    const result = await this.postRantService.editRant(username,rantId, {
+		rant,
+		currentRant,
+		tags,
+		when,
+		diff
+	    });
+
+	} catch(ex) {
+	    return next(ex);
+	}
     }
 }

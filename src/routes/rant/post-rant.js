@@ -13,7 +13,7 @@ export class PostRantRoute {
         );
         routeHandler.post("/", this.createRant());
         routeHandler.delete("/delete/", this.deleteRant());
-        //routeHandler.patch("/edit/:rant-id", this.editRant());
+        routeHandler.patch("/edit/:rantId", this.editRant());
         //routeHandler.post("/reply/:rant-id", this.replyRant());
         return routeHandler;
     }
@@ -37,7 +37,10 @@ export class PostRantRoute {
 
     editRant() {
         return [
-
+	    RantValidators.VerifyRantId,
+	    RantValidators.VerifyRantTags,
+	    RantValidators.VerifyRant,
+	    this.controller.editRant.bind(this.controller)
         ];
     }
 

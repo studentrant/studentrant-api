@@ -27,4 +27,48 @@ export class PostRantService {
     async deleteRant(rantId) {
         return await this.rantDbUtils.deleteOneRant(rantId);
     }
+
+    async getRant(rantId) {
+	return await this.rantDbUtils.findOneRant(
+	    {
+		query: { rantId }
+	    }
+	);
+    }
+
+    async editRant(username,rantId,values) {
+
+	const editOperation = {
+	    $set : {
+		rant : values.rant,
+		edit : {
+		    isEdited: true
+		}
+	    },
+	    $addToSet: {
+		"edit.editHistory": {
+		    when: values.when
+		},
+		tags: { $each: values.tags }
+	    }
+	};
+
+	const insertDiffToRantOperation = {
+	    $set: {
+		"edit.editHistory.$.diff" : values.diff
+	    }
+	};
+
+	const editedRant = await this.rantDbUtils.editOneRant({
+	    query     : { username, rantId },
+	    operation : editOperation
+	});
+
+	const appliedDiff = await this.rantDbUtils.editOneRant({
+	    query     : { username, rantId, "edit.editHistory.when": values.when },
+	    operation : insertDiffToRantOperation
+	});
+
+	return appliedDiff;
+    }
 }

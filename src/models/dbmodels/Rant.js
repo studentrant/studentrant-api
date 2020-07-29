@@ -25,6 +25,25 @@ const RantSchema = new mongoose.Schema({
         type     : Boolean,
         default  : false
     },
+    edit: {
+	isEdited    : {
+	    type    : Boolean,
+	    default : false
+	},
+	editHistory : [
+	    {
+		when : Number,
+		diff : [
+		    {
+			value   : String,
+			added   : Boolean,
+			removed : Boolean
+		    }
+		],
+		diffAgainst : String
+	    }
+	]
+    },
     rantUpvote   : Number,
     rantDownvote : Number,
 });
