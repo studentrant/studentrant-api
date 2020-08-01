@@ -12,7 +12,7 @@ describe("DeleteRant [Integration]", () => {
     describe("Unauthenticated User", () => {
 	it("should return 401 unauthroized access if user is not logged in", done => {
 	    agent
-		.post("/rant/post")
+		.delete("/rant/post/delete")
 		.send({})
 		.expect(401).end((err,res) => {
 		    expect(err).toBeNull();
