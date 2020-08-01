@@ -29,7 +29,10 @@ describe("DeleteRant [Integration]", () => {
 	beforeAll(done => {
 	    testUtils.login(agent, arg => testUtils.createRant(
 		agent,
-		cookie = arg,
+		{
+		    rant   : "this is a rant to edit for the edit rant test test",
+		    cookie : cookie = arg
+		},
 		arg => {
 		    rantId = arg;
 		    done();

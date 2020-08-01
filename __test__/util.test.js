@@ -9,7 +9,7 @@ export const login = (agent,cb) => {
         });
 };
 
-export const createRant = (agent,cookie,cb) => { 
+export const createRant = (agent,{rant,cookie},cb) => {
     agent
         .post("/rant/post/")
         .set("cookie", cookie)
