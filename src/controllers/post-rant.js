@@ -11,6 +11,8 @@ export default class PostRant {
         );
     }
 
+    static SetRantTagsToGeneralIfEmpty = tags => tags.length === 0 && tags.push("general");
+
     /**
      * extra guard to handle security that might occur
      * if someone tries to find a way to delete a rant
@@ -43,9 +45,10 @@ export default class PostRant {
 
         const { rant, tags } = req.body;
 
-        if ( tags.length === 0 ) tags.push("general");
-
         try {
+
+	    PostRant.SetRantTagsToGeneralIfEmpty(tags);
+
 	    const username = await this.utils.Utils.ExtractSessionObjectData(req, "username");
 	    const result   = await this.postRantService.createRant({
                 rantPoster: username,
