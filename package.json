@@ -17,7 +17,7 @@
 	"lint": "eslint '**/*.js'",
 	"lint:fix": "eslint --fix '**/*.js'",
 	"doc": "apidoc -i src/ -o doc/html-page",
-	"doc:watch": "nodemon  --watch controllers/ --exec npm run doc"
+	"doc:watch": "nodemon --watch src/ --exec npm run doc"
     },
     "repository": {
 	"type": "git",
