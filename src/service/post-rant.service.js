@@ -29,11 +29,11 @@ export class PostRantService {
     }
 
     async getRant(rantId) {
-	return await this.rantDbUtils.findOneRant(
+        return await this.rantDbUtils.findOneRant(
 	    {
-		query: { rantId }
+                query: { rantId }
 	    }
-	);
+        );
     }
 
     /**
@@ -46,37 +46,37 @@ export class PostRantService {
      **/
     async editRant(username,rantId,values) {
 
-	const editOperation = {
+        const editOperation = {
 	    $set : {
-		rant : values.editedRant,
-		"edit.isEdited" : true
+                rant : values.editedRant,
+                "edit.isEdited" : true
 	    },
 	    $addToSet: {
-		"edit.editHistory": {
+                "edit.editHistory": {
 		    when: values.when
-		},
-		tags: { $each: values.tags }
+                },
+                tags: { $each: values.tags }
 	    }
-	};
+        };
 
-	const insertDiffToRantOperation = {
+        const insertDiffToRantOperation = {
 	    $set: {
-		"edit.editHistory.$.diff" : values.diff,
-		"edit.editHistory.$.diffAgainst": values.currentRantInDb
+                "edit.editHistory.$.diff" : values.diff,
+                "edit.editHistory.$.diffAgainst": values.currentRantInDb
 	    }
-	};
+        };
 
-	// eslint-disable-next-line
+        // eslint-disable-next-line
 	const editedRant = await this.rantDbUtils.editOneRant({
 	    query     : { rantPoster: username, rantId },
 	    operation : editOperation
-	});
+        });
 
-	const appliedDiff = await this.rantDbUtils.editOneRant({
+        const appliedDiff = await this.rantDbUtils.editOneRant({
 	    query     : { rantPoster: username, rantId, "edit.editHistory.when": values.when },
 	    operation : insertDiffToRantOperation
-	});
+        });
 
-	return appliedDiff;
+        return appliedDiff;
     }
 }

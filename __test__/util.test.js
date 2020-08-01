@@ -41,10 +41,10 @@ export const createUser = (agent,cb) => {
 
 export const deleteRant = (agent,{cookie,rantId},cb) => {
     agent
-	.delete(`/rant/post/delete/${rantId}`)
-	.set("cookie", cookie)
-	.expect(200).end((err,res) => {
+        .delete(`/rant/post/delete/${rantId}`)
+        .set("cookie", cookie)
+        .expect(200).end((err) => {
 	    expect(err).toBeNull();
 	    cb();
-	});
+        });
 };

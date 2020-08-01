@@ -27,22 +27,22 @@ export default class RantValidators {
     }
 
     static VerifyRantId(req,res,next) {
-	if ( ! req.params.rantId )
+        if ( ! req.params.rantId )
 	    throw BadValueException(rantConstants.RANT_ID_IS_UNDEFINED);
         return next();
     }
 
     static VerifyWhen(req,res,next) {
 	
-	if ( ! req.body.when )
+        if ( ! req.body.when )
 	    throw BadValueException(rantConstants.RANT_WHEN_NO_EXISTS);
 	
-	if ( typeof(req.body.when) !== "number" )
+        if ( typeof(req.body.when) !== "number" )
 	    throw BadValueException(rantConstants.RANT_NOT_NUMBER);
 
-	if ( (new Date(req.body.when)).toString() === "Invalid Date" )
+        if ( (new Date(req.body.when)).toString() === "Invalid Date" )
 	    throw BadValueException(rantConstants.RANT_NOT_VALID_TIMESTAMP);
 	
-	return next();
+        return next();
     }
 }

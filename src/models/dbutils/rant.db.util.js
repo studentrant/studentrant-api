@@ -27,19 +27,19 @@ export default class RantDbUtils {
     }
 
     async editOneRant({ query , operation }) {
-	const extraOption = {
+        const extraOption = {
 	    new    : true,
 	    fields : {
-		_id: false,
-		__v: false,
-		"edit.editHistory.diff._id" : false,
-		"edit.editHistory._id"      : false
+                _id: false,
+                __v: false,
+                "edit.editHistory.diff._id" : false,
+                "edit.editHistory._id"      : false
 	    }
-	};
-	return await this.rantsCollection.findOneAndUpdate(
+        };
+        return await this.rantsCollection.findOneAndUpdate(
 	    query,
 	    operation,
 	    extraOption
-	).lean();
+        ).lean();
     }
 }

@@ -37,7 +37,7 @@ export default class PostRant {
      *
      **/
     static DiffRants(currentRant,replaceRant) {
-	return Diff.diffChars(currentRant, replaceRant);
+        return Diff.diffChars(currentRant, replaceRant);
     }
 
     async createRant(req,res,next) {
@@ -79,10 +79,10 @@ export default class PostRant {
     }
 
     async editRant(req,res,next) {
-	const { rantId } = req.params;
-	const { tags, rant : editedRant, when } = req.body;
+        const { rantId } = req.params;
+        const { tags, rant : editedRant, when } = req.body;
 
-	try {
+        try {
 
 	    PostRant.SetRantTagsToGeneralIfEmpty(tags);
 
@@ -92,18 +92,18 @@ export default class PostRant {
 	    const diff             = PostRant.DiffRants(currentRantInDb, editedRant);
 
 	    const result = await this.postRantService.editRant(username,rantId, {
-		editedRant,
-		currentRantInDb,
-		tags,
-		when,
-		diff
+                editedRant,
+                currentRantInDb,
+                tags,
+                when,
+                diff
 	    });
 
 	    return res.status(200).json({ status: 200, message: result });
 
-	} catch(ex) {
-	    console.log(ex.errorDetails ? '' : ex);
+        } catch(ex) {
+	    console.log(ex.errorDetails ? "" : ex);
 	    return next(ex);
-	}
+        }
     }
 }
