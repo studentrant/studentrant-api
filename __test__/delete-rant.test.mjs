@@ -40,21 +40,9 @@ describe("DeleteRant [Integration]", () => {
 	    ));
 	});
 
-	it("should not allow deletion of rant if rantId query string is abset", done => {
-	    agent
-		.delete("/rant/post/delete/")
-		.set("cookie", cookie)
-		.expect(412).end((err,res) => {
-		    expect(err).toBeNull();
-		    expect(res.body.status).toEqual(412);
-		    expect(res.body.message).toEqual(rantConstants.RANT_ID_IS_UNDEFINED);
-		    done();
-		});
-	});
-	
 	it("should return 404 for rant that does not exists", done => {
 	    agent
-		.delete("/rant/post/delete/?rantId=not_exists")
+		.delete("/rant/post/delete/not_exists")
 		.set("cookie", cookie)
 		.expect(404).end((err,res) => {
 		    expect(err).toBeNull();
@@ -67,25 +55,37 @@ describe("DeleteRant [Integration]", () => {
 	it("should return 401 when trying to delete rant you did not create ( edge case )", done => {
 	    testUtils.createUser(agent, arg => {
 		agent
-		    .delete(`/rant/post/delete/?rantId=${rantId}`)
+		    .delete(`/rant/post/delete/${rantId}`)
 		    .set("cookie", arg)
 		    .expect(401).end((err,res) => {
 			expect(err).toBeNull();
 			expect(res.body.status).toEqual(401);
-			expect(res.body.message).toEqual(rantConstants.RANT_DELETE_NOT_USER);
+			expect(res.body.message).toEqual(rantConstants.RANT_NOT_USER);
 			done();
 		    });
 	    });
 	});
-	
+
 	it("should delete the specified rant if all conditions is fulfilled", done => {
 	    agent
-		.delete(`/rant/post/delete/?rantId=${rantId}`)
+		.delete(`/rant/post/delete/${rantId}`)
 		.set("cookie", cookie)
 		.expect(200).end((err,res) => {
 		    expect(err).toBeNull();
 		    expect(res.body.status).toEqual(200);
 		    expect(res.body.message).toEqual(rantConstants.RANT_SUCCESSFULLY_DELETED);
+		    done();
+		});
+	});
+
+	it("should not delete rant that has already been deleted", done => {
+	    agent
+		.delete(`/rant/post/delete/${rantId}`)
+		.set("cookie", cookie)
+		.expect(410).end((err,res) => {
+		    expect(err).toBeNull();
+		    expect(res.body.status).toEqual(410);
+		    expect(res.body.message).toEqual(rantConstants.RANT_HAS_ALREADY_BEEN_DELETED);
 		    done();
 		});
 	});

@@ -12,7 +12,7 @@ export class PostRantRoute {
 	    rantsCollection
         );
         routeHandler.post("/", this.createRant());
-        routeHandler.delete("/delete/", this.deleteRant());
+        routeHandler.delete("/delete/:rantId", this.deleteRant());
         routeHandler.patch("/edit/:rantId", this.editRant());
         //routeHandler.post("/reply/:rant-id", this.replyRant());
         return routeHandler;

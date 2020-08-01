@@ -37,3 +37,14 @@ export const createUser = (agent,cb) => {
 	    cb(res.headers["set-cookie"]);
         });
 };
+
+
+export const deleteRant = (agent,{cookie,rantId},cb) => {
+    agent
+	.delete(`/rant/post/delete/${rantId}`)
+	.set("cookie", cookie)
+	.expect(200).end((err,res) => {
+	    expect(err).toBeNull();
+	    cb();
+	});
+};

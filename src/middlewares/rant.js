@@ -27,7 +27,7 @@ export default class RantValidators {
     }
 
     static VerifyRantId(req,res,next) {
-        if ( ! req.query.rantId || ! req.params.rantId )
+	if ( ! req.params.rantId )
 	    throw BadValueException(rantConstants.RANT_ID_IS_UNDEFINED);
         return next();
     }
