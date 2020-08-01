@@ -56,6 +56,7 @@ export const GoneException = message => {
         message,
         "GoneException",
         {
+	    status : 410,
 	    message
         }
     );

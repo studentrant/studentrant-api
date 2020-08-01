@@ -8,6 +8,7 @@ import betterLogging from "better-logging";
 import config      from "./config.js";
 import mountRoutes from "./mountRoutes.js";
 
+import { NotFoundException }      from "./service/exceptions.service.js";
 import { badExceptionConstants }  from "./constants/index.js";
 import * as routes from "./routes/index.js";
 
@@ -43,7 +44,7 @@ mountRoutes(
 );
 
 app.use("*", (req, res, next) => {
-    return next(`route ${req.path} does not exists`);
+    return next(NotFoundException(`route ${req.path} does not exists`));
 });
 
 // eslint-disable-next-line

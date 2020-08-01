@@ -5,11 +5,8 @@ import { usersCollection } from "../models/dbmodels/index.js";
 
 export default class Email {
 
-    constructor(req) {
-	
+    constructor() {
         sendgrid.setApiKey(config.get("sendGrid.api_key"));
-	
-        this.req       = req;
         this.sendEmail = sendgrid;
         this.fromEmail = "studentranters@studentrant.com";
         this.fromName  = "Student Ranters";

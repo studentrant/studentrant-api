@@ -25,4 +25,21 @@ export default class RantDbUtils {
 	    { $set: { deleted: true } }
         ).lean();
     }
+
+    async editOneRant({ query , operation }) {
+        const extraOption = {
+	    new    : true,
+	    fields : {
+                _id: false,
+                __v: false,
+                "edit.editHistory.diff._id" : false,
+                "edit.editHistory._id"      : false
+	    }
+        };
+        return await this.rantsCollection.findOneAndUpdate(
+	    query,
+	    operation,
+	    extraOption
+        ).lean();
+    }
 }

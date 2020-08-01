@@ -12,8 +12,8 @@ export class PostRantRoute {
 	    rantsCollection
         );
         routeHandler.post("/", this.createRant());
-        routeHandler.delete("/delete/", this.deleteRant());
-        //routeHandler.patch("/edit/:rant-id", this.editRant());
+        routeHandler.delete("/delete/:rantId", this.deleteRant());
+        routeHandler.patch("/edit/:rantId", this.editRant());
         //routeHandler.post("/reply/:rant-id", this.replyRant());
         return routeHandler;
     }
@@ -37,7 +37,11 @@ export class PostRantRoute {
 
     editRant() {
         return [
-
+	    RantValidators.VerifyRantId,
+	    RantValidators.VerifyRant,
+	    RantValidators.VerifyRantTags,
+	    RantValidators.VerifyWhen,
+	    this.controller.editRant.bind(this.controller)
         ];
     }
 
