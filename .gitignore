@@ -3,6 +3,7 @@ coverage/
 .prod.json
 .test.json
 .dev.json
+doc/
 keyfile
 assets/
 .nyc_output/
