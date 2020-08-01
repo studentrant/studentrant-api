@@ -36,9 +36,8 @@ export default class PostRant {
      *
      *
      **/
-    static async DiffRants(currentRant,replaceRant) {
-	const diffValues = Diff.diffChars(currentRant, replaceRant);
-	return { diff: diffValues , diffAgainst: currentRant };
+    static DiffRants(currentRant,replaceRant) {
+	return Diff.diffChars(currentRant, replaceRant);
     }
 
     async createRant(req,res,next) {
@@ -63,7 +62,7 @@ export default class PostRant {
 
     async deleteRant(req,res,next) {
 
-        const { rantId } = req.query;
+        const { rantId } = req.params;
 
         try {
 
@@ -80,25 +79,30 @@ export default class PostRant {
     }
 
     async editRant(req,res,next) {
-	const { rantId }     = req.params;
-	const { tags, rant, when } = req.body;
+	const { rantId } = req.params;
+	const { tags, rant : editedRant, when } = req.body;
 
 	try {
 
-	    const username     = await this.utils.Utils.ExtractSessionObjectData(req, "username");
-	    const modification = await PostRant.ValidateRantForModification(username,rantId); // eslint-disable-line
-	    const currentRant  = await this.postRantService.getRant(rantId).rant;
-	    const diff         = PostRant.DiffRants(currentRant, rant);
+	    PostRant.SetRantTagsToGeneralIfEmpty(tags);
+
+	    const username         = await this.utils.Utils.ExtractSessionObjectData(req, "username");
+	    const modification     = await PostRant.ValidateRantForModification(username,rantId); // eslint-disable-line
+	    const currentRantInDb  = (await this.postRantService.getRant(rantId)).rant;
+	    const diff             = PostRant.DiffRants(currentRantInDb, editedRant);
 
 	    const result = await this.postRantService.editRant(username,rantId, {
-		rant,
-		currentRant,
+		editedRant,
+		currentRantInDb,
 		tags,
 		when,
 		diff
 	    });
 
+	    return res.status(200).json({ status: 200, message: result });
+
 	} catch(ex) {
+	    console.log(ex.errorDetails ? '' : ex);
 	    return next(ex);
 	}
     }

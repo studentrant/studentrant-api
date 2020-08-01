@@ -32,7 +32,14 @@ const RantSchema = new mongoose.Schema({
 	},
 	editHistory : [
 	    {
+		/** when signifies when the did edit was made**/
 		when : Number,
+
+		/** diff contains things the difference between
+		 *  the edits made on the rant and what was initial the rant
+		 *  the values here should be used to do a color change
+		 **/
+
 		diff : [
 		    {
 			value   : String,
@@ -40,6 +47,7 @@ const RantSchema = new mongoose.Schema({
 			removed : Boolean
 		    }
 		],
+		/** diffAgainst is the rant before it was edited **/
 		diffAgainst : String
 	    }
 	]

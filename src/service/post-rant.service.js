@@ -36,14 +36,20 @@ export class PostRantService {
 	);
     }
 
+    /**
+     *
+     * when a rant is edited, the isEdited property is set to true
+     * this is to signify that the rant has been edited
+     * edit history is marked by (when) which specified when it is been edited
+     *
+     *
+     **/
     async editRant(username,rantId,values) {
 
 	const editOperation = {
 	    $set : {
-		rant : values.rant,
-		edit : {
-		    isEdited: true
-		}
+		rant : values.editedRant,
+		"edit.isEdited" : true
 	    },
 	    $addToSet: {
 		"edit.editHistory": {
@@ -55,17 +61,19 @@ export class PostRantService {
 
 	const insertDiffToRantOperation = {
 	    $set: {
-		"edit.editHistory.$.diff" : values.diff
+		"edit.editHistory.$.diff" : values.diff,
+		"edit.editHistory.$.diffAgainst": values.currentRantInDb
 	    }
 	};
 
+	// eslint-disable-next-line
 	const editedRant = await this.rantDbUtils.editOneRant({
-	    query     : { username, rantId },
+	    query     : { rantPoster: username, rantId },
 	    operation : editOperation
 	});
 
 	const appliedDiff = await this.rantDbUtils.editOneRant({
-	    query     : { username, rantId, "edit.editHistory.when": values.when },
+	    query     : { rantPoster: username, rantId, "edit.editHistory.when": values.when },
 	    operation : insertDiffToRantOperation
 	});
 

@@ -38,8 +38,9 @@ export class PostRantRoute {
     editRant() {
         return [
 	    RantValidators.VerifyRantId,
-	    RantValidators.VerifyRantTags,
 	    RantValidators.VerifyRant,
+	    RantValidators.VerifyRantTags,
+	    RantValidators.VerifyWhen,
 	    this.controller.editRant.bind(this.controller)
         ];
     }
