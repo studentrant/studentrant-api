@@ -23,7 +23,7 @@ export default class PostRant {
         const validateAndGetRant = await __postRantService.validateRantExistence(rantId);
 
         if ( ! validateAndGetRant )       throw NotFoundException(constants.rantConstants.RANT_DOES_NOT_EXISTS);
-        if ( validateAndGetRant.deleted ) throw GoneException(constants.rantConstants.RANT_HAS_ALREADY_BEEN_DELETED);
+        if ( validateAndGetRant.deleted )  throw GoneException(constants.rantConstants.RANT_HAS_ALREADY_BEEN_DELETED);
 
         if ( ! (await __postRantService.validateRantCreator(username,rantId)) )
 	    throw UnAuthorizedAccessException(constants.rantConstants.RANT_NOT_USER);
