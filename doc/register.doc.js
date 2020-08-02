@@ -1,4 +1,4 @@
-    /**
+/**
      * @api { post } /register/reg-first-step First registration step of user
      * @apiName firstRegStep
      * @apiGroup Register
@@ -50,7 +50,7 @@
 
 
 
-    /**
+/**
      * @api { patch } /register/reg-last-step Last registration step of user
      * @apiName lastRegStep
      * @apiGroup Register
@@ -102,7 +102,7 @@
 
 
 
-    /**
+/**
      * @api { patch } /register/verification/:token Verify user token
      * @apiName tokenVerification
      * @apiGroup Register
