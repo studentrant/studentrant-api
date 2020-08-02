@@ -8,7 +8,7 @@
     "ignorePatterns": [
 	"loader.js",
 	"node_modules/",
-	"doc/"
+	"html-doc/"
     ],
     "globals": {
         "Atomics": "readonly",
