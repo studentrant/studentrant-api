@@ -22,7 +22,7 @@ export default class Login {
 
         return data;
     }
-
+    
     async login(req,res,next) {
 
         const { username, email, password } = req.body;

@@ -1,16 +1,5 @@
 import mongoose from "mongoose";
 
-
-/**
-   username : username of user
-   email    : email address of user
-   password : password of user ( bcrypt )
-   avatar   : url picture of user
-   dateOfReg : date in which user registered
-   verified  : if user has verified their email address
- **/
-
-
 const UserSchema = new mongoose.Schema({
     username: {
         required : true,

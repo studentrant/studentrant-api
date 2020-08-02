@@ -31,6 +31,12 @@
 
 `npm run doc`
 
+### pushing documentation to upstream
+```bash
+$ cd html-doc
+$ git push origin
+```
+
 
 ### start up mongodb database
 
