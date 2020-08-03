@@ -24,6 +24,7 @@ export class PostRantRoute {
         return [
 	    RantValidators.VerifyRant,
 	    RantValidators.VerifyRantTags,
+	    RantValidators.VerifyWhen,
 	    this.controller.createRant.bind(this.controller)
         ];
     }

@@ -4,6 +4,7 @@ const RantSchema = new mongoose.Schema({
     tags: {
         type   : Array,
     },
+    when       : Number,
     rantId: {
         type   : String,
         unique : true

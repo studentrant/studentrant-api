@@ -42,7 +42,7 @@ export default class PostRant {
 
     async createRant(req,res,next) {
 
-        const { rant, tags } = req.body;
+        const { rant, tags, when } = req.body;
 
         try {
 
@@ -52,6 +52,7 @@ export default class PostRant {
 	    const result   = await this.postRantService.createRant({
                 rantPoster: username,
                 rant,
+		when,
                 tags
 	    });
 	    return res.status(201).json({ status: 201, message: result });
