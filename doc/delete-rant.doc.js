@@ -1,5 +1,5 @@
 /**
- * @api { delete } /rant/post/delete/:rantId
+ * @api { delete } /rant/post/delete/:rantId Delete Rant
  * @apiName deleteRant
  * @apiGroup Post Rant
  * @apiVersion 1.0.0
