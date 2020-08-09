@@ -10,5 +10,6 @@ export const rantConstants = {
     RANT_SUCCESSFULLY_DELETED: "Rant has been deleted succefully",
     RANT_WHEN_NO_EXISTS: "A when field is required, it carries the timestamp of when the edit request was made",
     RANT_NOT_NUMBER: "when property must be a number",
-    RANT_NOT_VALID_TIMESTAMP: "Invalid timestamp information passed as value to the when property"
+    RANT_NOT_VALID_TIMESTAMP: "Invalid timestamp information passed as value to the when property",
+    RANT_HAS_ALREADY_BEEN_DELETED: "Rant has already been deleted"
 };
