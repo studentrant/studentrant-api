@@ -35,7 +35,7 @@
  * @apiSuccess {number} message.rantDownVote Downvote count of the rant
  *
  * @apiParamExample {json} Request-Example:
- *        /rant/post/edit/eeee-ffff-0000-9999-gggg
+ *  /rant/post/edit/eeee-ffff-0000-9999-gggg
  *  {
  *     rant: "L O dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
  *     tags: [ "foo", "bar"],
@@ -43,9 +43,9 @@
  *  }
  *
  * @apiSuccessExample {json} Success-Response:
- *         HTTP/1.1 201 Created
+ *         HTTP/1.1 200 OK
  *         {
- *             status: 201,
+ *             status: 200,
  *             message  : {
  *                tags        : [ "foo", "bar" ]
  *                when        : 1596948381262
