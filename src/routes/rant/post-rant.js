@@ -11,7 +11,7 @@ export class PostRantRoute {
 	    Utils,
 	    rantsCollection
         );
-        routeHandler.post("/", this.createRant());
+        routeHandler.post("/create", this.createRant());
         routeHandler.delete("/delete/:rantId", this.deleteRant());
         routeHandler.patch("/edit/:rantId", this.editRant());
         //routeHandler.post("/reply/:rant-id", this.replyRant());
