@@ -52,7 +52,7 @@ export default class PostRant {
 	    const result   = await this.postRantService.createRant({
                 rantPoster: username,
                 rant,
-		when,
+                when,
                 tags
 	    });
 	    return res.status(201).json({ status: 201, message: result });
