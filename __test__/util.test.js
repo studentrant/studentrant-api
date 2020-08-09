@@ -13,11 +13,12 @@ export const login = (agent,cb) => {
 
 export const createRant = (agent,{rant,cookie},cb) => {
     agent
-        .post("/rant/post/")
+        .post("/rant/post/create")
         .set("cookie", cookie)
         .send({
 	    rant,
-	    tags: []
+	    tags: [],
+	    when: Date.now()
         })
         .expect(201).end((err,res) => {
 	    expect(err).toBeNull();
@@ -31,7 +32,7 @@ export const createUser = (agent,cb) => {
         .send({
 	    username : faker.internet.userName(),
 	    password : faker.internet.password(),
-	    email    :    faker.internet.email()
+	    email    : faker.internet.email()
         }).expect(201).end((err,res) => {
 	    expect(err).toBeNull();
 	    cb(res.headers["set-cookie"]);
