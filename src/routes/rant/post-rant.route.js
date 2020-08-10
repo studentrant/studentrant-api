@@ -1,8 +1,8 @@
 import RantDbUtils from "../../models/dbutils/rant.db.util.js";
-import PostRant    from "../../controllers/post-rant.js";
-import RantValidators from "../../middlewares/rant.js";
-import { rantsCollection } from "../../models/dbmodels/index.js";
-import * as Utils  from "../../utils/index.js";
+import PostRant    from "../../controllers/post-rant.controller.js";
+import RantValidators from "../../middlewares/rant.middleware.js";
+import { rantsCollection } from "../../models/dbmodels/index.model.js";
+import * as Utils  from "../../utils/index.util.js";
 
 export class PostRantRoute {
     constructor(routeHandler) {

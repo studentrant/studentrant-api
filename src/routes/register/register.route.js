@@ -1,10 +1,10 @@
-import middleware        from "../../middlewares/validator.js";
+import middleware        from "../../middlewares/validator.middleware.js";
 import  Email            from "../../service/email.service.js";
-import {Registration}    from "../../controllers/register.js";
+import {Registration}    from "../../controllers/register.controller.js";
 import RegisterDbUtils   from "../../models/dbutils/register.db.util.js";
-import { usersCollection } from "../../models/dbmodels/index.js";
+import { usersCollection } from "../../models/dbmodels/index.model.js";
 
-import * as Utils        from "../../utils/index.js";
+import * as Utils        from "../../utils/index.util.js";
 
 export class RegisterRoute {
 

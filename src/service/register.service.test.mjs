@@ -1,6 +1,6 @@
 import { RegisterService } from "./register.service.js";
 import { RegisterDbUtils, usersCollection } from "../../__test__/fakes/db.fakes.js";
-import * as Utils        from "../utils/index.js";
+import * as Utils        from "../utils/index.util.js";
 
 
 describe("RegisterService [Unit]", () => {

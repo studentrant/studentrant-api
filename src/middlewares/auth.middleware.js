@@ -1,4 +1,4 @@
-import { authConstants } from "../constants/index.js";
+import { authConstants } from "../constants/index.constant.js";
 import { UnAuthorizedAccessException } from "../service/exceptions.service.js";
 
 export default class Auth {

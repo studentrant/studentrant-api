@@ -1,5 +1,5 @@
 import Diff from "diff";
-import * as constants from "../constants/index.js";
+import * as constants from "../constants/index.constant.js";
 import { PostRantService } from "../service/post-rant.service.js";
 import { NotFoundException, GoneException, UnAuthorizedAccessException } from "../service/exceptions.service.js";
 

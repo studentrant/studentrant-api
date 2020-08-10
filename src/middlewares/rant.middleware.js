@@ -1,4 +1,4 @@
-import { rantConstants } from "../constants/index.js";
+import { rantConstants } from "../constants/index.constant.js";
 import { BadValueException } from "../service/exceptions.service.js";
 
 export default class RantValidators {

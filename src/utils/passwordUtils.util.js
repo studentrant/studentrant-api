@@ -1,5 +1,5 @@
 import      bcrypt from "bcryptjs";
-import * as constants from "../constants/index.js";
+import * as constants from "../constants/index.constant.js";
 
 export class PasswordUtils {
     static HashPassword(password) {

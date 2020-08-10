@@ -1,6 +1,6 @@
 import supertest from "supertest";
 import app       from "../src/server.js";
-import * as models from "../src/models/dbmodels/index.js";
+import * as models from "../src/models/dbmodels/index.model.js";
 const agent     = supertest(app);
 
 beforeAll(done => {
