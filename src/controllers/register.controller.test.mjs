@@ -1,11 +1,11 @@
-import * as Utils        from "../utils/index.js";
-import * as constants from "../constants/index.js";
-import { Registration } from "./register.js";
+import * as Utils        from "../utils/index.util.js";
+import * as constants from "../constants/index.constant.js";
+import { Registration } from "./register.controller.js";
 import { RegisterService } from "../service/register.service.js";
 import { ExistsException } from "../service/exceptions.service.js";
 import RegisterDbUtils   from "../models/dbutils/register.db.util.js";
 import  Email            from "../service/email.service.js";
-import { usersCollection } from "../models/dbmodels/index.js";
+import { usersCollection } from "../models/dbmodels/index.model.js";
 import { req } from "../../__test__/fakes/req.fake.js";
 import { res } from "../../__test__/fakes/res.fake.js";
 import * as nextValue from "../../__test__/fakes/next.fake.js";

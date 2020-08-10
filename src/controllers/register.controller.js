@@ -1,4 +1,4 @@
-import * as constants  from "../constants/index.js";
+import * as constants  from "../constants/index.constant.js";
 
 import  config from "../config.js";
 import { RegisterService } from "../service/register.service.js";

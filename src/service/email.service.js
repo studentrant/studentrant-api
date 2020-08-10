@@ -1,6 +1,6 @@
 import sendgrid  from "@sendgrid/mail";
 import config    from "../config.js";
-import { usersCollection } from "../models/dbmodels/index.js";
+import { usersCollection } from "../models/dbmodels/index.model.js";
 
 
 export default class Email {

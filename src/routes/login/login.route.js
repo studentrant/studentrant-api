@@ -1,7 +1,7 @@
-import middleware      from "../../middlewares/validator.js";
-import * as Utils      from "../../utils/index.js";
-import Login           from "../../controllers/login.js";
-import { usersCollection } from "../../models/dbmodels/index.js";
+import middleware      from "../../middlewares/validator.middleware.js";
+import * as Utils      from "../../utils/index.util.js";
+import Login           from "../../controllers/login.controller.js";
+import { usersCollection } from "../../models/dbmodels/index.model.js";
 
 export class LoginRoute {
     constructor(routeHandler) {

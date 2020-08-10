@@ -1,7 +1,7 @@
 
 import supertest from "supertest";
 import app       from "../src/server.js";
-import { authConstants , rantConstants } from "../src/constants/index.js";
+import { authConstants , rantConstants } from "../src/constants/index.constant.js";
 
 const agent = supertest(app);
 let cookie;

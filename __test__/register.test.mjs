@@ -2,13 +2,13 @@
 import * as async     from "async";
 import supertest from "supertest";
 import app       from "../src/server.js";
-import { usersCollection } from "../src/models/dbmodels/index.js";
+import { usersCollection } from "../src/models/dbmodels/index.model.js";
 
 import {
     registerConstants,
     loginConstants,
     authConstants
-} from "../src/constants/index.js";
+} from "../src/constants/index.constant.js";
 const agent     = supertest(app);
 let cookie, verificationLink;
 

@@ -1,10 +1,10 @@
 import { v4 as uuidv4 } from "uuid";
-import PostRant from "./post-rant.js";
+import PostRant from "./post-rant.controller.js";
 import { req }  from "../../__test__/fakes/req.fake.js";
 import { res }  from "../../__test__/fakes/res.fake.js";
-import  { RantDbUtils, rantsCollection } from "../../__test__/fakes/db.fakes.js";
+import { RantDbUtils, rantsCollection } from "../../__test__/fakes/db.fakes.js";
 import * as nextValue from "../../__test__/fakes/next.fake.js";
-import * as Utils from "../utils/utils.js";
+import * as Utils from "../utils/utils.util.js";
 
 describe("PostRant [Unit]", () => {
 

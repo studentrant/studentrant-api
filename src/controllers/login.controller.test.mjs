@@ -1,6 +1,6 @@
-import Login from "./login.js";
-import * as Utils  from "../utils/index.js";
-import * as constants from "../constants/index.js";
+import Login from "./login.controller.js";
+import * as Utils  from "../utils/index.util.js";
+import * as constants from "../constants/index.constant.js";
 import { req } from "../../__test__/fakes/req.fake.js";
 import { res } from "../../__test__/fakes/res.fake.js";
 import * as nextValue from "../../__test__/fakes/next.fake.js";

@@ -9,8 +9,8 @@ import config      from "./config.js";
 import mountRoutes from "./mountRoutes.js";
 
 import { NotFoundException }      from "./service/exceptions.service.js";
-import { badExceptionConstants }  from "./constants/index.js";
-import * as routes from "./routes/index.js";
+import { badExceptionConstants }  from "./constants/index.constant.js";
+import * as routes from "./routes/index.route.js";
 
 const app = express();
 
