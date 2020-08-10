@@ -43,9 +43,15 @@ const RantSchema = new mongoose.Schema({
 
                 diff : [
 		    {
-                        value   : String,
-                        added   : Boolean,
-                        removed : Boolean
+                        value       : String,
+                        added       : {
+			    type    : Boolean,
+			    default : false
+                        },
+                        removed     : {
+			    type    : Boolean,
+			    default : false
+                        }
 		    }
                 ],
                 /** diffAgainst is the rant before it was edited **/
