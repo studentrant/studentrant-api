@@ -7,7 +7,6 @@ import * as nextValue from "../../__test__/fakes/next.fake.js";
 import * as Utils from "../utils/utils.util.js";
 
 describe("PostRant [Unit]", () => {
-
     const controller = new PostRant(RantDbUtils,Utils,Collection);
 
     describe("::createRant", () => {
