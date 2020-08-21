@@ -1,9 +1,9 @@
 import { PostRantService } from "./post-rant.service.js";
-import { RantDbUtils, rantsCollection } from "../../__test__/fakes/db.fakes.js";
+import { RantDbUtils, Collection } from "../../__test__/fakes/db.fakes.js";
 
 describe("PostRantService [Unit]" , () => {
     const service = new PostRantService(
-	new RantDbUtils(rantsCollection)
+	new RantDbUtils(Collection)
     );
 
     describe("::createRant", () => {

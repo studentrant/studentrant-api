@@ -5,7 +5,7 @@ import { req } from "../../__test__/fakes/req.fake.js";
 import { res } from "../../__test__/fakes/res.fake.js";
 import * as nextValue from "../../__test__/fakes/next.fake.js";
 
-import { usersCollection } from "../../__test__/fakes/db.fakes.js";
+import { Collection } from "../../__test__/fakes/db.fakes.js";
 
 
 const successfulLoggedIn = {
@@ -21,7 +21,7 @@ const successfulLoggedIn = {
 	
 
 describe("Login [Unit]", () => {
-    const loginController = new Login(Utils,usersCollection);
+    const loginController = new Login(Utils,Collection);
     let findOneSpy;
     let resourceExistsSpy;
     let verifyPasswordUtilsSpy;
@@ -38,7 +38,7 @@ describe("Login [Unit]", () => {
     });
 
     beforeEach(() => {
-	findOneSpy = spyOn(usersCollection, "findOne");
+	findOneSpy = spyOn(Collection, "findOne");
 	resourceExistsSpy = spyOn(loginController.utils.DbUtils, "ResourceExists").and.callThrough();
 	verifyPasswordUtilsSpy = spyOn(loginController.utils.PasswordUtils, "VerifyHashPassword");
     });
@@ -47,8 +47,8 @@ describe("Login [Unit]", () => {
 	req.body = { username: "fake", password: "fake" };
 	findOneSpy.and.resolveTo(false);
 	const login = await loginController.login(req,res,nextValue.next);
-	expect(usersCollection.findOne).toHaveBeenCalled();
-	expect(usersCollection.findOne).toHaveBeenCalledWith({ username: "fake"});
+	expect(Collection.findOne).toHaveBeenCalled();
+	expect(Collection.findOne).toHaveBeenCalledWith({ username: "fake"});
 	expect(login.status).toEqual(404);
 	expect(login.message).toEqual(constants.loginConstants.INVALID_LOGIN_CREDENTIALS);
     });
@@ -58,8 +58,8 @@ describe("Login [Unit]", () => {
 	req.body = { email: "fake@example.com", password: "fake" };
 	findOneSpy.and.resolveTo(false);
 	const login = await loginController.login(req,res,nextValue.next);
-	expect(usersCollection.findOne).toHaveBeenCalled();
-	expect(usersCollection.findOne).toHaveBeenCalledWith({ email: "fake@example.com"});
+	expect(Collection.findOne).toHaveBeenCalled();
+	expect(Collection.findOne).toHaveBeenCalledWith({ email: "fake@example.com"});
 	expect(login.status).toEqual(404);
 	expect(login.message).toEqual(constants.loginConstants.INVALID_LOGIN_CREDENTIALS);
     });
@@ -69,8 +69,8 @@ describe("Login [Unit]", () => {
 	findOneSpy.and.resolveTo({ data: { password: "fake" } });
 	verifyPasswordUtilsSpy.and.resolveTo(false);
 	const login = await loginController.login(req,res,nextValue.next);
-	expect(usersCollection.findOne).toHaveBeenCalled();
-	expect(usersCollection.findOne).toHaveBeenCalledWith({ email: "real"});
+	expect(Collection.findOne).toHaveBeenCalled();
+	expect(Collection.findOne).toHaveBeenCalledWith({ email: "real"});
 	expect(login.status).toEqual(404);
 	expect(login.message).toEqual(constants.loginConstants.INVALID_LOGIN_CREDENTIALS);
     });
@@ -89,8 +89,8 @@ describe("Login [Unit]", () => {
 	
 	const login = JSON.parse(await loginController.login(req,res,nextValue.next));
 	
-	expect(usersCollection.findOne).toHaveBeenCalled();
-	expect(usersCollection.findOne).toHaveBeenCalledWith({ email: "real@example.com"});
+	expect(Collection.findOne).toHaveBeenCalled();
+	expect(Collection.findOne).toHaveBeenCalledWith({ email: "real@example.com"});
 	expect(login.status).toEqual(200);
 	expect(login.message.password).toBeUndefined();
 	expect(login.message._id).toBeUndefined();

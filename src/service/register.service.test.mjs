@@ -1,11 +1,11 @@
 import { RegisterService } from "./register.service.js";
-import { RegisterDbUtils, usersCollection } from "../../__test__/fakes/db.fakes.js";
+import { RegisterDbUtils, Collection } from "../../__test__/fakes/db.fakes.js";
 import * as Utils        from "../utils/index.util.js";
 
 
 describe("RegisterService [Unit]", () => {
     const service = new RegisterService(
-	new RegisterDbUtils(usersCollection),
+	new RegisterDbUtils(Collection),
 	Utils
     );
 
@@ -117,7 +117,7 @@ describe("RegisterService [Unit]", () => {
     describe("::updateUserAndCompleteReg", () => {
 	it("should verify validation token", async () => {
 	    updateNewUserDetails.and.resolveTo({});
-	    const result = await service.updateUserAndCompletetReg({ email: "email@example.com" });
+	    await service.updateUserAndCompletetReg({ email: "email@example.com" });
 	    expect(RegisterService.UpdateUserDetails).toHaveBeenCalled();
 	    expect(RegisterService.UpdateUserDetails).toHaveBeenCalledWith(
 		["email", "email@example.com" ],

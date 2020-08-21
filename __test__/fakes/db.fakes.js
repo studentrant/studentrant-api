@@ -1,9 +1,11 @@
-export const usersCollection = {
-    findOne: (value) => Promise.resolve(value),
-};
+export class Collection {
+    constructor()             {}
+    save()                    {}
+    static findOne(value)          { return { lean() {} }; }
+    static updateOne(value)        { return { lean() {} }; }
+    static findOneAndUpdate(value) { return { lean() {} }; }
+}
 
-export const rantsCollection = {  
-};
 
 export class RegisterDbUtils {
     constructor()          {}
