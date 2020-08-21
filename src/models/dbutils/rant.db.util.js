@@ -5,8 +5,8 @@ export default class RantDbUtils {
     }
 
     async saveRant(data) {
-        await (new this.rantsCollection(data).save());
-        return await this.rantsCollection.findOne({ rantId: data.rantId }, {
+	await (new this.rantsCollection(data).save());
+	return await this.rantsCollection.findOne({ rantId: data.rantId }, {
 	    _id: false,
 	    __v: false
         }).lean();
