@@ -1,9 +1,9 @@
 export class Collection {
     constructor()             {}
     save()                    {}
-    static findOne(value)          { return { lean() {} }; }
-    static updateOne(value)        { return { lean() {} }; }
-    static findOneAndUpdate(value) { return { lean() {} }; }
+    static findOne(value)          { return { lean() { return Promise.resolve(value); } }; }
+    static updateOne(value)        { return { lean() { return Promise.resolve(value); } }; }
+    static findOneAndUpdate(value) { return { lean() { return Promise.resolve(value); } }; }
 }
 
 
