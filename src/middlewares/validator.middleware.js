@@ -21,9 +21,13 @@ export default class ValidatorMiddleware {
                 constants.loginConstants.INVALID_LOGIN_PASSWORD_NO_DIGIT
 	    );
 
-        if ( ! /[A-Za-z]/.test(req.body.password) )
+        if ( ! /[A-Z]/.test(req.body.password) )
 	    throw BadValueException(
-                constants.loginConstants.INVALID_LOGIN_PASSWORD_NO_CHARS
+                constants.loginConstants.INVALID_LOGIN_PASSWORD_NO_UPPER_CASE
+	    );
+	if ( ! /[a-z]/.test(req.body.password) )
+	    throw BadValueException(
+		constants.loginConstants.INVALID_LOGIN_PASSWORD_NO_LOWER_CASE
 	    );
 
         return next();

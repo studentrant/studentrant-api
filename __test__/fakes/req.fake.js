@@ -1,4 +1,5 @@
 export const req = {
-    body: {},
-    session: {}
+    body    : {},
+    session : {},
+    params  : {}
 };
