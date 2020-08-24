@@ -1,6 +1,6 @@
 import * as constants  from "../constants/index.constant.js";
 
-import  config from "../config.js";
+import { config } from "../config/index.config.js";
 import { RegisterService } from "../service/register.service.js";
 import { ExistsException } from "../service/exceptions.service.js";
 

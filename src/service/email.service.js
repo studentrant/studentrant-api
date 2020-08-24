@@ -1,12 +1,12 @@
 import sendgrid  from "@sendgrid/mail";
-import config    from "../config.js";
+import {config}    from "../config/config.config.js";
 import { usersCollection } from "../models/dbmodels/index.model.js";
 
 
 export default class Email {
 
     constructor() {
-        sendgrid.setApiKey(config.get("sendGrid.api_key"));
+        sendgrid.setApiKey(config.get("sendGrid.apiKey"));
         this.sendEmail = sendgrid;
         this.fromEmail = "studentranters@studentrant.com";
         this.fromName  = "Student Ranters";
@@ -33,7 +33,7 @@ export default class Email {
                         to: to_email
 		    }
                 ],
-                template_id: config.get("sendGrid.templateIds.email_verification")
+                template_id: config.get("sendGrid.templateIds.emailVerification")
 	    });
         } catch(ex) {
 	    throw ex;

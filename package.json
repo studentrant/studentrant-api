@@ -5,24 +5,28 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-	"test": "npm run test:e2e ; npm run test:unit",
-	"test:e2e": "cross-env NODE_ENV=test ./scripts/runTest.sh ; npm run coverage:e2e",
-	"coverage:e2e": "cross-env NODE_ENV=test nyc node ./.jasmine-run-e2e.js ./.jasmine.e2e.json ./__test__/**/*.mjs",
-	"test:unit": "npm run coverage:unit",
-	"coverage:unit": "nyc node ./.jasmine-run-unit.js ./.jasmine.unit.json './src/**/*.mjs'",
-	"mongodb:purge:force": "./scripts/replicaSet.sh purge --force",
-	"mongodb:start": "./scripts/replicaSet.sh",
-	"mongodb:stop": "./scripts/replicaSet.sh killProc",
-	"server": "nodemon server.js --env dev",
-	"lint": "eslint '**/*.js'",
-	"lint:fix": "eslint --fix '**/*.js'",
-	"doc": "apidoc -i doc/ -o html-doc/",
-	"doc:watch": "nodemon --watch doc/ --exec npm run doc"
+
+	"test"         : "npm run test:e2e ; npm run test:unit",
+	"test:e2e"     : "cross-env NODE_ENV=test ./scripts/runTest.sh ; npm run coverage:e2e",
+	"coverage:e2e" : "cross-env NODE_ENV=test nyc node ./.jasmine-run-e2e.js ./.jasmine.e2e.json ./__test__/**/*.mjs",
+	"test:unit"    : "npm run coverage:unit",
+	"coverage:unit": "cross-env NODE_ENV=test nyc node ./.jasmine-run-unit.js ./.jasmine.unit.json './src/**/*.mjs'",
+
+	"db:drop"     : "./scripts/replicaSet.sh purge --force",
+	"db:setup"    : "./scripts/replicaSet.sh",
+	"db:start"    : "./scripts/replicaSet.sh run",
+	"mongodb:stop"    : "./scripts/replicaSet.sh killProc",
+	"start:dev"       : "node src/server.js --env dev",
+	"start:dev:watch" : "nodemon --exec node src/server.js --env dev",
+	"lint"            : "eslint '**/*.js'",
+	"lint:fix"        : "eslint --fix '**/*.js'",
+	"doc"             : "apidoc -i doc/ -o html-doc/",
+	"doc:watch"       : "nodemon --watch doc/ --exec npm run doc"
     },
     "husky": {
 	"hooks": {
-	    "pre-push": "npm test   ; npm lint",
-	    "pre-commit": "npm test ; npm lint"
+	    "pre-push": "npm test ; npm run lint",
+	    "pre-commit": "npm test ; npm run lint"
 	}
     },
     "repository": {
