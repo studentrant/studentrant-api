@@ -15,7 +15,7 @@
 	"db:drop"     : "./scripts/replicaSet.sh purge --force",
 	"db:setup"    : "./scripts/replicaSet.sh",
 	"db:start"    : "./scripts/replicaSet.sh run",
-	"mongodb:stop"    : "./scripts/replicaSet.sh killProc",
+	"db:stop"     : "./scripts/replicaSet.sh killProc",
 	"start:dev"       : "node src/server.js --env dev",
 	"start:dev:watch" : "nodemon --exec node src/server.js --env dev",
 	"lint"            : "eslint '**/*.js'",
