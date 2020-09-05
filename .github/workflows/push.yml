@@ -1,0 +1,9 @@
+name: test-e2e
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Unit Test
+        run: npm run test
