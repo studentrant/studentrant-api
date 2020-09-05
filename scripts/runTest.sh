@@ -26,7 +26,7 @@ if [[ ! -e "${HOME}/studentrant_test_db1/" ]] || \
     sleep 5
     mongod --dbpath "${HOME}/studentrant_test_db3/" --port 27091 --replSet studentrant --fork --syslog &>/dev/null
     sleep 5
-
+    
     mongo --port 27071 <<EOF
 use studentrant
 if ( rs.status().codeName === "NotYetInitialized" ) {
