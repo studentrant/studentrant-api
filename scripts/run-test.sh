@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-OLDIFS=${IFS}
-IFS=""
-echo `env`
-IFS=${OLDIFS}
-#docker exec -it studentrant-server-test npm run test:e2e
+env
+[[ -n ${CI} ]] && {
+    # if it's called from github actions
+    docker exec studentrant-server-test npm install
+    docker exec studentrant-server-test npm run lint
+}
 docker exec studentrant-server-test npm run test:unit
