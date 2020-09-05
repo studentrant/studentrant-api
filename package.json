@@ -5,23 +5,22 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-
-	"test"         : "npm run test:e2e ; npm run test:unit",
-	"test:e2e"     : "cross-env NODE_ENV=test ./scripts/runTest.sh ; npm run coverage:e2e",
-	"coverage:e2e" : "cross-env NODE_ENV=test nyc node ./.jasmine-run-e2e.js ./.jasmine.e2e.json ./__test__/**/*.mjs",
-	"test:unit"    : "npm run coverage:unit",
+	"test": "npm run test:e2e ; npm run test:unit",
+	"test:e2e": "cross-env NODE_ENV=test ./scripts/runTest.sh ; npm run coverage:e2e",
+	"coverage:e2e": "cross-env NODE_ENV=test nyc node ./.jasmine-run-e2e.js ./.jasmine.e2e.json ./__test__/**/*.mjs",
+	"test:unit": "npm run coverage:unit",
 	"coverage:unit": "cross-env NODE_ENV=test nyc node ./.jasmine-run-unit.js ./.jasmine.unit.json './src/**/*.mjs'",
-
-	"db:drop"     : "./scripts/replicaSet.sh purge --force",
-	"db:setup"    : "./scripts/replicaSet.sh",
-	"db:start"    : "./scripts/replicaSet.sh run",
-	"db:stop"     : "./scripts/replicaSet.sh killProc",
-	"start:dev"       : "node src/server.js --env dev",
-	"start:dev:watch" : "nodemon --exec node src/server.js --env dev",
-	"lint"            : "eslint '**/*.js'",
-	"lint:fix"        : "eslint --fix '**/*.js'",
-	"doc"             : "apidoc -i doc/ -o html-doc/",
-	"doc:watch"       : "nodemon --watch doc/ --exec npm run doc"
+	"db:drop": "docker-compose down",
+	"docker:down": "docker-compose down --remove-orphans",
+	"docker:up": "docker-compose up -d && ./scripts/replicaSet.sh",
+	"db:start":"docker-compose start",
+	"db:stop": "docker-compose kill",
+	"start:dev": "node src/server.js --env dev",
+	"start:watch": "nodemon --exec node src/server.js --env dev",
+	"lint": "eslint '**/*.js'",
+	"lint:fix": "eslint --fix '**/*.js'",
+	"doc": "apidoc -i doc/ -o html-doc/",
+	"doc:watch": "nodemon --watch doc/ --exec npm run doc"
     },
     "husky": {
 	"hooks": {
@@ -53,6 +52,7 @@
 	"express-session": "^1.17.1",
 	"express-validator": "^6.6.0",
 	"helmet": "^3.23.3",
+	"log4js": "^6.3.0",
 	"mongoose": "^5.9.21",
 	"node-fetch": "^2.6.0",
 	"sendgrid": "^5.2.3",
