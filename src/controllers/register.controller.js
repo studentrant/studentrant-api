@@ -1,6 +1,4 @@
 import * as constants  from "../constants/index.constant.js";
-
-import { config } from "../config/index.config.js";
 import { RegisterService } from "../service/register.service.js";
 import { ExistsException } from "../service/exceptions.service.js";
 
@@ -10,7 +8,8 @@ export class Registration {
         RegisterDbUtils,
         Email,
         Utils,
-        usersCollection
+        usersCollection,
+        config
     ) {
         this.utils = Utils;
         this.usersCollection = usersCollection;
@@ -18,7 +17,8 @@ export class Registration {
 	    new RegisterDbUtils(usersCollection),
 	    Utils
         );
-        this.email = Email;
+        this.email = new Email(config);
+        this.env   = config.get("env");
     }
 
     async firstRegStep(req,res,next) {
@@ -61,13 +61,11 @@ export class Registration {
 	    const verificationLink = await this.utils.Utils.UniqueCodeGenerator(email);
             const result           = await this.registerService.updateUserAndCompletetReg({email, country, interests , verificationLink });
 
-            if (config.get("env") !== "test")
+            if (this.env !== "test")
                 delete result.verificationLink;
 
-	    const sendEmail = new this.email(req);
-
 	    Promise.resolve(
-                sendEmail.sendEmailVerification(email)
+                this.email.sendEmailVerification(email)
 	    );
 
             return res.status(201).json({ status: 201, message: result });

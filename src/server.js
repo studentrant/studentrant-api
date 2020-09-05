@@ -4,8 +4,7 @@ import helmet      from "helmet";
 import betterLogging from "better-logging";
 
 import mountRoutes from "./mountRoutes.js";
-import mountGlobalConfigurations from "./mountGlobalConfigurations.js";
-
+import mountGlobalConfigurations  from "./mountGlobalConfigurations.js";
 import { NotFoundException }      from "./service/exceptions.service.js";
 import { badExceptionConstants }  from "./constants/index.constant.js";
 
@@ -16,10 +15,10 @@ const app = express();
 
 betterLogging(console);
 
-app.set("PORT", configs.config.get("SERVER.PORT"));
+app.set("PORT",          configs.config.get("SERVER.PORT"));
+app.set("CONFIGURATION", configs.config);
 app.use(helmet());
 app.use(bodyParser.json());
-
 
 mountGlobalConfigurations(
     app,

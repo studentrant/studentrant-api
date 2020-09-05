@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-env
 [[ -n ${CI} ]] && {
     # if it's called from github actions
     docker exec studentrant-server-test npm install

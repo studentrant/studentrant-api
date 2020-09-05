@@ -8,6 +8,7 @@ import  Email            from "../service/email.service.js";
 import { usersCollection } from "../models/dbmodels/index.model.js";
 import { req } from "../../__test__/fakes/req.fake.js";
 import { res } from "../../__test__/fakes/res.fake.js";
+import { config } from "../../__test__/fakes/utils.fake.js";
 import * as nextValue from "../../__test__/fakes/next.fake.js";
 
 const sucessfullyRegistered = {
@@ -22,7 +23,8 @@ describe("Registration [Unit]", () => {
 	RegisterDbUtils,
 	Email,
 	Utils,
-	usersCollection
+	usersCollection,
+	config
     );
 
     afterEach(() => {
