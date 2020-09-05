@@ -3,17 +3,17 @@ import  Email            from "../../service/email.service.js";
 import {Registration}    from "../../controllers/register.controller.js";
 import RegisterDbUtils   from "../../models/dbutils/register.db.util.js";
 import { usersCollection } from "../../models/dbmodels/index.model.js";
-
 import * as Utils        from "../../utils/index.util.js";
 
 export class RegisterRoute {
 
-    constructor(routeHandler) {
+    constructor(routeHandler,config) {
         this.controller    = new Registration(
 	    RegisterDbUtils,
 	    Email,
 	    Utils,
-	    usersCollection
+	    usersCollection,
+	    config
         );
         routeHandler.post("/reg-first-step",this.firstRegistrationStep());
         routeHandler.patch("/reg-last-step",this.lastRegistrationStep());

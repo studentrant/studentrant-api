@@ -1,9 +1,8 @@
 import mongoose from "mongoose";
-import {config} from "./config.config.js";
 
 export class Database {
 
-    constructor() {
+    constructor(config) {
         Database.MongooseURI = this.mongooseUri = config.get("dbConnectionString.connString");
     }
 
