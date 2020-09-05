@@ -6,8 +6,6 @@ sleep 20;
 
 docker exec -it studentrant-mongo-node-1 mongo --eval "
 
-print('Starting ReplicaSet.....');
-
 if ( rs.status().codeName == 'NotYetInitialized' ) {
 
     function sleep(delay) {
@@ -23,10 +21,10 @@ if ( rs.status().codeName == 'NotYetInitialized' ) {
 
     rs.initiate();
 
-    sleep(10)
+    sleep(10);
 
-    rs.add('mongo2:27017');
-    rs.add('mongo3:27017');
+    rs.add('mongo2');
+    rs.add('mongo3');
 
     admin.createUser( {
         user: 'studentrantUserAdmin',
@@ -46,6 +44,5 @@ if ( rs.status().codeName == 'NotYetInitialized' ) {
         roles: [ 'readWrite' ]
     });
 }
-
 print('Done....')
 "
