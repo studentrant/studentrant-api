@@ -1,0 +1,17 @@
+#jinja2: lstrip_blocks: True
+version: '3'
+
+services:
+  studentrant-server-test:
+    hostname: test-server
+    container_name: studentrant-server-test
+    image: node:alpine
+    expose:
+      - 3000
+    ports:
+      - 3001:3000
+    restart: always
+    working_dir: /app
+    volumes:
+      - ../:/app
+    command: [ "tail", "-f", "/dev/null"]
