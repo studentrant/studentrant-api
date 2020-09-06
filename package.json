@@ -23,7 +23,7 @@
 	"test:unit": "npm run coverage:unit"
     },
     "lint-staged": {
-	"*.js": "npm test; npm run lint:fix"
+	"*.js": "npm run lint:fix"
     },
     "husky": {
 	"hooks": {
