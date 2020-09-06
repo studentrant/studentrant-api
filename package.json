@@ -5,26 +5,26 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-	"coverage:e2e" : "cross-env NODE_ENV=test nyc node ./.jasmine-run-e2e.js ./.jasmine.e2e.json ./__test__/**/*.mjs",
+	"coverage:e2e": "cross-env NODE_ENV=test nyc node ./.jasmine-run-e2e.js ./.jasmine.e2e.json ./__test__/**/*.mjs",
 	"coverage:unit": "cross-env NODE_ENV=test nyc node ./.jasmine-run-unit.js ./.jasmine.unit.json './src/**/*.mjs'",
-	"db:drop"      : "docker-compose -f docker/docker-compose.dev.yml down --remove-orphans",
-	"db:start"     : "docker-compose start",
-	"db:stop"      : "docker-compose kill",
-	"docker:down"  : "docker-compose -f docker/docker-compose.dev.yml -f docker/docker-compose.test.yml down --remove-orphans",
-	"docker:up"    : "docker-compose -f docker/docker-compose.dev.yml up -d  && ./scripts/replica-setup.sh",
-	"doc"          : "apidoc -i doc/ -o html-doc/",
-	"doc:watch"    : "nodemon --watch doc/ --exec npm run doc",
-	"lint"         : "eslint '**/*.js'",
-	"lint:fix"     : "eslint --fix '**/*.js'",
-	"start:dev"    : "node src/server.js --env dev",
+	"db:drop": "docker-compose -f docker/docker-compose.dev.yml down --remove-orphans",
+	"db:start": "docker-compose start",
+	"db:stop": "docker-compose kill",
+	"docker:down": "docker-compose -f docker/docker-compose.dev.yml -f docker/docker-compose.test.yml down --remove-orphans",
+	"docker:up": "docker-compose -f docker/docker-compose.dev.yml up -d  && ./scripts/replica-setup.sh",
+	"doc": "apidoc -i doc/ -o html-doc/",
+	"doc:watch": "nodemon --watch doc/ --exec npm run doc",
+	"lint": "eslint '**/*.js'",
+	"lint:fix": "eslint --fix '**/*.js'",
+	"start:dev": "node src/server.js --env dev",
 	"start:dev:watch": "nodemon --exec node src/server.js --env dev",
-	"test"         : "docker-compose --file docker/docker-compose.test.yml up -d --remove-orphans && ./scripts/run-test.sh",
-	"test:e2e"     : "cross-env NODE_ENV=test ./scripts/setup-test.sh ; npm run coverage:e2e",
-	"test:unit"    : "npm run coverage:unit"
+	"test": "docker-compose --file docker/docker-compose.test.yml up -d --remove-orphans && ./scripts/run-test.sh",
+	"test:e2e": "cross-env NODE_ENV=test ./scripts/setup-test.sh ; npm run coverage:e2e",
+	"test:unit": "npm run coverage:unit"
     },
     "husky": {
 	"hooks": {
-	    "pre-push"  : "npm test ; npm run lint",
+	    "pre-push": "npm test ; npm run lint",
 	    "pre-commit": "npm test ; npm run lint"
 	}
     },
