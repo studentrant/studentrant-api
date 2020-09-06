@@ -41,6 +41,7 @@ $ git push origin
 ### start up mongodb database
 
 ```bash
+$ npm run docker:up
 $ npm run db:start
 ```
 
