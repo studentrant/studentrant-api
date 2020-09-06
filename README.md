@@ -41,20 +41,23 @@ $ git push origin
 ### start up mongodb database
 
 ```bash
-$ npm run mongodb:start
+$ npm run db:start
 ```
 
 ### stop mongodb database
 
 ```bash
-$ npm run mongodb:stop
+$ npm run db:stop
 ```
 
 ### purge mongodb database (deletes the entire database)
 
 ```bash
-$ npm run mongodb:purge:force
+$ npm run db:drop
 ```
 ### start local server
 
-`npm run server`
+`npm run start:dev`
+
+### start local server in development mode
+`npm run start:dev:watch`
