@@ -26,14 +26,14 @@ export default class ValidatorMiddleware {
                 constants.loginConstants.INVALID_LOGIN_PASSWORD_NO_UPPER_CASE
 	    );
 	
-	if ( ! /[a-z]/.test(req.body.password) )
+        if ( ! /[a-z]/.test(req.body.password) )
 	    throw BadValueException(
-		constants.loginConstants.INVALID_LOGIN_PASSWORD_NO_LOWER_CASE
+                constants.loginConstants.INVALID_LOGIN_PASSWORD_NO_LOWER_CASE
 	    );
 	
-	if ( ! /[!@#$%^&*(),.?":{}|<>]/.test(req.body.password) )
+        if ( ! /[!@#$%^&*(),.?":{}|<>]/.test(req.body.password) )
 	    throw BadValueException(
-		constants.loginConstants.INVALID_LOGIN_PASSWORD_NO_SPECIAL_CHARACTER
+                constants.loginConstants.INVALID_LOGIN_PASSWORD_NO_SPECIAL_CHARACTER
 	    );
         return next();
     }
