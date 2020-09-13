@@ -1,7 +1,6 @@
 node_modules/
 coverage/
 .prod.json
-.test.json
 .dev.json
 html-doc/
 keyfile
