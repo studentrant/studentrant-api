@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 export class Database {
 
     constructor(config) {
@@ -36,11 +37,11 @@ export class Database {
     }
 
     configure() {
-	
+
         const db  = mongoose.connection;
-	
+
         this.connect();
-	
+
         db.on("connected",    Database.ConnectedHandler);
         db.on("disconnected", Database.DisconnectedHandler);
         db.on("error",        Database.ErrorHandler);

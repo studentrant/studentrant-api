@@ -4,7 +4,7 @@ import { loginConstants, authConstants } from "../src/constants/index.constant.j
 
 const agent = supertest(app);
 
-describe("Login [Unit]", () => {
+describe("Login [Integration]", () => {
     it("status code of 412 if username field is not present", done => {
 	agent
 	    .post("/login")
@@ -60,15 +60,38 @@ describe("Login [Unit]", () => {
 	    });
     });
 
-    it("status code of 412 if password has no characters", done => {
+    it("status code of 412 if password has no upper case characters", done => {
 	agent
 	    .post("/login")
 	    .send({ username: "victory", password: "12345678" })
 	    .expect(412).end((err,res) => {
 		expect(err).toBeNull();
-		expect(res.body.message).toEqual(loginConstants.INVALID_LOGIN_PASSWORD_NO_CHARS);
+		expect(res.body.message).toEqual(loginConstants.INVALID_LOGIN_PASSWORD_NO_UPPER_CASE);
 		done();
 	    });
+    });
+
+    it("status code of 412 if password has no lowecase character", done => {
+	agent
+	    .post("/login")
+	    .send({ username: "victory", password: "12345678ABCDEF" })
+	    .expect(412).end((err,res) => {
+		expect(err).toBeNull();
+		expect(res.body.message).toEqual(loginConstants.INVALID_LOGIN_PASSWORD_NO_LOWER_CASE);
+		done();
+	    });
+    });
+
+
+    it("status code of 412 if password has no special character", done => {
+	agent
+	    .post("/login")
+	    .send({ username: "victory", password: "12345678ABCDEFcdddd" })
+	    .expect(412).end((err,res) => {
+		expect(err).toBeNull();
+		expect(res.body.message).toEqual(loginConstants.INVALID_LOGIN_PASSWORD_NO_SPECIAL_CHARACTER);
+		done();
+	    });	
     });
 
     it("status code of 412, if username field is present but invalid", done => {
@@ -96,7 +119,7 @@ describe("Login [Unit]", () => {
     it("status code of 404 if username and/or password does not match any data in the database", done => {
 	agent
 	    .post("/login")
-	    .send({ username: "victory", password: "password1234" })
+	    .send({ username: "victory", password: "PasswORd1234abcdef$$&" })
 	    .expect(404).end((err,res) => {
 		expect(err).toBeNull();
 		expect(res.body.message).toEqual(loginConstants.INVALID_LOGIN_CREDENTIALS);

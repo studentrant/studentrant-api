@@ -1,17 +1,68 @@
 #jinja2: lstrip_blocks: True
 version: '3'
 
+networks:
+  testnetwork:
+    driver: bridge
+
+volumes:
+  studentrant-test_1_db:
+  studentrant-test_1_configdb:
+  studentrant-test_2_db:
+  studentrant-test_2_configdb:
+  studentrant-test_3_db:
+  studentrant-test_3_configdb:
+  studentrant-test-server:
+
+
 services:
-  studentrant-server-test:
-    hostname: test-server
-    container_name: studentrant-server-test
-    image: node:alpine
+  sr-test-mongo1:
+    hostname: mongo1
+    container_name: studentrant_test-mongo-node-1
+    image: mongo
+    networks:
+      - testnetwork
     expose:
-      - 3000
+      - 27071
     ports:
-      - 3001:3000
+      - 27071:27071
     restart: always
-    working_dir: /app
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "studentrant", "--journal", "--dbpath", "/data/db", "--port", "27071" ]
     volumes:
-      - ../:/app
-    command: [ "tail", "-f", "/dev/null"]
+      - studentrant-test_1_db:/data/db
+      - studentrant-test_1_configdb:/data/configdb
+    depends_on:
+      - sr-test-mongo2
+      - sr-test-mongo3
+
+  sr-test-mongo2:
+    hostname: mongo2
+    container_name: studentrant_test-mongo-node-2
+    image: mongo
+    networks:
+      - testnetwork
+    expose:
+      - 27081
+    ports:
+      - 27081:27081
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "studentrant", "--journal", "--dbpath", "/data/db", "--port", "27081" ]
+    volumes:
+      - studentrant-test_2_db:/data/db
+      - studentrant-test_2_configdb:/data/configdb
+
+  sr-test-mongo3:
+    hostname: mongo3
+    container_name: studentrant_test-mongo-node-3
+    image: mongo
+    networks:
+      - testnetwork
+    expose:
+      - 27091
+    ports:
+      - 27091:27091
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "studentrant", "--journal", "--dbpath", "/data/db" ,  "--port", "27091"]
+    volumes:
+      - studentrant-test_3_db:/data/db
+      - studentrant-test_3_configdb:/data/configdb

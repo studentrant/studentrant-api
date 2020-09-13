@@ -65,20 +65,43 @@ describe("Register [Integration]", () => {
 		    done();
 	        });
         });
-        it("status code of 412 if password contains no charactes", done => {
+        it("status code of 412 if password contains no upper characters", done => {
             agent
 	        .post("/register/reg-first-step")
 	        .send({ username: "studentrant", password: "12345689234" })
 	        .expect(412).end((err,res) => {
 		    expect(err).toBeNull();
-		    expect(res.body.message).toEqual(loginConstants.INVALID_LOGIN_PASSWORD_NO_CHARS);
+		    expect(res.body.message).toEqual(loginConstants.INVALID_LOGIN_PASSWORD_NO_UPPER_CASE);
 		    done();
 	        });
         });
+	
+        it("status code of 412 if password contains no lowercase characters ", done => {
+            agent
+	        .post("/register/reg-first-step")
+	        .send({ username: "studentrant", password: "12345689234T" })
+	        .expect(412).end((err,res) => {
+		    expect(err).toBeNull();
+		    expect(res.body.message).toEqual(loginConstants.INVALID_LOGIN_PASSWORD_NO_LOWER_CASE);
+		    done();
+	        });
+        });
+	
+        it("status code of 412 if password contains no special characters ", done => {
+            agent
+	        .post("/register/reg-first-step")
+	        .send({ username: "studentrant", password: "12345689234TesT" })
+	        .expect(412).end((err,res) => {
+		    expect(err).toBeNull();
+		    expect(res.body.message).toEqual(loginConstants.INVALID_LOGIN_PASSWORD_NO_SPECIAL_CHARACTER);
+		    done();
+	        });
+        });
+	
         it("status code of 412 if email field is undefined", done => {
             agent
 	        .post("/register/reg-first-step")
-	        .send({ username: "studentrant", password: "12345689234abcd" })
+	        .send({ username: "studentrant", password: "12345689234TesT$$" })
 	        .expect(412).end((err,res) => {
 		    expect(err).toBeNull();
 		    expect(res.body.message).toEqual(authConstants.NO_EMAIL_FIELD);
@@ -88,7 +111,7 @@ describe("Register [Integration]", () => {
         it("status code of 412 if email does not match define regex", done => {
             agent
 	        .post("/register/reg-first-step")
-	        .send({ username: "studentrant", password: "12345689234abcd", email: "victory@" })
+	        .send({ username: "studentrant", password: "12345689234TesT$$", email: "victory@" })
 	        .expect(412).end((err,res) => {
 		    expect(err).toBeNull();
 		    expect(res.body.message).toEqual(authConstants.INVALID_EMAIL);
@@ -98,7 +121,7 @@ describe("Register [Integration]", () => {
         it("status code of 201 if user account is created", done => {
             agent
 	        .post("/register/reg-first-step")
-	        .send({ username: "studentrant", password: "12345689234abcd", email: "studentrant@example.com" })
+	        .send({ username: "studentrant", password: "12345689234TesT$$", email: "studentrant@example.com" })
 	        .expect(201).end((err,res) => {
 		    cookie = res.headers["set-cookie"];
 		    expect(err).toBeNull();
@@ -109,7 +132,7 @@ describe("Register [Integration]", () => {
         it("should return provided email address is not available", done => {
             agent
 	        .post("/register/reg-first-step")
-	        .send({ username: "studentrant", password: "12345689234abcd", email: "studentrant@example.com" })
+	        .send({ username: "studentrant", password: "12345689234TesT$$", email: "studentrant@example.com" })
 	        .expect(409).end((err,res) => {
 		    expect(err).toBeNull();
 		    expect(res.body.message).toEqual(registerConstants.EMAIL_ALREADY_EXISTS);
@@ -120,7 +143,7 @@ describe("Register [Integration]", () => {
         it("should return provided username is not available", done => {
             agent
 	        .post("/register/reg-first-step")
-	        .send({ username: "studentrant", password: "12345689234abcd", email: "victory-developer@example.com" })
+	        .send({ username: "studentrant", password: "12345689234TesT$$", email: "victory-developer@example.com" })
 	        .expect(409).end((err,res) => {
 		    expect(err).toBeNull();
 		    expect(res.body.message).toEqual(registerConstants.USERNAME_ALREADY_EXISTS);
@@ -131,7 +154,7 @@ describe("Register [Integration]", () => {
         it("should return status of 200 and set completeReg to false for incomplete registration", done => {
 	    agent
 		.post("/login")
-		.send({ username: "studentrant", password: "12345689234abcd" })
+		.send({ username: "studentrant", password: "12345689234TesT$$" })
 		.expect(200).end((err,res) => {
 		    expect(err).toBeNull();
 		    expect(res.body.status).toEqual(200);

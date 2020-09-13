@@ -4,7 +4,19 @@ printf "%s\n" "Setting up replicaset........."
 
 sleep 20;
 
-docker exec -it studentrant-mongo-node-1 mongo --eval "
+[[ "${NODE_ENV}" == "test" ]] && {
+    readonly CONTAINER="studentrant_test-mongo-node-1"
+    readonly HOST1="mongo1:27071"
+    readonly HOST2="mongo2:27081"
+    readonly HOST3="mongo3:27091"
+} || {
+    readonly CONTAINER="studentrant-mongo-node-1"
+    readonly HOST1="mongo1:27017"
+    readonly HOST2="mongo2:27018"
+    readonly HOST3="mongo3:27019"
+}
+
+docker exec -it "${CONTAINER}" mongo "${HOST1}" --eval "
 
 if ( rs.status().codeName == 'NotYetInitialized' ) {
 
@@ -23,8 +35,8 @@ if ( rs.status().codeName == 'NotYetInitialized' ) {
 
     sleep(10);
 
-    rs.add('mongo2');
-    rs.add('mongo3');
+    rs.add('${HOST2}');
+    rs.add('${HOST3}');
 
     admin.createUser( {
         user: 'studentrantUserAdmin',
