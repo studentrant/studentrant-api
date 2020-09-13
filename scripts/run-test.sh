@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 export NODE_ENV=test
 readonly TEST_TO_RUN="${1}"
-
+ifconfig
 [[ ! "${TEST_TO_RUN}" =~ ^(e2e|unit|\s{0,})$ ]] && {
     printf "%s\n" "e2e | unit test are allowed";
     exit 1;
