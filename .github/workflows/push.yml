@@ -5,5 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Unit Test
-        run: npm run test
+      - name: e2e test
+        run:  npm run test:e2e
+      - name: unit test
+        run:  npm run test:unit

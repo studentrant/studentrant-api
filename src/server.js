@@ -12,20 +12,14 @@ import * as configs from  "./config/index.config.js";
 
 const app = express();
 
-betterLogging(console);
+
+if ( process.env.NODE_ENV !== "test" ) betterLogging(console);
 
 app.set("PORT",          configs.config.get("SERVER.PORT"));
 app.set("CONFIGURATION", configs.config);
 app.use(helmet());
 app.use(bodyParser.json());
 
-mountGlobalConfigurations(
-    app,
-    [
-        configs.Database,
-        configs.Session
-    ]
-);
 
 mountGlobalConfigurations(
     app,

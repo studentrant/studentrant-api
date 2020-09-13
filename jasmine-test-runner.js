@@ -18,7 +18,7 @@ export async function loadFiles(config,testFiles) {
     for ( let file of testFiles ) {
         await import(file).catch(e => {
 	    console.error("error loading " , file);
-	    console.error(e);
+	    console.error({e});
 	    process.exit(1);
         });
     }

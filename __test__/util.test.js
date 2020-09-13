@@ -4,7 +4,7 @@ import faker from "faker";
 export const login = (agent,cb) => {
     agent
         .post("/login")
-        .send({ username: "testaccount", password: "12345689234abcd" })
+        .send({ username: "testaccount", password: "12345689234TesT$$" })
         .expect(200).end((err,res) => {
 	    expect(err).toBeNull();
 	    cb(res.headers["set-cookie"]);
@@ -31,7 +31,7 @@ export const createUser = (agent,cb) => {
         .post("/register/reg-first-step")
         .send({
 	    username : faker.internet.userName(),
-	    password : faker.internet.password(),
+	    password : "12345689234TesT$$",
 	    email    : faker.internet.email()
         }).expect(201).end((err,res) => {
 	    expect(err).toBeNull();

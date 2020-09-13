@@ -1,7 +1,20 @@
 #!/usr/bin/env bash
-[[ -n ${CI} ]] && {
-    # if it's called from github actions
-    docker exec studentrant-server-test npm install
-    docker exec studentrant-server-test npm run lint
+export NODE_ENV=test
+readonly TEST_TO_RUN="${1}"
+
+[[ ! "${TEST_TO_RUN}" =~ ^(e2e|unit|\s{0,})$ ]] && {
+    printf "%s\n" "e2e | unit test are allowed";
+    exit 1;
 }
-docker exec studentrant-server-test npm run test:unit
+
+{
+    [[ -z "${TEST_TO_RUN}" ]] || [[ "${TEST_TO_RUN}" == "e2e" ]]
+} && ./scripts/replica-setup.sh
+
+
+[[ "${TEST_TO_RUN}" == "unit" ]] && npm run test:unit && exit 0;
+[[ "${TEST_TO_RUN}" == "e2e"  ]] && npm run coverage:e2e  && exit 0;
+[[ -z "${TEST_TO_RUN}" ]]        && {
+    npm run coverage:e2e
+    npm run test:unit
+}
