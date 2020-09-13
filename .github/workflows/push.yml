@@ -8,12 +8,9 @@ jobs:
 
       - name: edit /etc/hosts
         run : echo "127.0.0.1  localhost mongo1 mongo2 mongo3" | sudo tee -a /etc/hosts
-
-      - name: install packages
-        run : npm install
-
-      - name: e2e test
-        run:  npm run test:e2e
-
-      - name: unit test
-        run:  npm run test:unit
+	
+      - name: cat /etc/hosts
+        run: sudo cat /etc/hosts
+      
+      - name: Run Test
+        run : npm test
