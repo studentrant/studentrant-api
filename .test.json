@@ -1,0 +1,34 @@
+{
+    "dbConnectionString": {
+	"replOne"  : {
+	    "host" : "localhost",
+	    "port" : 27071
+	},
+	"replTwo"  : {
+	    "host" : "localhost",
+	    "port"  : 27081
+	},
+	"replThree" : {
+	    "host" : "localhost",
+	    "port" : 27091
+	},
+	"extraArgument": "readPreference=primary&retryWrites=true&maxIdleTimeMS=10000&compressors=zlib&storageEngine=inMemory",
+	"replicaSetName": "studentrant",
+	"dbUser": "studentrant",
+	"dbPass": "studentrant",
+	"dbName": "studentrant"
+    },
+
+    "SERVER" : {
+	"HOST" : "http://localhost",
+	"PORT" : 3001
+    },
+
+    "sendGrid" : {
+	"apiKey": "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",
+	"templateIds" : {
+	    "emailVerification": "d-f1cc6e6d0a254e3fa0eb020bcc4c2db1"
+	}
+    },
+    "sessionSecret" : "this_is_my_secret"
+}
