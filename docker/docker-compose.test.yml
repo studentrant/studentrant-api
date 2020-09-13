@@ -1,4 +1,3 @@
-#jinja2: lstrip_blocks: True
 version: '3'
 
 networks:
@@ -27,7 +26,7 @@ services:
     ports:
       - 27071:27071
     restart: always
-    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "studentrant", "--journal", "--dbpath", "/data/db", "--port", "27071" ]
+    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "studentrant", "--journal", "--dbpath", "/data/db", "--port", "27071"]
     volumes:
       - studentrant-test_1_db:/data/db
       - studentrant-test_1_configdb:/data/configdb
@@ -46,7 +45,7 @@ services:
     ports:
       - 27081:27081
     restart: always
-    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "studentrant", "--journal", "--dbpath", "/data/db", "--port", "27081" ]
+    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "studentrant", "--journal", "--dbpath", "/data/db", "--port", "27081"]
     volumes:
       - studentrant-test_2_db:/data/db
       - studentrant-test_2_configdb:/data/configdb
@@ -62,7 +61,7 @@ services:
     ports:
       - 27091:27091
     restart: always
-    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "studentrant", "--journal", "--dbpath", "/data/db" ,  "--port", "27091"]
+    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "studentrant", "--journal", "--dbpath", "/data/db", "--port", "27091"]
     volumes:
       - studentrant-test_3_db:/data/db
       - studentrant-test_3_configdb:/data/configdb
