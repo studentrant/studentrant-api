@@ -7,9 +7,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: edit /etc/hosts
-        run : |
-	      sudo cat /etc/hosts
-	      sudo echo "127.0.0.1     localhost  mongo1 mongo2 mongo3" >> /etc/hosts
+        run : sudo echo "127.0.0.1     localhost  mongo1 mongo2 mongo3" >> /etc/hosts
 
       - name: install packages
         run : npm install
