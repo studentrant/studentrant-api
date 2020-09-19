@@ -1,5 +1,5 @@
 import * as constants from "../constants/index.constant.js";
-import { NotFoundException } from "../service/exceptions.service.js";
+import { NotFoundException } from "../core/exceptions.service.js";
 
 export default class Login {
 

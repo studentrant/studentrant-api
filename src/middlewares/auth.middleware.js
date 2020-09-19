@@ -1,5 +1,5 @@
 import { authConstants } from "../constants/index.constant.js";
-import { UnAuthorizedAccessException } from "../service/exceptions.service.js";
+import { UnAuthorizedAccessException } from "../core/exceptions.service.js";
 
 export default class Auth {
     static IsLogin(req,res,next) {

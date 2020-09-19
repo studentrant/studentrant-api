@@ -4,11 +4,11 @@ import helmet      from "helmet";
 import betterLogging from "better-logging";
 import mountRoutes from "./mountRoutes.js";
 import mountGlobalConfigurations  from "./mountGlobalConfigurations.js";
-import { NotFoundException }      from "./service/exceptions.service.js";
+import { NotFoundException }      from "./core/exceptions.service.js";
 import { badExceptionConstants }  from "./constants/index.constant.js";
 
 import * as routes  from "./routes/index.route.js";
-import * as configs from  "./config/index.config.js";
+import * as configs from  "./core/config/index.config.js";
 
 const app = express();
 

@@ -1,6 +1,6 @@
 
 import * as constants from "../constants/index.constant.js";
-import { BadValueException } from "../service/exceptions.service.js";
+import { BadValueException } from "../core/exceptions.service.js";
 
 export default class ValidatorMiddleware {
 

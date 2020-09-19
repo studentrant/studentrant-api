@@ -54,3 +54,15 @@ services:
     volumes:
       - studentrant_3_db:/data/db
       - studentrant_3_configdb:/data/configdb
+
+  elk-stack:
+    hostname: elk
+    image: sebp/elk
+    expose:
+      - 5601
+      - 9200
+      - 5044
+    ports:
+      - 5601:5601
+      - 9200:9200
+      - 5044:5044
