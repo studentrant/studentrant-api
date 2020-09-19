@@ -2,8 +2,6 @@
 export NODE_ENV=test
 readonly TEST_TO_RUN="${1}"
 
-ifconfig
-
 [[ -n "${CI}" ]] && npm install
 
 [[ ! "${TEST_TO_RUN}" =~ ^(e2e|unit|\s{0,})$ ]] && {
