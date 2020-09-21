@@ -14,6 +14,7 @@ const app = express();
 app.set("PORT",          configs.config.get("SERVER.PORT"));
 app.set("CONFIGURATION", configs.config);
 app.use(helmet());
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 
