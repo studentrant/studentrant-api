@@ -6,7 +6,7 @@ sleep 20;
 
 [[ "${NODE_ENV}" == "test" ]] && {
     readonly CONTAINER="studentrant_test-mongo-node-1"
-    readonly HOST1="mongo1:27071"
+    readonly HOST1="mongo1:27077"
     readonly HOST2="mongo2:27081"
     readonly HOST3="mongo3:27091"
 } || {
