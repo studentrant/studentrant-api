@@ -58,6 +58,9 @@ services:
   elk-stack:
     hostname: elk
     image: sebp/elk
+    network_mode: host
+    volumes:
+      - ../.elk-stack/elasticsearch.yml:/etc/elasticsearch/elasticsearch.yml:ro
     expose:
       - 5601
       - 9200
@@ -66,3 +69,18 @@ services:
       - 5601:5601
       - 9200:9200
       - 5044:5044
+
+  filebeat:
+    hostname: filebeat
+    network_mode: host
+    image: docker.elastic.co/beats/filebeat-oss:7.9.1
+    user: root
+    environment:
+      - setup.kibana.host=5601
+      - output.elasticsearch.hosts=["localhost:9200"]
+    volumes:
+      - "../.elk-stack/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro"
+      - "/var/lib/docker/containers:/var/lib/docker/containers:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "../scripts/filebeat.sh:/usr/share/filebeat/filebeat.sh:ro"
+    entrypoint: ["bash", "./filebeat.sh"]

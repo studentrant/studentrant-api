@@ -1,0 +1,18 @@
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: true
+
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      hints.enabled: true
+
+processors:
+# yamllint disable-line rule:indentation
+- add_cloud_metadata: ~
+
+output.elasticsearch:
+  hosts: ["localhost:9200"]
+
+setup.kibana:
+  host: "localhost:5601"
