@@ -1,7 +1,6 @@
 import express     from "express";
 import bodyParser  from "body-parser";
 import helmet      from "helmet";
-import betterLogging from "better-logging";
 import mountRoutes from "./mountRoutes.js";
 import mountGlobalConfigurations  from "./mountGlobalConfigurations.js";
 import { NotFoundException }      from "./core/exceptions.service.js";
@@ -12,20 +11,18 @@ import * as configs from  "./core/config/index.config.js";
 
 const app = express();
 
-
-if ( process.env.NODE_ENV !== "test" ) betterLogging(console);
-
 app.set("PORT",          configs.config.get("SERVER.PORT"));
 app.set("CONFIGURATION", configs.config);
 app.use(helmet());
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 
 mountGlobalConfigurations(
     app,
     [
         configs.Database,
-        configs.Session
+        configs.Session,
+        configs.Logger
     ]
 );
 
@@ -44,6 +41,7 @@ app.use("*", (req, res, next) => {
 
 // eslint-disable-next-line
 app.use((err, req, res, next) => {
+
     const { status, message } = err.errorDetails ?
         err.errorDetails :
         {
@@ -52,8 +50,13 @@ app.use((err, req, res, next) => {
                 badExceptionConstants :
                 err.message
         };
-    if ( process.env.NODE_ENV !== "production" && status === 500 )
-        console.error(err,message);
+
+    if ( process.env.NODE_ENV !== "production" && status === 500 ) {
+        const logger = new configs.Logger(app.get("CONFIGURATION"));
+        logger.setLogType("express");
+        logger.log.fatal(message);
+    }
+
     return res.status(status).json({ status, message });
 });
 

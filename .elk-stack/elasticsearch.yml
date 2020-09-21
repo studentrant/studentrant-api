@@ -1,0 +1,7 @@
+node.name: elk
+path.repo: /var/backups
+cluster.initial_master_nodes: ["elk"]
+network:
+  host: 0.0.0.0
+http:
+  port: 9200

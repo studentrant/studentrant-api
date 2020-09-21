@@ -1,22 +1,30 @@
 import mongoose from "mongoose";
+import {Logger}  from "./logger.config.js";
 
 export class Database {
 
     constructor(config) {
+
+        const logger = new Logger(config);
+
+        logger.setLogType("express");
+        Logger.log           =  logger.log;
+
         Database.MongooseURI = this.mongooseUri = config.get("dbConnectionString.connString");
+
     }
 
     static ErrorHandler(error) {
         if ( error )
-	    console.log(`${error} ${Database.MongooseURI}`);
+	    Logger.log.error(`${error} on Database`);
     }
 
     static ConnectedHandler() {
-        console.log(`Connected to ${Database.MongooseURI}`);
+        Logger.log.info("Connected to Database");
     }
 
     static DisconnectedHandler() {
-        console.log(`Disconnected to ${Database.MongooseURI}`);
+        Logger.log.warn("Disconnected from Database");
     }
 
     connect() {
