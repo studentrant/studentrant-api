@@ -9,6 +9,7 @@ export class Logger {
     }
 
     setLogType(type) {
+        type     = this.config.get("env") !== "test" ? type : "test";
         this.log = log4js.getLogger(type);
         return log4js.connectLogger(this.log);
     }
@@ -35,6 +36,12 @@ export class Logger {
 
 
     configure() {
+
+        if ( this.config.get("env") === "test" ) {
+	    this.useMiddleware = false;
+	    return false;
+        }
+
         log4js.configure({
 	    appenders: {
                 customAppender : {
@@ -48,6 +55,7 @@ export class Logger {
                 default : { appenders: [ "customAppender" , "express" ], level: "info" }
 	    }
         });
+
         return this.setLogType("express");
     }
 }
