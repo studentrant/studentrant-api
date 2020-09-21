@@ -2,7 +2,7 @@
     "dbConnectionString": {
 	"replOne"  : {
 	    "host" : "localhost",
-	    "port" : 27071
+	    "port" : 27077
 	},
 	"replTwo"  : {
 	    "host" : "localhost",

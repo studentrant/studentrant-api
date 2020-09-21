@@ -22,11 +22,11 @@ services:
     networks:
       - testnetwork
     expose:
-      - 27071
+      - 27077
     ports:
-      - 27071:27071
+      - 27077:27077
     restart: always
-    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "studentrant", "--journal", "--dbpath", "/data/db", "--port", "27071"]
+    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "studentrant", "--journal", "--dbpath", "/data/db", "--port", "27077"]
     volumes:
       - studentrant-test_1_db:/data/db
       - studentrant-test_1_configdb:/data/configdb
