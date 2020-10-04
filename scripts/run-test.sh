@@ -14,9 +14,9 @@ readonly TEST_TO_RUN="${1}"
 } && ./scripts/replica-setup.sh
 
 
-[[ "${TEST_TO_RUN}" == "unit" ]] && npm run test:unit && exit 0;
-[[ "${TEST_TO_RUN}" == "e2e"  ]] && npm run coverage:e2e  && exit 0;
+[[ "${TEST_TO_RUN}" == "unit" ]] && yarn test:unit && exit 0;
+[[ "${TEST_TO_RUN}" == "e2e"  ]] && yarn coverage:e2e  && exit 0;
 [[ -z "${TEST_TO_RUN}" ]]        && {
-    npm run coverage:e2e
-    npm run test:unit
+    yarn coverage:e2e
+    yarn test:unit
 }

@@ -1,87 +1,87 @@
 {
-    "name": "studentrant",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "type": "module",
-    "scripts": {
-	"coverage:e2e": "cross-env NODE_ENV=test nyc node ./.jasmine-run-e2e.js ./.jasmine.e2e.json ./__test__/**/*.mjs",
-	"coverage:unit": "cross-env NODE_ENV=test nyc node ./.jasmine-run-unit.js ./.jasmine.unit.json './src/**/*.mjs'",
-	"db:drop": "docker-compose -p dev -f docker/docker-compose.dev.yml down --remove-orphans",
-	"db:start": "docker-compose -p dev -f docker/docker-compose.dev.yml start",
-	"db:stop": "docker-compose -f docker/docker-compose.dev.yml stop",
-	"docker:down": "docker-compose -p dev -f docker/docker-compose.dev.yml -p test -f docker/docker-compose.test.yml down --remove-orphans",
-	"docker:up": "docker-compose -p dev -f docker/docker-compose.dev.yml up -d && ./scripts/replica-setup.sh",
-	"doc": "apidoc -i doc/ -o html-doc/",
-	"doc:watch": "nodemon --watch doc/ --exec yarn doc",
-	"lint": "eslint '**/*.js'",
-	"lint:fix": "eslint --fix '**/*.js'",
-	"start:dev": "node src/server.js --env dev",
-	"start:test": "node src/server.js --env test",
-	"start:dev:watch": "nodemon --exec node src/server.js --env dev",
-	"test": "docker-compose -p test -f docker/docker-compose.test.yml up -d && ./scripts/run-test.sh",
-	"test:e2e": "docker-compose -p test -f docker/docker-compose.test.yml up -d && yarn coverage:e2e",
-	"test:unit": "yarn coverage:unit",
-	"yaml:lint": "yamllint -c ./.yamllint.yml ${PWD}"
-    },
-    "lint-staged": {
-	"*.js": "yarn lint:fix",
-	"*.yml": "yarn yaml:lint"
-    },
-    "husky": {
-	"hooks": {
-	    "pre-push": "yarn test ; yarn lint",
-	    "pre-commit": "lint-staged"
-	}
-    },
-    "repository": {
-	"type": "git",
-	"url": "git+https://github.com/studentrant/studentrant.git"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "bugs": {
-	"url": "https://github.com/studentrant/studentrant/issues"
-    },
-    "homepage": "https://github.com/studentrant/studentrant#readme",
-    "dependencies": {
-	"@elastic/elasticsearch": "^7.9.0",
-	"@log4js-node/logstash-http": "^1.0.0",
-	"@log4js-node/slack": "^1.0.0",
-	"@sendgrid/mail": "^6.5.5",
-	"bcryptjs": "^2.4.3",
-	"body-parser": "^1.19.0",
-	"connect-mongodb-session": "^2.3.3",
-	"convict": "^5.2.0",
-	"cors": "^2.8.5",
-	"diff": "^4.0.2",
-	"express": "^4.17.1",
-	"express-session": "^1.17.1",
-	"express-validator": "^6.6.0",
-	"helmet": "^3.23.3",
-	"log4js": "^6.3.0",
-	"mongoose": "^5.9.21",
-	"node-fetch": "^2.6.1",
-	"sendgrid": "^5.2.3",
-	"supertest": "^4.0.2",
-	"uid-generator": "^2.0.0",
-	"uuid": "^8.2.0"
-    },
-    "devDependencies": {
-	"apidoc": "^0.20.1",
-	"async": "^3.2.0",
-	"babel-eslint": "^10.1.0",
-	"coveralls": "^3.1.0",
-	"cross-env": "^7.0.2",
-	"eslint": "^6.8.0",
-	"esm": "^3.2.25",
-	"faker": "^4.1.0",
-	"husky": "^4.2.5",
-	"jasmine": "^3.5.0",
-	"jasmine-spec-reporter": "^4.2.1",
-	"lint-staged": "^10.3.0",
-	"nodemon": "^2.0.4",
-	"nyc": "^15.1.0"
+  "name": "studentrant",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "coverage:e2e": "cross-env NODE_ENV=test c8 node ./.jasmine-run-e2e.js ./.jasmine.e2e.json ./__test__/**/*.mjs",
+    "coverage:unit": "cross-env NODE_ENV=test c8 node ./.jasmine-run-unit.js ./.jasmine.unit.json './src/**/*.mjs'",
+    "db:drop": "docker-compose -p dev -f docker/docker-compose.dev.yml down --remove-orphans",
+    "db:start": "docker-compose -p dev -f docker/docker-compose.dev.yml start",
+    "db:stop": "docker-compose -f docker/docker-compose.dev.yml stop",
+    "docker:down": "docker-compose -p dev -f docker/docker-compose.dev.yml -p test -f docker/docker-compose.test.yml down --remove-orphans",
+    "docker:up": "docker-compose -p dev -f docker/docker-compose.dev.yml up -d && ./scripts/replica-setup.sh",
+    "doc": "apidoc -i doc/ -o html-doc/",
+    "doc:watch": "nodemon --watch doc/ --exec yarn doc",
+    "lint": "eslint '**/*.js'",
+    "lint:fix": "eslint --fix '**/*.js'",
+    "start:dev": "node src/server.js --env dev",
+    "start:test": "node src/server.js --env test",
+    "start:dev:watch": "nodemon --exec node src/server.js --env dev",
+    "test": "docker-compose -p test -f docker/docker-compose.test.yml up -d && ./scripts/run-test.sh",
+    "yaml:lint": "yamllint -c ./.yamllint.yml ${PWD}"
+  },
+  "lint-staged": {
+    "*.js": "yarn lint:fix",
+    "*.yml": "yarn yaml:lint"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "yarn test ; yarn lint",
+      "pre-commit": "lint-staged"
     }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/studentrant/studentrant.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/studentrant/studentrant/issues"
+  },
+  "homepage": "https://github.com/studentrant/studentrant#readme",
+  "dependencies": {
+    "@elastic/elasticsearch": "^7.9.0",
+    "@log4js-node/logstash-http": "^1.0.0",
+    "@log4js-node/slack": "^1.0.0",
+    "@sendgrid/mail": "^6.5.5",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "c8": "^7.3.1",
+    "connect-mongodb-session": "^2.3.3",
+    "convict": "^5.2.0",
+    "cors": "^2.8.5",
+    "diff": "^4.0.2",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "express-validator": "^6.6.0",
+    "helmet": "^3.23.3",
+    "log4js": "^6.3.0",
+    "mongoose": "^5.9.21",
+    "node-fetch": "^2.6.1",
+    "sendgrid": "^5.2.3",
+    "supertest": "^4.0.2",
+    "uid-generator": "^2.0.0",
+    "uuid": "^8.2.0"
+  },
+  "devDependencies": {
+    "apidoc": "^0.20.1",
+    "async": "^3.2.0",
+    "babel-eslint": "^10.1.0",
+    "coveralls": "^3.1.0",
+    "cross-env": "^7.0.2",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "esm": "^3.2.25",
+    "faker": "^4.1.0",
+    "husky": "^4.2.5",
+    "jasmine": "^3.5.0",
+    "jasmine-spec-reporter": "^4.2.1",
+    "lint-staged": "^10.3.0",
+    "nodemon": "^2.0.4"
+  }
 }

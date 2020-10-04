@@ -1,58 +1,53 @@
-import mongoose from "mongoose";
-import {Logger}  from "./logger.config.js";
+import mongoose from 'mongoose';
+import { Logger } from './logger.config.js';
 
 export class Database {
+  constructor(config) {
+    const logger = new Logger(config);
 
-    constructor(config) {
+    logger.setLogType('express');
+    Logger.log = logger.log;
 
-        const logger = new Logger(config);
+    Database.MongooseURI = this.mongooseUri = config.get('dbConnectionString.connString');
+  }
 
-        logger.setLogType("express");
-        Logger.log           =  logger.log;
+  static ErrorHandler(error) {
+    if (error) Logger.log.error(`${error} on Database`);
+  }
 
-        Database.MongooseURI = this.mongooseUri = config.get("dbConnectionString.connString");
+  static ConnectedHandler() {
+    Logger.log.info('Connected to Database');
+  }
 
-    }
+  static DisconnectedHandler() {
+    Logger.log.warn('Disconnected from Database');
+  }
 
-    static ErrorHandler(error) {
-        if ( error )
-	    Logger.log.error(`${error} on Database`);
-    }
+  connect() {
+    return mongoose.connect(
+      this.mongooseUri,
+      {
+        useFindAndModify: false,
+        useNewUrlParser: true,
+        useCreateIndex: true,
+        useUnifiedTopology: true,
+        bufferMaxEntries: 0,
+        keepAlive: true,
+        poolSize: 350,
+      },
+      Database.ErrorHandler,
+    );
+  }
 
-    static ConnectedHandler() {
-        Logger.log.info("Connected to Database");
-    }
+  configure() {
+    const db = mongoose.connection;
 
-    static DisconnectedHandler() {
-        Logger.log.warn("Disconnected from Database");
-    }
+    this.connect();
 
-    connect() {
-        return mongoose.connect(
-	    this.mongooseUri,
-	    {
-                useFindAndModify: false,
-                useNewUrlParser: true,
-                useCreateIndex: true,
-                useUnifiedTopology: true,
-                bufferMaxEntries: 0,
-                bufferCommands: 0,
-                keepAlive: true,
-                poolSize: 350
-	    },
-	    Database.ErrorHandler
-        );
-    }
-
-    configure() {
-
-        const db  = mongoose.connection;
-
-        this.connect();
-
-        db.on("connected",    Database.ConnectedHandler);
-        db.on("disconnected", Database.DisconnectedHandler);
-        db.on("error",        Database.ErrorHandler);
-
-    }
+    db.on('connected', Database.ConnectedHandler);
+    db.on('disconnected', Database.DisconnectedHandler);
+    db.on('error', Database.ErrorHandler);
+  }
 }
+
+export default Database;

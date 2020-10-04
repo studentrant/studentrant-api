@@ -1,5 +1,7 @@
-export const req = {
-    body    : {},
-    session : {},
-    params  : {}
+const req = {
+  body: {},
+  session: {},
+  params: {},
 };
+
+export default req;

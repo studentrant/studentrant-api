@@ -43,12 +43,7 @@
      * @apiError INVALID_LOGIN_PASSWORD_LENGTH         password field is less than 8
      * @apiError INVALID_LOGIN_PASSWORD_NO_DIGIT       password does not contain any number
      * @apiError INVALID_LOGIN_PASSWORD_NO_CHARS       password does not contain any characters
-     **/
-
-
-
-
-
+     * */
 
 /**
      * @api { patch } /register/reg-last-step Last registration step of user
@@ -95,12 +90,7 @@
      * @apiError NO_INTEREST_FIELD               interests is undefined
      * @apiError NO_ARRAY_INTEREST               interests is not an array field
      * @apiError NO_INTEREST_LENGTH              interest array length is 0
-     **/
-
-
-
-
-
+     * */
 
 /**
      * @api { patch } /register/verification/:token Verify user token
@@ -134,4 +124,4 @@
      *
      *
      * @apiError INVALID_VERIFICATION_TOKEN
-     **/
+     * */

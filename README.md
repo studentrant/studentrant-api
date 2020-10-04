@@ -8,13 +8,16 @@
 ### test
 
 **e2e test**
-`yarn test:e2e`
+
+`yarn test e2e`
 
 **unit test**
-`yarn test:unit`
+
+`yarn test unit`
 
 
 **run both e2e and unit test together**
+
 `yarn test`
 
 ### lint

@@ -58,7 +58,7 @@
  *                   isEdited    : true,
  *                   editHistory : [
  *                         { when: 1596978723642 , diff: { value: "Lorem ipsum", removed: true, added: false} },
- *                         { when: 1596978723642 , diff: { value: "L O", removed: added: true } } 
+ *                         { when: 1596978723642 , diff: { value: "L O", removed: added: true } }
  *                    ]
  *                 diffAgainst: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
  *                },
@@ -69,9 +69,9 @@
  *
  * @apiError RANT_BODY_UNDEFINED                  Rant body data is not defined
  * @apiError RANT_LENGTH_NOT_MORE_THAN_TWENTY     Rant cannot be created because it is less than 20
- * @apiError RANT_TAGS_UNDEFINED                  Tag body data is not defined   
- * @apiError RANT_TAGS_NOT_AN_ARRAY               Expect an array as rant tags but got 
- * @apiError RANT_WHEN_NO_EXISTS                  A when field is required, it carries the timestamp of when the edit request was made               
+ * @apiError RANT_TAGS_UNDEFINED                  Tag body data is not defined
+ * @apiError RANT_TAGS_NOT_AN_ARRAY               Expect an array as rant tags but got
+ * @apiError RANT_WHEN_NO_EXISTS                  A when field is required, it carries the timestamp of when the edit request was made
  * @apiError RANT_NOT_NUMBER                      when property must be a number
  * @apiError RANT_NOT_VALID_TIMESTAMP             Invalid timestamp information passed as value to the when property
  * @apiError RANT_ID_IS_UNDEFINED           There is no id specified for the rant to modify
@@ -80,4 +80,4 @@
  * @apiError RANT_NOT_USER                  You are not allowed to modify this rant at this time
  *
 
- **/
+ * */

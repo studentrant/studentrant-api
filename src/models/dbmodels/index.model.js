@@ -1,2 +1,2 @@
-export * from "../dbmodels/user.model.js";
-export * from "../dbmodels/rant.model.js";
+export { default as usersCollection } from './user.model.js';
+export { default as rantsCollection } from './rant.model.js';

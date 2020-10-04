@@ -29,4 +29,4 @@
  * @apiError RANT_HAS_ALREADY_BEEN_DELETED  Rant has already been deleted
  * @apiError RANT_NOT_USER                  You are not allowed to modify this rant at this time
  *
- **/
+ * */

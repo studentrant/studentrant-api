@@ -1,1 +1,2 @@
-export const config = { get() {} };
+const config = { get() {} };
+export default config;

@@ -1,35 +1,17 @@
-"use strict";
-
-export class DbUtils {
-
-    static async ResourceExists(coll = [], resource ) {
-
-        coll                      = Array.isArray(coll) ? coll : [ coll ];
-        const [ [ key , value ] ] = Object.entries(resource);
-
-        try {
-
-	    for ( let col of coll ) {
-                const val = await col.findOne({ [key]: value });
-                if ( val ) return {
-		    collection: col,
-		    exists    : true,
-		    error     : false,
-		    data      : val
-                };
-	    }
-
-	    return {
-                error  : false,
-                exists : false
-	    };
-
-        } catch(ex) {
-	    return {
-                ex,
-                error : true,
-                exists: false
-	    };
-        }
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-await-in-loop */
+export default class DbUtils {
+  static async ResourceExists(coll = [], resource) {
+    const collections = Array.isArray(coll) ? coll : [coll];
+    const [[key, value]] = Object.entries(resource);
+    for (const col of collections) {
+      const val = await col.findOne({ [key]: value });
+      if (val) {
+        return {
+          collection: col, exists: true, data: val,
+        };
+      }
     }
+    return { exist: false };
+  }
 }

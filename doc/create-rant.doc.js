@@ -49,9 +49,9 @@
  *
  * @apiError RANT_BODY_UNDEFINED                  Rant body data is not defined
  * @apiError RANT_LENGTH_NOT_MORE_THAN_TWENTY     Rant cannot be created because it is less than 20
- * @apiError RANT_TAGS_UNDEFINED                  Tag body data is not defined   
- * @apiError RANT_TAGS_NOT_AN_ARRAY               Expect an array as rant tags but got 
- * @apiError RANT_WHEN_NO_EXISTS                  A when field is required, it carries the timestamp of when the edit request was made               
+ * @apiError RANT_TAGS_UNDEFINED                  Tag body data is not defined
+ * @apiError RANT_TAGS_NOT_AN_ARRAY               Expect an array as rant tags but got
+ * @apiError RANT_WHEN_NO_EXISTS                  A when field is required, it carries the timestamp of when the edit request was made
  * @apiError RANT_NOT_NUMBER                      when property must be a number
  * @apiError RANT_NOT_VALID_TIMESTAMP             Invalid timestamp information passed as value to the when property
- **/
+ * */

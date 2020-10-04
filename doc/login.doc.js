@@ -52,4 +52,4 @@
  * @apiError INVALID_LOGIN_PASSWORD_LENGTH         password field is less than 8
  * @apiError INVALID_LOGIN_PASSWORD_NO_DIGIT       password does not contain any number
  * @apiError INVALID_LOGIN_PASSWORD_NO_CHARS       password does not contain any characters
- **/
+ * */

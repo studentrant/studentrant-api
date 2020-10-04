@@ -1,42 +1,32 @@
 {
-    "env": {
-        "commonjs": true,
-        "es6": true,
-        "node": true
-    },
-    "extends": "eslint:recommended",
-    "ignorePatterns": [
-	"loader.js",
-	"node_modules/",
-	"html-doc/"
-    ],
-    "globals": {
-        "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
-    },
-    "parser": "babel-eslint",
-    "parserOptions": {
-        "ecmaVersion": 2018,
-	"sourceType": "module"
-    },
-    "rules": {
-        "indent": [
-            "error",
-            4
-        ],
-        "linebreak-style": [
-            "error",
-            "unix"
-        ],
-        "quotes": [
-            "error",
-            "double"
-        ],
-        "semi": [
-            "error",
-            "always"
-        ],
-	"no-mixed-spaces-and-tabs": [ "error", "smart-tabs" ],
-	"no-useless-catch": "off"
-    }
+  "env": {
+    "node": true,
+    "es6": true,
+    "jasmine": true
+  },
+  "extends": [
+    "airbnb-base"
+  ],
+  "ignorePatterns": [
+    "loader.js",
+    "node_modules/",
+    "html-doc/",
+    "doc/"
+  ],
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "rules": {
+    "import/extensions": "off",
+    "no-console": "off",
+    "no-underscore-dangle": "off",
+    "class-methods-use-this": "off",
+    "no-multi-assign": "off"
+  }
 }
