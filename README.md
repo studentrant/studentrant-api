@@ -15,6 +15,8 @@
 
 `yarn test unit`
 
+**run the unit test without using docker**
+`yarn coverage:unit`
 
 **run both e2e and unit test together**
 

@@ -6,7 +6,6 @@
   "exclude": ["**/**/*.mjs", "src/*.js", "src/core/config/"],
   "reporter": [ "text", "html" ],
   "all": true,
-  "check-coverage": true,
   "watermarks": {
     "lines": [65, 75],
     "functions": [0, 0],
