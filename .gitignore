@@ -7,3 +7,4 @@ keyfile
 assets/
 .nyc_output/
 *~
+yarn-error.log
