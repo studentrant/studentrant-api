@@ -1,4 +1,4 @@
-name: test-e2e
+name: test
 # yamllint disable-line rule:truthy
 on: [push, pull_request]
 jobs:
@@ -7,8 +7,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: install
-        run: npm install
+      - name: install yarn
+        run: npm install -g yarn
+
+      - name: install packages
+        run: yarn install
 
       - name: edit /etc/hosts
         run: echo "0.0.0.0 localhost mongo1 mongo2 mongo3" | sudo tee -a /etc/hosts
@@ -17,4 +20,4 @@ jobs:
         run: sudo cat /etc/hosts
 
       - name: Run Test
-        run: npm test
+        run: yarn test
