@@ -32,17 +32,20 @@ describe('Registration [Unit]', () => {
   });
 
   describe('::firstRegStep', () => {
-    let checkUserExistenceSpy; let
-      saveUserSpy;
+    let checkUserExistenceSpy;
+    let saveUserSpy;
+    let hashPasswordSpy;
 
     beforeEach(() => {
       checkUserExistenceSpy = spyOn(registerController.registerService, 'checkUserExistence');
       saveUserSpy = spyOn(registerController.registerService, 'saveUser');
+      hashPasswordSpy = spyOn(registerController.passwordUtils, "hashPassword");
     });
 
     afterEach(() => {
       checkUserExistenceSpy.calls.reset();
       saveUserSpy.calls.reset();
+      hashPasswordSpy.calls.reset();
     });
 
     it('should throw ExistsException error when searching email that already exists', async () => {
@@ -76,11 +79,12 @@ describe('Registration [Unit]', () => {
     it('should register user', async () => {
       req.body = { email: 'notexists@example.com', password: 'password', username: 'notexistsusername' };
 
+      hashPasswordSpy.and.resolveTo("xxxx");
       checkUserExistenceSpy.and.resolveTo(undefined);
       saveUserSpy.and.resolveTo(sucessfullyRegistered);
 
       const result = JSON.parse(await registerController.firstRegStep(req, res, next));
-
+      expect(registerController.passwordUtils.hashPassword).toHaveBeenCalledWith("password");
       expect(result.status).toEqual(201);
       expect(result.message.password).toBeUndefined();
       expect(result.message._id).toBeUndefined();

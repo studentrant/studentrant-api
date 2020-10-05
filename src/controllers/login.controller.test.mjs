@@ -22,7 +22,6 @@ describe('Login [Unit]', () => {
   let findOneSpy;
   let resourceExistsSpy;
   let verifyPasswordUtilsSpy;
-  // let nextSpy;
 
   afterAll(() => {
     req.session = {};
@@ -37,7 +36,7 @@ describe('Login [Unit]', () => {
   beforeEach(() => {
     findOneSpy = spyOn(Collection, 'findOne');
     resourceExistsSpy = spyOn(loginController.utils.DbUtils, 'ResourceExists').and.callThrough();
-    verifyPasswordUtilsSpy = spyOn(loginController.utils.PasswordUtils, 'VerifyHashPassword');
+    verifyPasswordUtilsSpy = spyOn(loginController.passwordUtils, 'verifyHashPassword');
   });
 
   it('should not allow invalid logins for username', async () => {

@@ -1,3 +1,4 @@
+import bcrypt from 'bcryptjs';
 import * as constants from '../constants/index.constant.js';
 import { RegisterService } from '../service/register.service.js';
 import { ExistsException } from '../core/exceptions.service.js';
@@ -12,7 +13,7 @@ export default class Registration {
     config,
   ) {
     this.Utils = Utils;
-    this.PasswordUtils = PasswordUtils;
+    this.passwordUtils = new PasswordUtils(bcrypt);
     this.registerService = new RegisterService(
       new RegisterDbUtils(usersCollection),
       Utils,
@@ -36,7 +37,7 @@ export default class Registration {
 
       const result = await this.registerService.saveUser({
         username,
-        password: await this.PasswordUtils.HashPassword(password),
+        password: await this.passwordUtils.hashPassword(password),
         email,
       });
 

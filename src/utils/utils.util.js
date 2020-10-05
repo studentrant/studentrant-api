@@ -13,7 +13,7 @@ export default class Utils {
   }
 
   static UpdateSessionObject(req, data) {
-    Object.assign(req.session.user, ...data);
+    Object.assign(req.session.user, { ...req.session.user, ...data });
   }
 
   static UniqueCodeGenerator() {
