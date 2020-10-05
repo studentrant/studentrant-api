@@ -1,9 +1,11 @@
+import bcrypt from 'bcryptjs';
 import * as constants from '../constants/index.constant.js';
 import { NotFoundException } from '../core/exceptions.service.js';
 
 export default class Login {
-  constructor(utils, usersCollection) {
-    this.utils = utils;
+  constructor(Utils, usersCollection) {
+    this.passwordUtils = new Utils.PasswordUtils(bcrypt);
+    this.utils = Utils;
     this.usersCollection = usersCollection;
   }
 
@@ -17,7 +19,7 @@ export default class Login {
     if (!exists) return constants.loginConstants.INVALID_LOGIN_CREDENTIALS;
 
     if (
-      !await this.utils.PasswordUtils.VerifyHashPassword(password, data.password)
+      !await this.passwordUtils.verifyHashPassword(password, data.password)
     ) return constants.loginConstants.INVALID_LOGIN_CREDENTIALS;
 
     return data;
