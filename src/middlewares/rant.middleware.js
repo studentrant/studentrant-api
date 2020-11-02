@@ -48,4 +48,9 @@ export default class RantValidators {
 
     return next();
   }
+
+  static VerifyRantVoter(req, res, next) {
+    if (req.body.rantUpvoter || req.body.rantDownvoter) return next();
+    throw BadValueException(rantConstants.RANT_VOTER_NO_EXISTS);
+  }
 }

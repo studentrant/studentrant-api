@@ -212,6 +212,28 @@ describe('EditRant [Integrathion]', () => {
           });
       });
 
+      it('should return 410 when trying to edit a deleted rant', done => {
+        const cb = (arg) => {
+          console.log(rantId);
+          testUtils.deleteRant(agent, { cookie, rantId : arg } , (rantId) => {
+            agent
+              .patch(`/rant/post/edit/${rantId}`)
+              .set("cookie", cookie)
+              .send({ rant: 'this is a rant to edit for the edit rant test test', tags: ['news', 'rant'], when: Date.now() })
+              .expect(410).end((err,res) => {
+                console.log(rantId);
+                expect(err).toBeNull();
+                expect(res.body.status).toEqual(410);
+                expect(res.body.message).toEqual(rantConstants.RANT_HAS_ALREADY_BEEN_DELETED);
+                done();
+              });
+          });
+        };
+
+        testUtils.createRant( agent, { rant: 'Test this rant for upvoting a rant, but this rant will be  deleted', cookie: cookie },cb);
+
+      });
+
       it('should return 401 when trying to edit rant you did not edit ( edge case )', (done) => {
         testUtils.createUser(agent, (arg) => {
           agent

@@ -7,8 +7,8 @@ describe("Rant [Model]", () => {
     when,
     rantId: 'unique_id',
     rant:  'hello rant',
-    rantUpvote  : 12,
-    rantDownvote: 5
+    rantUpvote  : [],
+    rantDownvote: []
   });
   it('should be defined', () => {
     expect(rant).toBeDefined();
@@ -18,8 +18,8 @@ describe("Rant [Model]", () => {
     expect(rant.when).toEqual(when);
     expect(rant.rantId).toEqual('unique_id');
     expect(rant.rant).toEqual('hello rant');
-    expect(rant.rantUpvote).toEqual(12);
-    expect(rant.rantDownvote).toEqual(5);
+    expect(rant.rantUpvote).toEqual(jasmine.any(Array));
+    expect(rant.rantDownvote).toEqual(jasmine.any(Array));
     expect(rant.deleted).toEqual(false);
   });
 });

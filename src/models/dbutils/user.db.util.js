@@ -1,4 +1,4 @@
-export default class RegisterDbUtils {
+export default class UserDbUtils {
   constructor(usersCollection) {
     this.UsersCollection = usersCollection;
   }

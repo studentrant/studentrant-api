@@ -1,14 +1,14 @@
-import RegisterDbUtils from './register.db.util.js';
+import UserDbUtils from './user.db.util.js';
 import { Collection } from '../../../__test__/fakes/db.fakes.js';
 
-describe('RegisterDbUtils [Unit]', () => {
-  const registerDbUtils = new RegisterDbUtils(Collection);
+describe('UserdbUtils [Unit]', () => {
+  const userdbUtils = new UserDbUtils(Collection);
   describe('::saveNewUser', () => {
     let collectionSaveSpy;
     let collectionFindOneSpy;
     let instanceOfCollection;
     beforeEach(() => {
-      instanceOfCollection = new registerDbUtils.UsersCollection();
+      instanceOfCollection = new userdbUtils.UsersCollection();
       collectionSaveSpy = spyOn(instanceOfCollection, 'save').and.callThrough();
       collectionFindOneSpy = spyOn(
         Collection,
@@ -22,7 +22,7 @@ describe('RegisterDbUtils [Unit]', () => {
     });
 
     it('should save call findOne', async () => {
-      await registerDbUtils.saveNewUser({ foo: 'bar', email: 'test@example.com' });
+      await userdbUtils.saveNewUser({ foo: 'bar', email: 'test@example.com' });
       // expect(instanceOfCollection.save).toHaveBeenCalled();
       expect(Collection.findOne).toHaveBeenCalled();
       expect(Collection.findOne).toHaveBeenCalledWith(
@@ -43,7 +43,7 @@ describe('RegisterDbUtils [Unit]', () => {
       findOneAndUpdateSpy.calls.reset();
     });
     it('should call findOneAndUpdate', async () => {
-      await registerDbUtils.updateNewUserDetails({
+      await userdbUtils.updateNewUserDetails({
         criteria: { foo: 'bar' },
         data: { bar: 'baz' },
         options: { foo: true, bar: true },
@@ -66,7 +66,7 @@ describe('RegisterDbUtils [Unit]', () => {
       findOneAndUpdateSpy.calls.reset();
     });
     it('should call findOneAndUpdate', async () => {
-      await registerDbUtils.verifyUserRegTokenAndGetData('xxxx');
+      await userdbUtils.verifyUserRegTokenAndGetData('xxxx');
       expect(Collection.findOneAndUpdate).toHaveBeenCalled();
       expect(Collection.findOneAndUpdate).toHaveBeenCalledWith(
         { verificationLink: 'xxxx' },
@@ -90,7 +90,7 @@ describe('RegisterDbUtils [Unit]', () => {
       findOneSpy.calls.reset();
     });
     it('should call findOne', async () => {
-      await registerDbUtils.checkUserExists('foo', 'bar');
+      await userdbUtils.checkUserExists('foo', 'bar');
       expect(Collection.findOne).toHaveBeenCalled();
       expect(Collection.findOne).toHaveBeenCalledWith(
         { foo: 'bar' },

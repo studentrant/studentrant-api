@@ -32,7 +32,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     index: true,
   },
-});
+}, { timestamp: true });
 
 const usersCollection = mongoose.model('Users', UserSchema);
 

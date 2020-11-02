@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 import { RegisterService } from './register.service.js';
-import { RegisterDbUtils, Collection } from '../../__test__/fakes/db.fakes.js';
+import { UserDbUtils, Collection } from '../../__test__/fakes/db.fakes.js';
 import * as Utils from '../utils/index.util.js';
 
 describe('RegisterService [Unit]', () => {
   const service = new RegisterService(
-    new RegisterDbUtils(Collection),
+    new UserDbUtils(Collection),
     Utils,
   );
 
