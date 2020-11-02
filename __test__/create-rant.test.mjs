@@ -12,7 +12,6 @@ describe('CreateRant [Integration]', () => {
         .post('/rant/post/create')
         .send({})
         .expect(401).end((err, res) => {
-          console.log(err, 'IN HERE');
           expect(err).toBeNull();
           expect(res.body.status).toEqual(401);
           expect(res.body.message).toEqual(authConstants.USER_NOT_LOGGED_IN);

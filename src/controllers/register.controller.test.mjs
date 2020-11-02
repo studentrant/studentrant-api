@@ -7,7 +7,7 @@ import req    from '../../__test__/fakes/req.fake.js';
 import res    from '../../__test__/fakes/res.fake.js';
 import Email  from '../service/email.service.js';
 
-import RegisterDbUtils from '../models/dbutils/register.db.util.js';
+import UserDbUtils from '../models/dbutils/user.db.util.js';
 import Registration from './register.controller.js';
 
 const sucessfullyRegistered = {
@@ -19,7 +19,7 @@ const sucessfullyRegistered = {
 
 describe('Registration [Unit]', () => {
   const registerController = new Registration(
-    RegisterDbUtils,
+    UserDbUtils,
     Email,
     Utils,
     PasswordUtils,

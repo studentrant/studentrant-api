@@ -59,9 +59,12 @@ const RantSchema = new mongoose.Schema({
       },
     ],
   },
-  rantUpvote: Number,
-  rantDownvote: Number,
-});
+  rantUpvote: [mongoose.Types.ObjectId],
+  rantDownvote: [mongoose.Types.ObjectId],
+}, { timestamp: true });
+
+RantSchema.index({ rantUpvote: true });
+RantSchema.index({ rantDownvote: true });
 
 const rantsCollection = mongoose.model('Rants', RantSchema);
 

@@ -28,15 +28,16 @@ export const createRant = (agent, { rant, cookie }, cb) => {
 };
 
 export const createUser = (agent, cb) => {
+  const body = {
+    username: faker.internet.userName(),
+    password: '12345689234TesT$$',
+    email: faker.internet.email('test'),
+  };
   agent
     .post('/register/reg-first-step')
-    .send({
-      username: faker.internet.userName(),
-      password: '12345689234TesT$$',
-      email: faker.internet.email(),
-    }).expect(201).end((err, res) => {
+    .send(body).expect(201).end((err, res) => {
       expect(err).toBeNull();
-      cb(res.headers['set-cookie']);
+      cb(res.headers['set-cookie'], body);
     });
 };
 
@@ -46,6 +47,6 @@ export const deleteRant = (agent, { cookie, rantId }, cb) => {
     .set('cookie', cookie)
     .expect(200).end((err) => {
       expect(err).toBeNull();
-      cb();
+      cb(rantId);
     });
 };

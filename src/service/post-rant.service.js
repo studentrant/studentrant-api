@@ -1,8 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
 
 export default class PostRantService {
-  constructor(rantDbUtils) {
+  constructor(rantDbUtils, userDbUtils) {
     this.rantDbUtils = rantDbUtils;
+    this.userDbUtils = userDbUtils;
   }
 
   createRant(data) {
@@ -25,6 +26,10 @@ export default class PostRantService {
         query: { rantId, rantPoster: username },
       },
     );
+  }
+
+  validateRantUpvoter(rantUpvoter) {
+    return this.userDbUtils.checkUserName(rantUpvoter);
   }
 
   deleteRant(rantId) {
@@ -77,5 +82,21 @@ export default class PostRantService {
       query: { rantPoster: username, rantId, 'edit.editHistory.when': values.when },
       operation: insertDiffToRantOperation,
     });
+  }
+
+  async upvote(rantId, rantUpvoterId) {
+    const isUserAlreadyUpvoted = await this.rantDbUtils.findOneVoter('rantUpvote', rantId, rantUpvoterId);
+    if (!isUserAlreadyUpvoted) {
+      return this.rantDbUtils.upvote(rantId, rantUpvoterId);
+    }
+    return this.rantDbUtils.removeOneVote('rantUpvote', rantId, rantUpvoterId);
+  }
+
+  async downvote(rantId, rantDownvoterId) {
+    const isUserAlreadyDownvoted = await this.rantDbUtils.findOneVoter('rantDownvote', rantId, rantDownvoterId);
+    if (!isUserAlreadyDownvoted) {
+      return this.rantDbUtils.downvote(rantId, rantDownvoterId);
+    }
+    return this.rantDbUtils.removeOneVote('rantDownvote', rantId, rantDownvoterId);
   }
 }

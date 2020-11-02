@@ -10,7 +10,7 @@ const RantCommentSchema = new mongoose.Schema({
   rantComment: String,
   rantCommentUpvote: Number,
   rantCommentDownVote: Number,
-});
+}, { timestamp: true });
 
 const rantComments = mongoose.model('rantcomments', RantCommentSchema);
 

@@ -1,19 +1,24 @@
 import RantDbUtils from '../../models/dbutils/rant.db.util.js';
+import UserDbUtils from '../../models/dbutils/user.db.util.js';
 import PostRant from '../../controllers/post-rant.controller.js';
 import RantValidators from '../../middlewares/rant.middleware.js';
-import { rantsCollection } from '../../models/dbmodels/index.model.js';
+import { rantsCollection, usersCollection } from '../../models/dbmodels/index.model.js';
 import { Utils } from '../../utils/index.util.js';
 
 export default class PostRantRoute {
   constructor(routeHandler) {
     this.controller = new PostRant(
       RantDbUtils,
+      UserDbUtils,
       Utils,
       rantsCollection,
+      usersCollection,
     );
     routeHandler.post('/create', this.createRant());
     routeHandler.delete('/delete/:rantId', this.deleteRant());
     routeHandler.patch('/edit/:rantId', this.editRant());
+    routeHandler.patch('/vote/upvote/:rantId', this.upvoteRant());
+    routeHandler.patch('/vote/downvote/:rantId', this.downvoteRant());
     // routeHandler.post("/reply/:rant-id", this.replyRant());
     return routeHandler;
   }
@@ -43,6 +48,22 @@ export default class PostRantRoute {
       RantValidators.VerifyRantTags,
       RantValidators.VerifyWhen,
       this.controller.editRant.bind(this.controller),
+    ];
+  }
+
+  upvoteRant() {
+    return [
+      RantValidators.VerifyRantId,
+      RantValidators.VerifyRantVoter,
+      this.controller.upvoteRant.bind(this.controller),
+    ];
+  }
+
+  downvoteRant() {
+    return [
+      RantValidators.VerifyRantId,
+      RantValidators.VerifyRantVoter,
+      this.controller.downvoteRant.bind(this.controller),
     ];
   }
 

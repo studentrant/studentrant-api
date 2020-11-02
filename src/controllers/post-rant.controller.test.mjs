@@ -4,11 +4,17 @@ import PostRant from './post-rant.controller.js';
 import req from '../../__test__/fakes/req.fake.js';
 import res from '../../__test__/fakes/res.fake.js';
 import next from '../../__test__/fakes/next.fake.js';
-import { RantDbUtils, Collection } from '../../__test__/fakes/db.fakes.js';
+import { RantDbUtils, Collection, UserDbUtils } from '../../__test__/fakes/db.fakes.js';
 import Utils from '../utils/utils.util.js';
 
 describe('PostRant [Unit]', () => {
-  const controller = new PostRant(RantDbUtils, Utils, Collection);
+  const controller = new PostRant(
+    RantDbUtils,
+    UserDbUtils,
+    Utils,
+    Collection,
+    Collection
+  );
 
   beforeEach(() => {
     req.session = { user: { username: 'testuseraccount' } };
@@ -55,7 +61,7 @@ describe('PostRant [Unit]', () => {
       createRantSpy.and.resolveTo({ ...req.body, tags: ['general'], rantPoster: req.session.user.username });
       const result = JSON.parse(await controller.createRant(req, res, next));
       expect(result.status).toEqual(201);
-      expect(result.message).toEqual({ ...req.body, tags: ['general'], rantPoster: req.session.user.username });
+      expect(result.message).toEqual({ ...req.body, tags: ['general'], rantPoster: req.session.user.username  });
     });
 
     it("call next on error", async () => {

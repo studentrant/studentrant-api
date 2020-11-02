@@ -15,7 +15,7 @@ export class Collection {
   static findOneAndUpdate(value) { return { lean() { return Promise.resolve(value); } }; }
 }
 
-export class RegisterDbUtils {
+export class UserDbUtils {
   constructor() {}
 
   updateNewUserDetails() {}

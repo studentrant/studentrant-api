@@ -1,3 +1,5 @@
+import mongoose from 'mongoose';
+import { v4 as uuid } from 'uuid';
 import RantDbUtils from './rant.db.util.js';
 import { Collection } from '../../../__test__/fakes/db.fakes.js';
 
@@ -105,4 +107,60 @@ describe('RantDbUtils [Unit]', () => {
       );
     });
   });
+
+  describe("::findOneVoter", () => {
+    let collectionFindOneSpy;
+    beforeEach(() => {
+      collectionFindOneSpy = spyOn(Collection, 'findOne').and.callThrough();
+    });
+
+    afterEach(() => {
+      collectionFindOneSpy.calls.reset();
+    });
+
+    it('should call findOneVoter', () => {
+      const rantId = uuid();
+      const userInternalId = mongoose.Types.ObjectId();
+      rantDbUtils.findOneVoter("rantDownvote", rantId, userInternalId);
+      expect(Collection.findOne).toHaveBeenCalled();
+      expect(Collection.findOne).toHaveBeenCalledWith({
+        rantDownvote: { $in: userInternalId } ,
+        rantId
+      });
+    });
+
+  });
+
+  describe("::removeOneVote", () => {
+     let collectionFindOneSpy;
+    beforeEach(() => {
+      collectionFindOneSpy = spyOn(Collection, 'findOneAndUpdate').and.callThrough();
+    });
+
+    afterEach(() => {
+      collectionFindOneSpy.calls.reset();
+    });
+
+    it('should remove one vote', () => {
+      const rantId = uuid();
+      const userInternalId = mongoose.Types.ObjectId();
+      rantDbUtils.removeOneVote("rantDownvote", rantId, userInternalId);
+      expect(Collection.findOneAndUpdate).toHaveBeenCalled();
+      expect(Collection.findOneAndUpdate).toHaveBeenCalledWith(
+        { rantId },
+        { $pull: { rantDownvote: userInternalId } },
+        {
+          new: true,
+          fields: {
+            'edit.editHistory.diff._id': false,
+            'edit.editHistory._id': false,
+            _id: false,
+            __v: false
+          }
+        }
+      );
+    });
+
+  });
+  
 });

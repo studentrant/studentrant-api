@@ -12,6 +12,10 @@ const rantConstants = {
   RANT_NOT_NUMBER: 'when property must be a number',
   RANT_NOT_VALID_TIMESTAMP: 'Invalid timestamp information passed as value to the when property',
   RANT_HAS_ALREADY_BEEN_DELETED: 'Rant has already been deleted',
+  RANT_USER_UPVOTER_NOT_EXISTS: 'The rant upvoter does not exists',
+  RANT_USER_UPVOTER_DEACTIVATED: 'Your account has been deactivated, you can\'t carry out this operation',
+  RANT_USER_UPVOTE_REMOVED: 'Your upvote has been removed',
+  RANT_VOTER_NO_EXISTS: 'Rant voter is undefined',
 };
 
 export default rantConstants;
