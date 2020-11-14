@@ -53,4 +53,13 @@ export default class RantValidators {
     if (req.body.rantUpvoter || req.body.rantDownvoter) return next();
     throw BadValueException(rantConstants.RANT_VOTER_NO_EXISTS);
   }
+
+  static VerifyNumRequest(req , res , next) {
+    req.query.numRequest = Number(req.query.numRequest);
+    if ( isNaN(req.query.numRequest) )
+      throw BadValueException(
+        rantConstants.RANT_NOT_VALID_LOAD_NUM_REQUEST
+      );
+    return next();
+  }
 }

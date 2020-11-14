@@ -113,4 +113,32 @@ export default class RantDbUtils {
       },
     ).lean();
   }
+
+  async get(rantId) {
+    return this.RantsCollection.findOne(
+      { rantId },
+      {
+        _id                    : false,
+        "rantPoster._id"       : false,
+        "rantComments._id"     : false,
+        "edit._id"             : false,
+        "edit.editHistory._id" : false,
+        "rantComments"         : false,
+        deleted                : false
+      }
+    ).lean();
+  }
+
+  async findAllRant(pipeline) {
+    return this.RantsCollection.aggregate(
+      [
+        pipeline.getRants,
+        pipeline.limitToDefinedNum,
+        pipeline.isMoreRantExists,
+        pipeline.votes,
+        pipeline.getRantPosters,
+        pipeline.limitSearchByVerifiedUsers,
+      ]
+    );
+  }
 }

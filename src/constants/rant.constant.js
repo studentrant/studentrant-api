@@ -16,6 +16,7 @@ const rantConstants = {
   RANT_USER_UPVOTER_DEACTIVATED: 'Your account has been deactivated, you can\'t carry out this operation',
   RANT_USER_UPVOTE_REMOVED: 'Your upvote has been removed',
   RANT_VOTER_NO_EXISTS: 'Rant voter is undefined',
+  RANT_NOT_VALID_LOAD_NUM_REQUEST: "numRequest is not a number"
 };
 
 export default rantConstants;
