@@ -185,4 +185,30 @@ export default class PostRant {
       return next(ex);
     }
   }
+
+  async getRant(req,res,next) {
+    
+    const { rantId } = req.params;
+    
+    try {
+      
+      await PostRant.ValidateRantForModification(rantId);
+      const result = await this.postRantService.getOneRant(rantId);
+
+      PostRant.RantCountVoteDelete(result);
+
+      return res.status(200).json({ status: 200 , message: result });
+    } catch(ex) {
+      return next(ex);
+    }
+  }
+
+  async getRant(req,res,next) {
+    const { numRequest } = req.query;
+    try {
+      const result = this.postRantService.getRants(numRequest);
+    } catch(ex) {
+      return next(ex);
+    }
+  }
 }

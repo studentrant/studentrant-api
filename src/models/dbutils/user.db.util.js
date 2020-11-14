@@ -41,4 +41,16 @@ export default class UserDbUtils {
   checkUserExists(key, value) {
     return this.UsersCollection.findOne({ [key]: value }, { [key]: true });
   }
+
+  get(userId) {
+    return this.UsersCollection.findOne(
+      { userId: userId },
+      {
+        passwod         : false,
+        verified        : false,
+        completeReg     : false,
+        verificationLink: false
+      }
+    );
+  }
 }

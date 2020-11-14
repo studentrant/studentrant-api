@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { rantEnums } from '../enums/rants.enums.js';
 
 export default class PostRantService {
   constructor(rantDbUtils, userDbUtils) {
@@ -98,5 +99,73 @@ export default class PostRantService {
       return this.rantDbUtils.downvote(rantId, rantDownvoterId);
     }
     return this.rantDbUtils.removeOneVote('rantDownvote', rantId, rantDownvoterId);
+  }
+
+  async getOneRant(rantId) {
+
+    const rant = await this.rantDbUtils.get(
+      rantId
+    );
+
+    rant.rantPoster = await this.userDbUtils.get(
+      rant.rantPoster.userId
+    );
+
+    return rant;
+  }
+
+
+  async getRants(numRequest) {
+
+    const totalRants = rantEnums.RANTS_LOAD_LIMIT * numRequest > await this.rantDbUtils.getTotalRants({ deleted: false });
+
+    return this.rantDbUtils.findAllRants({
+
+      getRants           : { $match : { deleted: false } },
+
+      limitToDefinedEnum : {
+        $limit : rantEnums.RANTS_LOAD_LIMIT,
+        $skip  : rantEnums.RANTS_LOAD_LIMIT * numRequest
+      },
+
+      isMoreRantExits: {
+        $addField: { hasMore: totalRants }
+      },
+
+      votes: {
+        $project: {
+          rantUpvote   : { $size: "$rantUpvote"   },
+          rantDownvote : { $size: "$rantDownvote" },
+          rantComments : { $size: "$rantComments" }
+        }
+      },
+
+      getRantPosters : {
+        $lookup: {
+          from        : "users",
+          as          : "users",
+          localField  : "rantPoster.userId",
+          foreignField: "userId"
+        }
+      },
+
+      limitSearchByVerifiedUsers: {
+        $match: {
+          "users.verified"    : true ,
+          "users.completeReg" : true,
+          "users.tags"        : { $in: "$tags" }
+        },
+        $project: {
+          "users._id"           : false,
+          "users.verified"      : false,
+          "users.completeReg"   : false,
+          "users.password"      : false,
+          "rantPoster._id"      : false,
+          'edit._id'            : false,
+          'edit.editHistory._id': false
+        }
+      }
+
+    });
   }
 }
