@@ -8,8 +8,8 @@ const UserSchema = new mongoose.Schema({
   },
   userId: {
     required: true,
-    unique  : true,
-    type    : String
+    unique: true,
+    type: String,
   },
   email: {
     required: true,
@@ -37,6 +37,14 @@ const UserSchema = new mongoose.Schema({
     type: String,
     index: true,
   },
+
+  settings: {
+    notAllowedTags: {
+      type: Array,
+      default: [],
+    },
+  },
+
 }, { timestamp: true });
 
 const usersCollection = mongoose.model('Users', UserSchema);

@@ -5,7 +5,7 @@ const rantConstants = {
   RANT_TAGS_NOT_AN_ARRAY: 'Expect an array as rant tags but got ',
   RANT_TAGS_UNDEFINED: 'Tag body data is not defined',
   RANT_ID_IS_UNDEFINED: 'There is no id specified for the rant to modify',
-  RANT_DOES_NOT_EXISTS: 'The requested rant to modify does not exist',
+  RANT_DOES_NOT_EXISTS: 'This rant does not exists',
   RANT_NOT_USER: 'You are not allowed to modify this rant at this time',
   RANT_SUCCESSFULLY_DELETED: 'Rant has been deleted succefully',
   RANT_WHEN_NO_EXISTS: 'A when field is required, it carries the timestamp of when the edit request was made',
@@ -16,7 +16,8 @@ const rantConstants = {
   RANT_USER_UPVOTER_DEACTIVATED: 'Your account has been deactivated, you can\'t carry out this operation',
   RANT_USER_UPVOTE_REMOVED: 'Your upvote has been removed',
   RANT_VOTER_NO_EXISTS: 'Rant voter is undefined',
-  RANT_NOT_VALID_LOAD_NUM_REQUEST: "numRequest is not a number"
+  RANT_NOT_VALID_LOAD_NUM_REQUEST: 'numRequest is not a number',
+  RANT_READ_EXHAUSTED: "No Rant's to read",
 };
 
 export default rantConstants;

@@ -82,6 +82,7 @@
     "jasmine": "^3.5.0",
     "jasmine-spec-reporter": "^4.2.1",
     "lint-staged": "^10.3.0",
+    "lorem-ipsum": "^2.0.3",
     "nodemon": "^2.0.4"
   }
 }

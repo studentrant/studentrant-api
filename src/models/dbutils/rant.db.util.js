@@ -118,27 +118,33 @@ export default class RantDbUtils {
     return this.RantsCollection.findOne(
       { rantId },
       {
-        _id                    : false,
-        "rantPoster._id"       : false,
-        "rantComments._id"     : false,
-        "edit._id"             : false,
-        "edit.editHistory._id" : false,
-        "rantComments"         : false,
-        deleted                : false
-      }
+        _id: false,
+        'rantPoster._id': false,
+        'rantComments._id': false,
+        'edit._id': false,
+        'edit.editHistory._id': false,
+        rantComments: false,
+        deleted: false,
+      },
     ).lean();
   }
 
-  async findAllRant(pipeline) {
+  async findAllRants(pipeline) {
     return this.RantsCollection.aggregate(
       [
         pipeline.getRants,
-        pipeline.limitToDefinedNum,
-        pipeline.isMoreRantExists,
-        pipeline.votes,
+        pipeline.skipAlreadyViewed,
+        pipeline.limitToDefinedEnum,
+        pipeline.projectRant,
         pipeline.getRantPosters,
+        pipeline.spreadUsers,
+        pipeline.filterOutUnwanted,
         pipeline.limitSearchByVerifiedUsers,
-      ]
+      ],
     );
+  }
+
+  async getTotalRants(query) {
+    return this.RantsCollection.countDocuments(query);
   }
 }

@@ -44,13 +44,20 @@ export default class UserDbUtils {
 
   get(userId) {
     return this.UsersCollection.findOne(
-      { userId: userId },
+      { userId },
       {
-        passwod         : false,
-        verified        : false,
-        completeReg     : false,
-        verificationLink: false
-      }
+        passwod: false,
+        verified: false,
+        completeReg: false,
+        verificationLink: false,
+      },
+    );
+  }
+
+  getUserVerificationToken(userId) {
+    return this.UsersCollection.findOne(
+      { userId },
+      { verificationLink: true },
     );
   }
 }

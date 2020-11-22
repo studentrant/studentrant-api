@@ -14,13 +14,13 @@ export default class PostRantRoute {
       rantsCollection,
       usersCollection,
     );
-    
-    routeHandler.post('/create',           this.createRant());
-    routeHandler.get('/rant/:rantId',      this.getRant());
-    routeHandler.get('/rants',             this.getRants());
-    routeHandler.get('/rants/tags/',       this.getRantsByTag());
+
+    routeHandler.post('/create', this.createRant());
+    routeHandler.get('/rant/:rantId', this.getRant());
+    routeHandler.get('/rants', this.getRants());
+    // routeHandler.get('/rants/tags/',             this.getRantsByTag());
     routeHandler.delete('/delete/:rantId', this.deleteRant());
-    routeHandler.patch('/edit/:rantId',    this.editRant());
+    routeHandler.patch('/edit/:rantId', this.editRant());
     routeHandler.patch('/vote/upvote/:rantId', this.upvoteRant());
     routeHandler.patch('/vote/downvote/:rantId', this.downvoteRant());
     // routeHandler.post("/reply/:rant-id", this.replyRant());
@@ -41,14 +41,14 @@ export default class PostRantRoute {
   getRant() {
     return [
       RantValidators.VerifyRantId,
-      this.controller.getRant.bind(this.controller)
+      this.controller.getRant.bind(this.controller),
     ];
   }
-  
+
   getRants() {
     return [
       RantValidators.VerifyNumRequest,
-      this.controller.getRants.bind(this.controller)
+      this.controller.getRants.bind(this.controller),
     ];
   }
 

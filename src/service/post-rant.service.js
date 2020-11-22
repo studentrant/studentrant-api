@@ -41,6 +41,12 @@ export default class PostRantService {
     return this.rantDbUtils.findOneRant(
       {
         query: { rantId },
+        project: {
+          _id: false,
+          'edit.editHistory.diff._id': false,
+          'edit.editHistory._id': false,
+          __v: false,
+        },
       },
     );
   }
@@ -101,71 +107,83 @@ export default class PostRantService {
     return this.rantDbUtils.removeOneVote('rantDownvote', rantId, rantDownvoterId);
   }
 
-  async getOneRant(rantId) {
-
-    const rant = await this.rantDbUtils.get(
-      rantId
-    );
-
-    rant.rantPoster = await this.userDbUtils.get(
-      rant.rantPoster.userId
-    );
-
-    return rant;
-  }
-
-
   async getRants(numRequest) {
+    const rantCount = await this.rantDbUtils.getTotalRants({ deleted: false });
+    const calculateNext = rantEnums.RANTS_LOAD_LIMIT * (numRequest + 1);
+    const hasMore = calculateNext < rantCount;
 
-    const totalRants = rantEnums.RANTS_LOAD_LIMIT * numRequest > await this.rantDbUtils.getTotalRants({ deleted: false });
+    const rants = await this.rantDbUtils.findAllRants({
 
-    return this.rantDbUtils.findAllRants({
+      getRants: { $match: { deleted: false } },
 
-      getRants           : { $match : { deleted: false } },
-
-      limitToDefinedEnum : {
-        $limit : rantEnums.RANTS_LOAD_LIMIT,
-        $skip  : rantEnums.RANTS_LOAD_LIMIT * numRequest
+      skipAlreadyViewed: {
+        $skip: rantEnums.RANTS_LOAD_LIMIT * numRequest,
       },
 
-      isMoreRantExits: {
-        $addField: { hasMore: totalRants }
+      limitToDefinedEnum: {
+        $limit: rantEnums.RANTS_LOAD_LIMIT,
       },
 
-      votes: {
+      projectRant: {
         $project: {
-          rantUpvote   : { $size: "$rantUpvote"   },
-          rantDownvote : { $size: "$rantDownvote" },
-          rantComments : { $size: "$rantComments" }
-        }
+          rantUpvote: { $size: '$rantUpvote' },
+          rantDownvote: { $size: '$rantDownvote' },
+          rantComments: { $size: '$rantComments' },
+          edit: true,
+          deleted: true,
+          rant: true,
+          rantPoster: true,
+          rantId: true,
+          when: true,
+          tags: true,
+        },
       },
 
-      getRantPosters : {
+      getRantPosters: {
         $lookup: {
-          from        : "users",
-          as          : "users",
-          localField  : "rantPoster.userId",
-          foreignField: "userId"
-        }
+          from: 'users',
+          as: 'authoredBy',
+          localField: 'username',
+          foreignField: 'rantPoster',
+        },
+      },
+
+      spreadUsers: {
+        $unwind: '$authoredBy',
+      },
+
+      filterOutUnwanted: {
+        $project: {
+          'authoredBy._id': false,
+          'authoredBy.__v': false,
+          'authoredBy.password': false,
+          _id: false,
+          __v: false,
+          'edit._id': false,
+          'edit.editHistory._id': false,
+        },
       },
 
       limitSearchByVerifiedUsers: {
         $match: {
-          "users.verified"    : true ,
-          "users.completeReg" : true,
-          "users.tags"        : { $in: "$tags" }
+          'authoredBy.verified': true,
+          'authoredBy.completeReg': true,
+          $expr: { $not: { $in: ['$authoredBy.settings.notAllowedTags', '$tags'] } },
         },
-        $project: {
-          "users._id"           : false,
-          "users.verified"      : false,
-          "users.completeReg"   : false,
-          "users.password"      : false,
-          "rantPoster._id"      : false,
-          'edit._id'            : false,
-          'edit.editHistory._id': false
-        }
-      }
-
+      },
     });
+
+    return {
+      rants,
+      hasMore,
+      page: {
+        totalRant: rantCount,
+        remainingRant: Math.abs(rantCount - (
+          rants.length < rantEnums.RANTS_LOAD_LIMIT
+            ? rantCount
+            : calculateNext
+        )),
+      },
+    };
   }
 }
