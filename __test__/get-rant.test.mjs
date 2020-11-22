@@ -7,7 +7,7 @@ import * as testUtils from './util.test.js';
 const agent = supertest(app);
 let cookie;
 
-fdescribe('GetRant [Integration]', () => {
+describe('GetRant [Integration]', () => {
 
   describe('Unauthenticated User', () => {
     it('should return 401 unauthroized access if user is not logged in', (done) => {
@@ -78,7 +78,7 @@ fdescribe('GetRant [Integration]', () => {
 
     });
 
-    fdescribe("Get Rants", () => {
+    describe("Get Rants", () => {
       let paginatedRants = [];
       beforeAll(done => {
         testUtils.createMoreRants(
