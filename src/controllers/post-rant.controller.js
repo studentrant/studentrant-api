@@ -186,28 +186,40 @@ export default class PostRant {
     }
   }
 
-  async getRant(req,res,next) {
-    
+  async getRant(req, res, next) {
     const { rantId } = req.params;
-    
+
     try {
-      
       await PostRant.ValidateRantForModification(rantId);
-      const result = await this.postRantService.getOneRant(rantId);
+      const result = await this.postRantService.getRant(rantId);
 
       PostRant.RantCountVoteDelete(result);
 
-      return res.status(200).json({ status: 200 , message: result });
-    } catch(ex) {
+      return res.status(200).json({ status: 200, message: result });
+    } catch (ex) {
       return next(ex);
     }
   }
 
-  async getRant(req,res,next) {
+  async getRants(req, res, next) {
     const { numRequest } = req.query;
+
     try {
-      const result = this.postRantService.getRants(numRequest);
-    } catch(ex) {
+      const result = await this.postRantService.getRants(numRequest);
+
+      if (result.rants.length === 0) {
+        throw NotFoundException(
+          constants.rantConstants.RANT_READ_EXHAUSTED,
+        );
+      }
+
+      return res.status(200).json(
+        {
+          status: 200,
+          message: { rant: result },
+        },
+      );
+    } catch (ex) {
       return next(ex);
     }
   }

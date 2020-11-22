@@ -1,5 +1,5 @@
 const rantEnums = {
-  RANTS_LOAD_LIMIT : 20
+  RANTS_LOAD_LIMIT: 20,
 };
 
-export {rantEnums};
+export {rantEnums}; // eslint-disable-line

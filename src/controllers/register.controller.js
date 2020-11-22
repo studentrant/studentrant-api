@@ -37,9 +37,9 @@ export default class Registration {
       }
 
       const result = await this.registerService.saveUser({
+        userId: uuid(),
         username,
         password: await this.passwordUtils.hashPassword(password),
-        userId  : uuid(),
         email,
       });
 

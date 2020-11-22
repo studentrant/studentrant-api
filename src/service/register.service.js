@@ -27,12 +27,8 @@ export class RegisterService {
     /* eslint-enable no-return-await */
   }
 
-  saveUser({ username, password, email }) {
-    return this.registerDbUtils.saveNewUser({
-      username,
-      email,
-      password,
-    });
+  saveUser(data) {
+    return this.registerDbUtils.saveNewUser(data);
   }
 
   verifyValidationTokenAndSetVerified(token) {
@@ -52,6 +48,10 @@ export class RegisterService {
         $set: { ...values, completeReg: true },
       },
     );
+  }
+
+  getVerificationToken(userId) {
+    return this.registerDbUtils.getUserVerificationToken(userId);
   }
 }
 

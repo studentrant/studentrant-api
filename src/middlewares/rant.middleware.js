@@ -54,12 +54,13 @@ export default class RantValidators {
     throw BadValueException(rantConstants.RANT_VOTER_NO_EXISTS);
   }
 
-  static VerifyNumRequest(req , res , next) {
+  static VerifyNumRequest(req, res, next) {
     req.query.numRequest = Number(req.query.numRequest);
-    if ( isNaN(req.query.numRequest) )
+    if (Number.isNaN(req.query.numRequest)) {
       throw BadValueException(
-        rantConstants.RANT_NOT_VALID_LOAD_NUM_REQUEST
+        rantConstants.RANT_NOT_VALID_LOAD_NUM_REQUEST,
       );
+    }
     return next();
   }
 }
