@@ -34,7 +34,7 @@ describe('UserdbUtils [Unit]', () => {
     });
   });
 
-  describe('::updateNewUserDetails', () => {
+  describe('::updateUserInfo', () => {
     let findOneAndUpdateSpy;
     beforeEach(() => {
       findOneAndUpdateSpy = spyOn(Collection, 'findOneAndUpdate').and.callThrough();
@@ -43,7 +43,7 @@ describe('UserdbUtils [Unit]', () => {
       findOneAndUpdateSpy.calls.reset();
     });
     it('should call findOneAndUpdate', async () => {
-      await userdbUtils.updateNewUserDetails({
+      await userdbUtils.updateUserInfo({
         criteria: { foo: 'bar' },
         data: { bar: 'baz' },
         options: { foo: true, bar: true },

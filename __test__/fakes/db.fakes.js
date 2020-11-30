@@ -18,7 +18,7 @@ export class Collection {
 export class UserDbUtils {
   constructor() {}
 
-  updateNewUserDetails() {}
+  updateUserInfo() {}
 
   checkEmail() {}
 
