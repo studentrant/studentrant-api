@@ -116,15 +116,44 @@ export default class PostRantService {
 
       getRants: { $match: { deleted: false } },
 
-      skipAlreadyViewed: {
-        $skip: rantEnums.RANTS_LOAD_LIMIT * numRequest,
+      sortInInsertionOrder: {
+        $sort: { _id: -1 },
       },
 
-      limitToDefinedEnum: {
-        $limit: rantEnums.RANTS_LOAD_LIMIT,
+      getRantPosters: {
+        $lookup: {
+          from: 'users',
+          as: 'authoredBy',
+          localField: 'rantPoster',
+          foreignField: 'username',
+        },
       },
 
-      projectRant: {
+      filterOutIds: {
+        $project: {
+          'authoredBy._id': false,
+          'authoredBy.__v': false,
+          'authoredBy.password': false,
+          _id: false,
+          __v: false,
+          'edit._id': false,
+          'edit.editHistory._id': false,
+          'edit.editHistory.diff._id': false,
+        },
+      },
+
+      spreadUsers: {
+        $unwind: '$authoredBy',
+      },
+
+      limitSearchByVerifiedUsers: {
+        $match: {
+          'authoredBy.verified': true,
+          'authoredBy.completeReg': true,
+        },
+      },
+
+      filterOutUnwanted: {
         $project: {
           rantUpvote: { $size: '$rantUpvote' },
           rantDownvote: { $size: '$rantDownvote' },
@@ -136,41 +165,31 @@ export default class PostRantService {
           rantId: true,
           when: true,
           tags: true,
+          authoredBy: true,
+          shouldRead: {
+            $size: {
+              $filter: {
+                input: '$authoredBy.settings.notAllowedTags',
+                as: 'tag',
+                cond: { $in: ['$$tag', '$tags'] },
+              },
+            },
+          },
         },
       },
 
-      getRantPosters: {
-        $lookup: {
-          from: 'users',
-          as: 'authoredBy',
-          localField: 'username',
-          foreignField: 'rantPoster',
-        },
+      limitByAllowedTags: {
+        $match: { shouldRead: 0 },
       },
 
-      spreadUsers: {
-        $unwind: '$authoredBy',
+      skipAlreadyViewed: {
+        $skip: rantEnums.RANTS_LOAD_LIMIT * numRequest,
       },
 
-      filterOutUnwanted: {
-        $project: {
-          'authoredBy._id': false,
-          'authoredBy.__v': false,
-          'authoredBy.password': false,
-          _id: false,
-          __v: false,
-          'edit._id': false,
-          'edit.editHistory._id': false,
-        },
+      limitToDefinedEnum: {
+        $limit: rantEnums.RANTS_LOAD_LIMIT,
       },
 
-      limitSearchByVerifiedUsers: {
-        $match: {
-          'authoredBy.verified': true,
-          'authoredBy.completeReg': true,
-          $expr: { $not: { $in: ['$authoredBy.settings.notAllowedTags', '$tags'] } },
-        },
-      },
     });
 
     return {

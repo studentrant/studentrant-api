@@ -133,13 +133,15 @@ export default class RantDbUtils {
     return this.RantsCollection.aggregate(
       [
         pipeline.getRants,
+        pipeline.sortInInsertionOrder,
+        pipeline.getRantPosters,
+        pipeline.filterOutIds,
+        pipeline.spreadUsers,
+        pipeline.limitSearchByVerifiedUsers,
+        pipeline.filterOutUnwanted,
+        pipeline.limitByAllowedTags,
         pipeline.skipAlreadyViewed,
         pipeline.limitToDefinedEnum,
-        pipeline.projectRant,
-        pipeline.getRantPosters,
-        pipeline.spreadUsers,
-        pipeline.filterOutUnwanted,
-        pipeline.limitSearchByVerifiedUsers,
       ],
     );
   }
