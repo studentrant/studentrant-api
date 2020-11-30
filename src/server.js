@@ -34,10 +34,11 @@ mountRoutes(
     routes.RegisterRoute,
     routes.LoginRoute,
     routes.RantRoute,
+    routes.Ranter,
   ],
 );
 
-app.use('*', (req, res, next) => next(NotFoundException(`route ${req.path} does not exists`)));
+app.use('*', (req, res, next) => next(NotFoundException(`route ${req.url} does not exists`)));
 
 // eslint-disable-next-line
 app.use((err, req, res, next) => {
