@@ -13,13 +13,13 @@ export const login = (agent, cb) => {
     });
 };
 
-export const createRant = (agent, { rant, cookie }, cb) => {
+export const createRant = (agent, { rant, cookie, tags }, cb) => {
   agent
     .post('/rant/post/create')
     .set('cookie', cookie)
     .send({
       rant,
-      tags: [],
+      tags: tags || [],
       when: Date.now(),
     })
     .expect(201)
@@ -64,6 +64,7 @@ export const createMoreRants = (agent, { cookie, num }, cb) => {
     createRant(
       agent,
       {
+        tags: ['general', 'fakerant'],
         rant: `${lorem.generateSentences()} ${i}`,
         cookie,
       },

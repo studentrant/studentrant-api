@@ -79,7 +79,7 @@ describe('GetRant [Integration]', () => {
 
     });
 
-    describe("Get Rants", () => {
+    describe("Get Rants Without Tags Modifier", () => {
       let paginatedRants = [];
       beforeAll(done => {
         testUtils.createMoreRants(
@@ -158,7 +158,7 @@ describe('GetRant [Integration]', () => {
           .expect(200).end((err,res) => {
             expect(err).toBeNull();
             expect(res.body.status).toEqual(200);
-            expect(res.body.message.rant.rants.length).toEqual(11);
+            expect(res.body.message.rant.rants.length).toEqual(16);
             expect(res.body.message.rant.hasMore).toEqual(false);
             expect(res.body.message.rant.page.remainingRant).toEqual(0);
             expect(
@@ -182,7 +182,29 @@ describe('GetRant [Integration]', () => {
             done();
           });
       });
+    });
 
+    describe("Get Rants - With Tags Limit", () => {
+      let ignoredTags = [ "general" ];
+      beforeAll(done => {
+        testUtils.updateUserInfo(
+          agent,
+          { cookie, ignoredTags},
+          done
+        );
+      });
+      it('should return rants for only specified tags ( for num request 0, no rants )', () => {
+        agent
+          .get('/rant/post/rants?numRequest=0')
+          .set('cookie', cookie)
+          .expect(200).end((err,res) => {
+            expect(err).toBeNull();
+            expect(res.body.status).toEqual(200);
+            expect(
+              (res.body.message.rant.rants.map(({tags}) => tags).filter( tag => ignoredTags.includes(tag))).length
+            ).toEqual(0);
+          });
+      });
     });
 
   });
