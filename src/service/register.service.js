@@ -5,7 +5,7 @@ export class RegisterService {
   }
 
   static UpdateUserDetails(lookup, updateOperation) {
-    return RegisterService.__DBUTILS.updateNewUserDetails({
+    return RegisterService.__DBUTILS.updateUserInfo({
       criteria: { [lookup[0]]: lookup[1] },
       data: { ...updateOperation },
       options: {

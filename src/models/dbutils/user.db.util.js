@@ -13,7 +13,7 @@ export default class UserDbUtils {
     }).lean();
   }
 
-  async updateNewUserDetails({ criteria, data, options }) {
+  updateUserInfo({ criteria, data, options }) {
     return this.UsersCollection.findOneAndUpdate(criteria, data, options);
   }
 

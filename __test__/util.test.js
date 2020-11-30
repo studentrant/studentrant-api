@@ -74,3 +74,18 @@ export const createMoreRants = (agent, { cookie, num }, cb) => {
     );
   }
 };
+
+export const updateUserInfo = (
+  agent,
+  { cookie, ignoredTags },
+  cb,
+) => {
+  agent
+    .patch('/me/update/tags')
+    .set('cookie', cookie)
+    .send({ tags: ignoredTags })
+    .expect(200).end((err,res) => { // eslint-disable-line
+      expect(err).toBeNull();
+      cb();
+    });
+};

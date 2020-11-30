@@ -9,25 +9,25 @@ describe('RegisterService [Unit]', () => {
     Utils,
   );
 
-  let updateNewUserDetails;
+  let updateUserInfo;
   let UpdateUserDetails;
 
   beforeEach(() => {
-    updateNewUserDetails = spyOn(service.registerDbUtils, 'updateNewUserDetails');
+    updateUserInfo = spyOn(service.registerDbUtils, 'updateUserInfo');
     UpdateUserDetails = spyOn(RegisterService, 'UpdateUserDetails').and.callThrough();
   });
 
   afterEach(() => {
-    updateNewUserDetails.calls.reset();
+    updateUserInfo.calls.reset();
     UpdateUserDetails.calls.reset();
   });
 
   describe('::UpdateUserDetails', () => {
     it('should return all values except sensitive values', async () => {
-      updateNewUserDetails.and.resolveTo({});
+      updateUserInfo.and.resolveTo({});
       const result = await RegisterService.UpdateUserDetails(['fake-1', 'fake-2'], { foo: 'bar', foobar: 'baz' });
-      expect(service.registerDbUtils.updateNewUserDetails).toHaveBeenCalled();
-      expect(service.registerDbUtils.updateNewUserDetails).toHaveBeenCalledWith({
+      expect(service.registerDbUtils.updateUserInfo).toHaveBeenCalled();
+      expect(service.registerDbUtils.updateUserInfo).toHaveBeenCalledWith({
         criteria: { 'fake-1': 'fake-2' },
         data: { foo: 'bar', foobar: 'baz' },
         options: {
@@ -95,7 +95,7 @@ describe('RegisterService [Unit]', () => {
 
   describe('::verifyValidationTokenAndSetVerified', () => {
     it('should verify validation token', async () => {
-      updateNewUserDetails.and.resolveTo({});
+      updateUserInfo.and.resolveTo({});
       const result = await service.verifyValidationTokenAndSetVerified('xxxx');
       expect(RegisterService.UpdateUserDetails).toHaveBeenCalled();
       expect(RegisterService.UpdateUserDetails).toHaveBeenCalledWith(
@@ -110,7 +110,7 @@ describe('RegisterService [Unit]', () => {
 
   describe('::updateUserAndCompleteReg', () => {
     it('should verify validation token', async () => {
-      updateNewUserDetails.and.resolveTo({});
+      updateUserInfo.and.resolveTo({});
       await service.updateUserAndCompletetReg({ email: 'email@example.com' });
       expect(RegisterService.UpdateUserDetails).toHaveBeenCalled();
       expect(RegisterService.UpdateUserDetails).toHaveBeenCalledWith(
