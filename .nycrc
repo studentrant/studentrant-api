@@ -7,9 +7,9 @@
   "reporter": [ "text", "html" ],
   "all": true,
   "watermarks": {
-    "lines": [65, 75],
-    "functions": [0, 0],
-    "branches": [65, 75],
-    "statements": [0, 0]
+    "lines": [90, 75],
+    "functions": [90, 0],
+    "branches": [90, 75],
+    "statements": [90, 0]
   }
 }
