@@ -254,4 +254,282 @@ describe('PostRant [Unit]', () => {
     });
 
   });
+
+  describe("::upvoteRant", () => {
+
+    let upvoteRantSpy;
+    let validateRantForModification;
+    let rantUpvoterUserId;
+
+    beforeAll(() => {
+      req.params = { rantId: 'xxxx'};
+      req.body = { rantUpvoter: "test" };
+    });
+
+    beforeEach(() => {
+      upvoteRantSpy = spyOn(controller.postRantService, 'upvote');
+      rantUpvoterUserId = spyOn(controller.postRantService, 'validateRantUpvoter');
+      validateRantForModification = spyOn(controller.postRantService, 'validateRantExistence');
+    });
+
+    afterEach(() => {
+      upvoteRantSpy.calls.reset();
+      validateRantForModification.calls.reset();
+      rantUpvoterUserId.calls.reset();
+    });
+
+    it("should return 404 if rant id does not exists", async () => {
+      validateRantForModification.and.resolveTo(undefined);
+      const result = await controller.upvoteRant(req,res,next);
+      expect(controller.postRantService.validateRantExistence).toHaveBeenCalled();
+      expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
+      expect(result.status).toEqual(404);
+      expect(result.message).toEqual(
+        constants.rantConstants.RANT_DOES_NOT_EXISTS
+      );
+    });
+
+    it("should return rant has been deleted if trying to upvote a deleted rant", async () => {
+      validateRantForModification.and.resolveTo({ deleted: true });
+      const result = await controller.upvoteRant(req,res,next);
+      expect(controller.postRantService.validateRantExistence).toHaveBeenCalled();
+      expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
+      expect(result.status).toEqual(410);
+      expect(result.message).toEqual(
+        constants.rantConstants.RANT_HAS_ALREADY_BEEN_DELETED
+      );
+
+    });
+
+
+    it("should not upvote rant if rant upvoter is not exists", async () => {
+      validateRantForModification.and.resolveTo({});
+      rantUpvoterUserId.and.resolveTo(undefined);
+      const result = await controller.upvoteRant(req,res,next);
+      expect(controller.postRantService.validateRantExistence).toHaveBeenCalled();
+      expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
+      expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalled();
+      expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalledWith(req.body.rantUpvoter);
+      expect(result.status).toEqual(404);
+      expect(result.message).toEqual(
+        constants.rantConstants.RANT_USER_UPVOTER_NOT_EXISTS
+      );
+    });
+
+    it("should not upvote rant if rant upvoter is deactivated", async () => {
+      validateRantForModification.and.resolveTo({});
+      rantUpvoterUserId.and.resolveTo({ deactivated: true });
+      const result = await controller.upvoteRant(req,res,next);
+      expect(controller.postRantService.validateRantExistence).toHaveBeenCalled();
+      expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
+      expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalled();
+      expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalledWith(req.body.rantUpvoter);
+      expect(result.status).toEqual(404);
+      expect(result.message).toEqual(
+        constants.rantConstants.RANT_USER_UPVOTER_DEACTIVATED
+      );
+    });
+
+    it("should upvote rant and count rant upvotes", async () => {
+      validateRantForModification.and.resolveTo({});
+      rantUpvoterUserId.and.resolveTo({ _id: 'xxx' });
+      upvoteRantSpy.and.resolveTo({ rantDownvote: [], rantUpvote: [ 'x', 'x', 'x'] });
+      const result = JSON.parse(await controller.upvoteRant(req,res,next));
+      expect(controller.postRantService.validateRantExistence).toHaveBeenCalled();
+      expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
+      expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalled();
+      expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalledWith(req.body.rantUpvoter);
+      expect(result.status).toEqual(200);
+      expect(result.message.rantUpvoteCount).toEqual(3);
+      expect(result.message.rantDownvoteCount).toEqual(0);
+    });
+
+  });
+
+
+  describe("::downVoteRant", () => {
+
+    let upvoteRantSpy;
+    let validateRantForModification;
+    let rantDownvoteUserId;
+
+    beforeAll(() => {
+      req.params = { rantId: 'xxxx'};
+      req.body = { rantDownvoter: "test" };
+    });
+
+    beforeEach(() => {
+      upvoteRantSpy = spyOn(controller.postRantService, 'downvote');
+      rantDownvoteUserId = spyOn(controller.postRantService, 'validateRantUpvoter');
+      validateRantForModification = spyOn(controller.postRantService, 'validateRantExistence');
+    });
+
+    afterEach(() => {
+      upvoteRantSpy.calls.reset();
+      validateRantForModification.calls.reset();
+      rantDownvoteUserId.calls.reset();
+    });
+
+    it("should return 404 if rant id does not exists", async () => {
+      validateRantForModification.and.resolveTo(undefined);
+      const result = await controller.downvoteRant(req,res,next);
+      expect(controller.postRantService.validateRantExistence).toHaveBeenCalled();
+      expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
+      expect(result.status).toEqual(404);
+      expect(result.message).toEqual(
+        constants.rantConstants.RANT_DOES_NOT_EXISTS
+      );
+    });
+
+    it("should return rant has been deleted if trying to upvote a deleted rant", async () => {
+      validateRantForModification.and.resolveTo({ deleted: true });
+      const result = await controller.downvoteRant(req,res,next);
+      expect(controller.postRantService.validateRantExistence).toHaveBeenCalled();
+      expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
+      expect(result.status).toEqual(410);
+      expect(result.message).toEqual(
+        constants.rantConstants.RANT_HAS_ALREADY_BEEN_DELETED
+      );
+
+    });
+
+    
+    it("should not upvote rant if rant downvoter is not exists", async () => {
+      validateRantForModification.and.resolveTo({});
+      rantDownvoteUserId.and.resolveTo(undefined);
+      const result = await controller.downvoteRant(req,res,next);
+      expect(controller.postRantService.validateRantExistence).toHaveBeenCalled();
+      expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
+      expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalled();
+      expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalledWith(req.body.rantDownvoter);
+      expect(result.status).toEqual(404);
+      expect(result.message).toEqual(
+        constants.rantConstants.RANT_USER_UPVOTER_NOT_EXISTS
+      );
+    });
+    
+    it("should not upvote rant if rant upvoter is deactivated", async () => {
+      validateRantForModification.and.resolveTo({});
+      rantDownvoteUserId.and.resolveTo({ deactivated: true });
+      const result = await controller.downvoteRant(req,res,next);
+      expect(controller.postRantService.validateRantExistence).toHaveBeenCalled();
+      expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
+      expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalled();
+      expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalledWith(req.body.rantDownvoter);
+      expect(result.status).toEqual(404);
+      expect(result.message).toEqual(
+        constants.rantConstants.RANT_USER_UPVOTER_DEACTIVATED
+      );
+    });
+
+    it("should upvote rant and count rant upvotes", async () => {
+      validateRantForModification.and.resolveTo({});
+      rantDownvoteUserId.and.resolveTo({ _id: 'xxx' });
+      upvoteRantSpy.and.resolveTo({ rantDownvote: [ 'x', 'x' ], rantUpvote: [ 'x' ] });
+      const result = JSON.parse(await controller.downvoteRant(req,res,next));
+      expect(controller.postRantService.validateRantExistence).toHaveBeenCalled();
+      expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
+      expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalled();
+      expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalledWith(req.body.rantDownvoter);
+      expect(result.status).toEqual(200);
+      expect(result.message.rantUpvoteCount).toEqual(1);
+      expect(result.message.rantDownvoteCount).toEqual(2);
+    });
+
+  });
+
+
+  describe("::getRant", () => {
+    let validateRantExistenseSpy ;
+    let getRantSpy;
+
+    beforeEach(() => {
+      validateRantExistenseSpy = spyOn(controller.postRantService, 'validateRantExistence');
+      getRantSpy = spyOn(controller.postRantService, 'getRant');
+    });
+
+    afterEach(() => {
+      validateRantExistenseSpy.calls.reset();
+      getRantSpy.calls.reset();
+    });
+
+    beforeAll(() => {
+      req.params = { rantId: 'xxxx' };
+    });
+
+    it('should not get rant if rant does not exists', async () => {
+      validateRantExistenseSpy.and.resolveTo(undefined);
+      const result = await controller.getRant(req,res,next);
+      expect(controller.postRantService.validateRantExistence).toHaveBeenCalled();
+      expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
+      expect(result.status).toEqual(404);
+      expect(result.message).toEqual(
+        constants.rantConstants.RANT_DOES_NOT_EXISTS
+      );
+    });
+
+    it("should return rant has been deleted when trying to read a rant immidatley deleted", async () => {
+      validateRantExistenseSpy.and.resolveTo({ deleted: true });
+      const result = await controller.getRant(req,res,next);
+      expect(controller.postRantService.validateRantExistence).toHaveBeenCalled();
+      expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
+      expect(result.status).toEqual(410);
+      expect(result.message).toEqual(
+        constants.rantConstants.RANT_HAS_ALREADY_BEEN_DELETED
+      );
+    });
+
+
+    it("should return rant has been deleted if trying to upvote a deleted rant", async () => {
+      validateRantExistenseSpy.and.resolveTo({});
+      getRantSpy.and.resolveTo({ rantDownvote: [ 'x', 'x' ], rantUpvote: [ 'x' ] });
+      const result = JSON.parse(await controller.getRant(req,res,next));
+      expect(controller.postRantService.validateRantExistence).toHaveBeenCalled();
+      expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
+      expect(controller.postRantService.getRant).toHaveBeenCalled();
+      expect(controller.postRantService.getRant).toHaveBeenCalledWith(req.params.rantId);
+      expect(result.status).toEqual(200);
+      expect(result.message.rantDownvoteCount).toEqual(2);
+      expect(result.message.rantUpvoteCount).toEqual(1);
+    });
+
+  });
+
+  describe("::getRants", () => {
+    
+    let getRantsSpy;
+    
+    beforeEach(() => {
+      getRantsSpy = spyOn(controller.postRantService, 'getRants');
+    });
+    
+    afterEach(() => {
+      getRantsSpy.calls.reset();
+    });
+
+    beforeAll(() => {
+      req.query = { numRequest: 0 };
+    });
+    
+    it('should return no more rant to read if rant length is 0 ', async () => {
+      getRantsSpy.and.resolveTo({ rants: [] });
+      const result = await controller.getRants(req,res,next);
+      expect(controller.postRantService.getRants).toHaveBeenCalled();
+      expect(controller.postRantService.getRants).toHaveBeenCalledWith(req.query.numRequest);
+      expect(result.status).toEqual(404);
+      expect(result.message).toEqual(
+        constants.rantConstants.RANT_READ_EXHAUSTED,
+      );
+    });
+
+    it('should return no more rant to read if rant length is 0 ', async () => {
+      getRantsSpy.and.resolveTo({ rants: [ 'a' , 'b', 'c' ] });
+      const result = JSON.parse(await controller.getRants(req,res,next));
+      expect(controller.postRantService.getRants).toHaveBeenCalled();
+      expect(controller.postRantService.getRants).toHaveBeenCalledWith(req.query.numRequest);
+      expect(result.status).toEqual(200);
+      expect(result.message.rant).toEqual({ rants: [ 'a', 'b', 'c' ]});
+    });
+  });
+
 });

@@ -162,5 +162,167 @@ describe('RantDbUtils [Unit]', () => {
     });
 
   });
-  
+
+  describe("::upvote", () => {
+
+    let updateOneSpy, findOneAndUpdateSpy;
+
+    beforeEach(() => {
+      updateOneSpy = spyOn(Collection, 'updateOne').and.callThrough();
+      findOneAndUpdateSpy = spyOn(Collection, 'findOneAndUpdate').and.callThrough();
+    });
+
+    afterEach(() => {
+      updateOneSpy.calls.reset();
+      findOneAndUpdateSpy.calls.reset();
+    });
+
+
+
+    it('should call updateone and findoneandupadate', async () => {
+      const rantId = uuid();
+      const rantUpvoterId = mongoose.Types.ObjectId();
+      await rantDbUtils.upvote(rantId, rantUpvoterId);
+      expect(Collection.findOneAndUpdate).toHaveBeenCalled();
+      expect(Collection.updateOne).toHaveBeenCalled();
+      expect(Collection.updateOne).toHaveBeenCalledWith(
+        {
+          rantId, rantDownvote: { $in: rantUpvoterId }
+        },
+        {
+          $pull: { rantDownvote: rantUpvoterId }
+        }
+      );
+
+      expect(Collection.findOneAndUpdate).toHaveBeenCalledWith(
+        { rantId },
+        { $addToSet: { rantUpvote: rantUpvoterId } },
+        {
+          new: true,
+          fields: {
+            'edit.editHistory.diff._id': false,
+            'edit.editHistory._id': false,
+            _id: false,
+            __v: false,
+          },
+        },
+      );
+
+    });
+
+  });
+
+  describe("::downvote", () => {
+
+    let updateOneSpy, findOneAndUpdateSpy;
+
+    beforeEach(() => {
+      updateOneSpy = spyOn(Collection, 'updateOne').and.callThrough();
+      findOneAndUpdateSpy = spyOn(Collection, 'findOneAndUpdate').and.callThrough();
+    });
+
+    afterEach(() => {
+      updateOneSpy.calls.reset();
+      findOneAndUpdateSpy.calls.reset();
+    });
+
+    it('should call updateone and findoneandupadate', async () => {
+      const rantId = uuid();
+      const rantDownvoterId = mongoose.Types.ObjectId();
+      await rantDbUtils.downvote(rantId, rantDownvoterId);
+      expect(Collection.findOneAndUpdate).toHaveBeenCalled();
+      expect(Collection.updateOne).toHaveBeenCalled();
+      expect(Collection.updateOne).toHaveBeenCalledWith(
+        {
+          rantId, rantUpvote: { $in: rantDownvoterId }
+        },
+        {
+          $pull: { rantUpvote: rantDownvoterId }
+        }
+      );
+
+      expect(Collection.findOneAndUpdate).toHaveBeenCalledWith(
+        { rantId },
+        { $addToSet: { rantDownvote: rantDownvoterId } },
+        {
+          new: true,
+          fields: {
+            'edit.editHistory.diff._id': false,
+            'edit.editHistory._id': false,
+            _id: false,
+            __v: false,
+          },
+        },
+      );
+
+    });
+  });
+
+  describe("::get", () => {
+
+    let findOneAndSpy;
+
+    beforeEach(() => {
+      findOneAndSpy = spyOn(Collection, 'findOne').and.callThrough();
+    });
+
+    afterEach(() => {
+      findOneAndSpy.calls.reset();
+    });
+
+    it('should call findone', async () => {
+      const rantId = uuid();
+      await rantDbUtils.get(rantId);
+      expect(Collection.findOne).toHaveBeenCalled();
+      expect(Collection.findOne).toHaveBeenCalledWith(
+        { rantId },
+        {
+          _id: false,
+          'rantPoster._id': false,
+          'rantComments._id': false,
+          'edit._id': false,
+          'edit.editHistory._id': false,
+          rantComments: false,
+          deleted: false,
+        },
+      );
+    });
+
+  });
+
+  describe("::findAllRants", () => {
+
+    let aggregateSpy;
+
+    beforeEach(() => {
+      aggregateSpy = spyOn(Collection , 'aggregate').and.callThrough();
+    });
+
+    afterEach(() => {
+      aggregateSpy.calls.reset();
+    });
+
+    it('call aggregate', async () => {
+      await rantDbUtils.findAllRants([]);
+      expect(Collection.aggregate).toHaveBeenCalled();
+    });
+
+  });
+
+  describe("::getTotalRantsQuery", () => {
+    let countDocumentsSpy;
+    beforeEach(() => {
+      countDocumentsSpy = spyOn(Collection , 'countDocuments').and.callThrough();
+    });
+    afterEach(() => {
+      countDocumentsSpy.calls.reset();
+    });
+    it('should call countDocuments', async () => {
+      const query = { foo: 'bar' };
+      await rantDbUtils.getTotalRants(query);
+      expect(Collection.countDocuments).toHaveBeenCalled();
+      expect(Collection.countDocuments).toHaveBeenCalledWith(query);
+    });
+  });
+
 });
