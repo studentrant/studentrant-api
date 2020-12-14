@@ -98,4 +98,97 @@ describe('UserdbUtils [Unit]', () => {
       );
     });
   });
+
+  describe("::checkUserName", () => {
+    
+    let findOneSpy;
+    
+    beforeEach(() => {
+      findOneSpy = spyOn(userdbUtils.UsersCollection, 'findOne').and.callThrough();
+    });
+
+    afterEach(() => {
+      findOneSpy.calls.reset();
+    });
+
+    it('should call find one', async () => {
+      const username = "test";
+      userdbUtils.checkUserName(username);
+      expect(Collection.findOne).toHaveBeenCalled();
+      expect(Collection.findOne).toHaveBeenCalledWith(
+        { username },
+        { username: true }
+      );
+    });
+    
+  });
+
+  
+  describe("::checkEmail", () => {
+    
+    let findOneSpy;
+    
+    beforeEach(() => {
+      findOneSpy = spyOn(userdbUtils.UsersCollection, 'findOne').and.callThrough();
+    });
+
+    afterEach(() => {
+      findOneSpy.calls.reset();
+    });
+
+    it('should call find one', async () => {
+      const email = "test";
+      userdbUtils.checkEmail(email);
+      expect(Collection.findOne).toHaveBeenCalled();
+      expect(Collection.findOne).toHaveBeenCalledWith(
+        { email },
+        { email: true }
+      );
+    });
+    
+  });
+
+  describe("::get", () => {
+    let getSpy;
+    beforeEach(() => {
+      getSpy = spyOn(userdbUtils.UsersCollection, 'findOne').and.callThrough();
+    });
+    afterEach(() => {
+      getSpy.calls.reset();
+    });
+    it('should call find one', () => {
+      const userId = 'x';
+      userdbUtils.get(userId);
+      expect(userdbUtils.UsersCollection.findOne).toHaveBeenCalled();
+      expect(userdbUtils.UsersCollection.findOne).toHaveBeenCalledWith(
+        { userId },
+        {
+          passwod: false,
+          verified: false,
+          completeReg: false,
+          verificationLink: false,
+        },
+      );
+    });
+  });
+
+  describe("::getUserVerificationToken", () => {
+    let getUserVerificationToken;
+    beforeEach(() => {
+      getUserVerificationToken = spyOn(userdbUtils.UsersCollection, 'findOne').and.callThrough();
+    });
+    afterEach(() => {
+      getUserVerificationToken.calls.reset();
+    });
+    it('should call find one', () => {
+      const userId = 'x';
+      userdbUtils.getUserVerificationToken(userId);
+      expect(userdbUtils.UsersCollection.findOne).toHaveBeenCalled();
+      expect(userdbUtils.UsersCollection.findOne).toHaveBeenCalledWith(
+        { userId },
+        { verificationLink: true },
+      );
+    });
+  });
+  
 });

@@ -13,6 +13,10 @@ export class Collection {
   static updateOne(value) { return { lean() { return Promise.resolve(value); } }; }
 
   static findOneAndUpdate(value) { return { lean() { return Promise.resolve(value); } }; }
+
+  static aggregate(value) { return Promise.resolve(value); }
+
+  static countDocuments(value) { return Promise.resolve(value); }
 }
 
 export class UserDbUtils {
