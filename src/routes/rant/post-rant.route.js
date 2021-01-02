@@ -72,7 +72,6 @@ export default class PostRantRoute {
   upvoteRant() {
     return [
       RantValidators.VerifyRantId,
-      RantValidators.VerifyRantVoter,
       this.controller.upvoteRant.bind(this.controller),
     ];
   }
@@ -80,7 +79,6 @@ export default class PostRantRoute {
   downvoteRant() {
     return [
       RantValidators.VerifyRantId,
-      RantValidators.VerifyRantVoter,
       this.controller.downvoteRant.bind(this.controller),
     ];
   }

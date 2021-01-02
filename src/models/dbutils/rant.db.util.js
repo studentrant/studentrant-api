@@ -81,12 +81,7 @@ export default class RantDbUtils {
       { $addToSet: { rantUpvote: mongoose.Types.ObjectId(rantUpvoterId) } },
       {
         new: true,
-        fields: {
-          'edit.editHistory.diff._id': false,
-          'edit.editHistory._id': false,
-          _id: false,
-          __v: false,
-        },
+        fields: { rantUpvote: true, rantDownvote: true },
       },
     ).lean();
   }
@@ -104,12 +99,7 @@ export default class RantDbUtils {
       { $addToSet: { rantDownvote: mongoose.Types.ObjectId(rantDownvoterId) } },
       {
         new: true,
-        fields: {
-          'edit.editHistory.diff._id': false,
-          'edit.editHistory._id': false,
-          _id: false,
-          __v: false,
-        },
+        fields: { rantUpvote: true, rantDownvote: true },
       },
     ).lean();
   }

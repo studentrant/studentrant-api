@@ -199,12 +199,7 @@ describe('RantDbUtils [Unit]', () => {
         { $addToSet: { rantUpvote: rantUpvoterId } },
         {
           new: true,
-          fields: {
-            'edit.editHistory.diff._id': false,
-            'edit.editHistory._id': false,
-            _id: false,
-            __v: false,
-          },
+          fields: { rantUpvote: true, rantDownvote: true },
         },
       );
 
@@ -246,12 +241,7 @@ describe('RantDbUtils [Unit]', () => {
         { $addToSet: { rantDownvote: rantDownvoterId } },
         {
           new: true,
-          fields: {
-            'edit.editHistory.diff._id': false,
-            'edit.editHistory._id': false,
-            _id: false,
-            __v: false,
-          },
+          fields: { rantUpvote: true, rantDownvote: true },
         },
       );
 
