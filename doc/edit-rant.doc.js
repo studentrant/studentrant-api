@@ -62,8 +62,8 @@
  *                    ]
  *                 diffAgainst: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
  *                },
- *                rantUpVote   : 532,
- *                rantDownVote : 7
+ *                rantUpvoteCount   : 532,
+ *                rantDownvoteCount : 7
  *             }
  *         }
  *
