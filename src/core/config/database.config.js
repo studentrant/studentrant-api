@@ -20,7 +20,11 @@ export class Database {
   }
 
   static DisconnectedHandler() {
-    Logger.log.warn('Disconnected from Database');
+    Logger.log.error('Disconnected from Database');
+  }
+
+  static ConnectingHandler() {
+    Logger.log.info('Connecting to Database');
   }
 
   connect() {
@@ -44,6 +48,7 @@ export class Database {
 
     this.connect();
 
+    db.on('connecting', Database.ConnectingHandler);
     db.on('connected', Database.ConnectedHandler);
     db.on('disconnected', Database.DisconnectedHandler);
     db.on('error', Database.ErrorHandler);

@@ -43,24 +43,11 @@ describe('Upvote Rant [Integration]', () => {
       });
     });
 
-    it('should return if rantUpvoter is undefined', done => {
-      agent
-        .patch('/rant/post/vote/upvote/fake')
-        .set('cookie', cookie)
-        .send({})
-        .expect(412).end((err,res) => {
-          expect(err).toBeNull();
-          expect(res.body.status).toEqual(412);
-          expect(res.body.message).toEqual(rantConstants.RANT_VOTER_NO_EXISTS);
-          done();
-        });
-    });
-
     it('should return rant does not exists on bad rant id', done => {
       agent
         .patch(`/rant/post/vote/upvote/qq`)
         .set('cookie', cookie)
-        .send({ rantUpvoter: 'testaccount' })
+        .send()
         .expect(404).end((err,res) => {
           expect(err).toBeNull();
           expect(res.body.status).toEqual(404);
@@ -75,7 +62,7 @@ describe('Upvote Rant [Integration]', () => {
           agent
             .patch(`/rant/post/vote/upvote/${rantId}`)
             .set("cookie", cookie)
-            .send({ rantUpvoter: 'testaccount' })
+            .send()
             .expect(410).end((err,res) => {
               expect(err).toBeNull();
               expect(res.body.status).toEqual(410);
@@ -93,7 +80,7 @@ describe('Upvote Rant [Integration]', () => {
       agent
         .patch(`/rant/post/vote/upvote/${rantId}`)
         .set("cookie", cookie)
-        .send({ rantUpvoter: 'testaccount' })
+        .send()
         .expect(200).end((err,res) => {
           expect(err).toBeNull();
           expect(res.body.status).toEqual(200);
@@ -107,7 +94,7 @@ describe('Upvote Rant [Integration]', () => {
         agent
           .patch(`/rant/post/vote/upvote/${rantId}`)
           .set("cookie", cookie)
-          .send({ rantUpvoter: username })
+          .send()
           .expect(200).end((err,res) => {
             expect(err).toBeNull();
             expect(res.body.status).toEqual(200);
@@ -122,7 +109,7 @@ describe('Upvote Rant [Integration]', () => {
       agent
         .patch(`/rant/post/vote/downvote/${rantId}`)
         .set("cookie", cookie)
-        .send({ rantDownvoter: 'testaccount' })
+        .send()
         .expect(200).end((err,res) => {
           expect(err).toBeNull();
           expect(res.body.status).toEqual(200);
@@ -136,7 +123,7 @@ describe('Upvote Rant [Integration]', () => {
       agent
         .patch(`/rant/post/vote/upvote/${rantId}`)
         .set("cookie", cookie)
-        .send({ rantUpvoter: 'testaccount' })
+        .send()
         .expect(200).end((err,res) => {
           expect(err).toBeNull();
           expect(res.body.status).toEqual(200);

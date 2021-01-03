@@ -263,7 +263,7 @@ describe('PostRant [Unit]', () => {
 
     beforeAll(() => {
       req.params = { rantId: 'xxxx'};
-      req.body = { rantUpvoter: "test" };
+      req.session = { user: { username: "testaccount" } };
     });
 
     beforeEach(() => {
@@ -309,7 +309,7 @@ describe('PostRant [Unit]', () => {
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalled();
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
       expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalled();
-      expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalledWith(req.body.rantUpvoter);
+      expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalledWith(req.session.user.username);
       expect(result.status).toEqual(404);
       expect(result.message).toEqual(
         constants.rantConstants.RANT_USER_UPVOTER_NOT_EXISTS
@@ -323,7 +323,7 @@ describe('PostRant [Unit]', () => {
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalled();
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
       expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalled();
-      expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalledWith(req.body.rantUpvoter);
+      expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalledWith(req.session.user.username);
       expect(result.status).toEqual(404);
       expect(result.message).toEqual(
         constants.rantConstants.RANT_USER_UPVOTER_DEACTIVATED
@@ -338,7 +338,7 @@ describe('PostRant [Unit]', () => {
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalled();
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
       expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalled();
-      expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalledWith(req.body.rantUpvoter);
+      expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalledWith(req.session.user.username);
       expect(result.status).toEqual(200);
       expect(result.message.rantUpvoteCount).toEqual(3);
       expect(result.message.rantDownvoteCount).toEqual(0);
@@ -355,7 +355,7 @@ describe('PostRant [Unit]', () => {
 
     beforeAll(() => {
       req.params = { rantId: 'xxxx'};
-      req.body = { rantDownvoter: "test" };
+      req.session = { user: { username: "testaccount" } };
     });
 
     beforeEach(() => {
@@ -393,7 +393,7 @@ describe('PostRant [Unit]', () => {
 
     });
 
-    
+
     it("should not upvote rant if rant downvoter is not exists", async () => {
       validateRantForModification.and.resolveTo({});
       rantDownvoteUserId.and.resolveTo(undefined);
@@ -401,13 +401,13 @@ describe('PostRant [Unit]', () => {
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalled();
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
       expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalled();
-      expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalledWith(req.body.rantDownvoter);
+      expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalledWith(req.session.user.username);
       expect(result.status).toEqual(404);
       expect(result.message).toEqual(
         constants.rantConstants.RANT_USER_UPVOTER_NOT_EXISTS
       );
     });
-    
+
     it("should not upvote rant if rant upvoter is deactivated", async () => {
       validateRantForModification.and.resolveTo({});
       rantDownvoteUserId.and.resolveTo({ deactivated: true });
@@ -415,7 +415,7 @@ describe('PostRant [Unit]', () => {
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalled();
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
       expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalled();
-      expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalledWith(req.body.rantDownvoter);
+      expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalledWith(req.session.user.username);
       expect(result.status).toEqual(404);
       expect(result.message).toEqual(
         constants.rantConstants.RANT_USER_UPVOTER_DEACTIVATED
@@ -430,7 +430,7 @@ describe('PostRant [Unit]', () => {
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalled();
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
       expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalled();
-      expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalledWith(req.body.rantDownvoter);
+      expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalledWith(req.session.user.username);
       expect(result.status).toEqual(200);
       expect(result.message.rantUpvoteCount).toEqual(1);
       expect(result.message.rantDownvoteCount).toEqual(2);
@@ -496,13 +496,13 @@ describe('PostRant [Unit]', () => {
   });
 
   describe("::getRants", () => {
-    
+
     let getRantsSpy;
-    
+
     beforeEach(() => {
       getRantsSpy = spyOn(controller.postRantService, 'getRants');
     });
-    
+
     afterEach(() => {
       getRantsSpy.calls.reset();
     });
@@ -510,7 +510,7 @@ describe('PostRant [Unit]', () => {
     beforeAll(() => {
       req.query = { numRequest: 0 };
     });
-    
+
     it('should return no more rant to read if rant length is 0 ', async () => {
       getRantsSpy.and.resolveTo({ rants: [] });
       const result = await controller.getRants(req,res,next);

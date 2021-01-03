@@ -104,25 +104,6 @@ describe('RantValidators [Unit]', () => {
     });
   });
 
-  describe("::VerifyRantVoter", () => {
-    it('should throw badvalueexception if req.body.rantUpvoter is undefined and req.body.reantDownvoter is undefiend ', () => {
-      expect(() => {
-        RantValidators.VerifyRantVoter(req,res,nextValue.next);
-      }).toThrowError(rantConstants.RANT_VOTER_NO_EXISTS);
-      expect(nextValue.next).not.toHaveBeenCalled();
-    });
-    it('should call next', () => {
-      req.body.rantUpvoter = 'xxxx';
-      RantValidators.VerifyRantVoter(req,res,nextValue.next);
-      expect(nextValue.next).toHaveBeenCalled();
-    });
-    it('should call next', () => {
-      req.body.rantDownvoter = 'xxxx';
-      RantValidators.VerifyRantVoter(req,res,nextValue.next);
-      expect(nextValue.next).toHaveBeenCalled();
-    });
-  });
-
   describe("::VerifyNumRequest", () => {
     it('should throw badvalueexception if req.query.numRequest is not a number', () => {
       req.query.numRequest = 'asdfadsfadf';

@@ -152,13 +152,13 @@ export default class PostRant {
   }
 
   async upvoteRant(req, res, next) {
-    const { rantUpvoter } = req.body;
     const { rantId } = req.params;
 
     try {
       await PostRant.ValidateRantForModification(rantId);
 
-      const rantUpvoterUserId = await PostRant.ValidateRantUpvoter(rantUpvoter);
+      const username = await this.Utils.ExtractSessionObjectData(req, 'username');
+      const rantUpvoterUserId = await PostRant.ValidateRantUpvoter(username);
       const result = await this.postRantService.upvote(rantId, rantUpvoterUserId);
 
       PostRant.RantCountVoteDelete(result);
@@ -170,12 +170,12 @@ export default class PostRant {
   }
 
   async downvoteRant(req, res, next) {
-    const { rantDownvoter } = req.body;
     const { rantId } = req.params;
 
     try {
       await PostRant.ValidateRantForModification(rantId);
-      const rantDownvoterUserId = await PostRant.ValidateRantUpvoter(rantDownvoter);
+      const username = await this.Utils.ExtractSessionObjectData(req, 'username');
+      const rantDownvoterUserId = await PostRant.ValidateRantUpvoter(username);
       const result = await this.postRantService.downvote(rantId, rantDownvoterUserId);
 
       PostRant.RantCountVoteDelete(result);
