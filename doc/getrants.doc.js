@@ -1,5 +1,5 @@
 /**
- * @api { get } /rant/post/rants/?numRquest
+ * @api { get } /rant/post/rants/?numRquest=0 GetMore Rant
  * @apiName  getRants
  * @apiGroup Post Rant
  * @apiVersion 1.0.0
