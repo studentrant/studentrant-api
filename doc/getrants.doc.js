@@ -1,5 +1,5 @@
 /**
- * @api { get } /rant/post/rants/?numRquest
+ * @api { get } /rant/post/rants/?numRquest=0 GetMore Rant
  * @apiName  getRants
  * @apiGroup Post Rant
  * @apiVersion 1.0.0
@@ -29,7 +29,7 @@
  *            status: 200
  *            message:  {
  *                rant : {
- *                    rants   : <a href="#api-Post_Rant-getRant">getRant documentation</a>,
+ *                    rants   : see GetOne Rant documentation
  *                    hasMore : true
  *                    page    : { totalRant: 50, remainingRant: 15 }
  *                }
