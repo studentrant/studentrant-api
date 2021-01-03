@@ -29,7 +29,7 @@
  *            status: 200
  *            message:  {
  *                rant : {
- *                    rants   : <a href="#api-Post_Rant-getRant">getRant documentation</a>,
+ *                    rants   : see GetOne Rant documentation
  *                    hasMore : true
  *                    page    : { totalRant: 50, remainingRant: 15 }
  *                }
