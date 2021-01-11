@@ -315,4 +315,37 @@ describe('RantDbUtils [Unit]', () => {
     });
   });
 
+  describe("::findRantTags", () => {
+    let findRantTagsSpy;
+    beforeEach(() => {
+      findRantTagsSpy = spyOn(Collection, 'findOne').and.callThrough();
+    });
+
+    afterEach(() => {
+      findRantTagsSpy.calls.reset();
+    });
+
+    it('should call findone and be called with array [ tag1 ] when a string is passed in', async () => {
+      await rantDbUtils.findRantTags( "hello", "tag1" );
+      expect(Collection.findOne).toHaveBeenCalled()
+      expect(Collection.findOne).toHaveBeenCalledWith({
+        username: "hello",
+        "settings.notAllowedTags": {
+          $in: [ "tag1" ]
+        }
+      });
+    });
+
+    it('should call findone and behave normally when an array is sent in here', async () => {
+      await rantDbUtils.findRantTags( "hello", [ "tag1", "tag2", "tag3" ])
+      expect(Collection.findOne).toHaveBeenCalled()
+      expect(Collection.findOne).toHaveBeenCalledWith({
+        username: "hello",
+        "settings.notAllowedTags": {
+          $in: [ "tag1", "tag2", "tag3" ]
+        }
+      });
+    });
+  });
+
 });

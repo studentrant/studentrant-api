@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 const RantSchema = new mongoose.Schema({
   tags: {
     type: Array,
+    index: true,
   },
   when: Number,
   rantId: {
@@ -25,6 +26,7 @@ const RantSchema = new mongoose.Schema({
   deleted: {
     type: Boolean,
     default: false,
+    index: true,
   },
   edit: {
     isEdited: {

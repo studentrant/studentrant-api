@@ -203,9 +203,60 @@ describe('GetRant [Integration]', () => {
             expect(
               (res.body.message.rant.rants.map(({tags}) => tags).filter( tag => ignoredTags.includes(tag))).length
             ).toEqual(0);
+            done();
           });
       });
     });
 
+    describe("Get Rants By Tag", () => {
+
+      it('should return 403 error when trying to get rants from tag(s) ignored by current user', done => {
+        agent
+          .get('/rant/post/rants/tag/general?numRequest=0')
+          .set('cookie', cookie)
+          .expect(403).end((err,res) => {
+            expect(err).toBeNull();
+            expect(res.body.status).toEqual(403);
+            expect(res.body.message).toEqual(
+              rantConstants.RANT_READ_TAG_NOT_ALLOWED
+            );
+            done();
+          });
+      });
+      it('should return no rants to read when the specified tag has not been ignored by the current user and the rants base on that tagis empty', done => {
+
+        agent
+          .get('/rant/post/rants/tag/auchi?numRequest=0')
+          .set('cookie', cookie)
+          .expect(404).end((err,res) => {
+            expect(err).toBeNull();
+            expect(res.body.status).toEqual(404);
+            expect(res.body.message).toEqual(
+              rantConstants.RANT_READ_EXHAUSTED
+            );
+            done();
+          });
+      });
+      it('should return rants if rant tag has not been muted by the current user', done => {
+        agent
+          .get('/rant/post/rants/tag/student?numRequest=0')
+          .set('cookie', cookie)
+          .expect(200).end((err,res) => {
+            expect(err).toBeNull();
+            expect(res.body.status).toEqual(200);
+            expect(res.body.message.rant.hasMore).toEqual(true);
+            expect(res.body.message.rant.page.totalRant).not.toEqual(
+              res.body.message.rant.page.remainingRant
+            );
+            expect(
+              res.body.message.rant.rants.filter(
+                rant => !rant.tags.filter(
+                  tag => !rant.authoredBy.settings.notAllowedTags.includes(tag)
+                )).length
+            ).toEqual(0);
+            done();
+          });
+      });
+    });
   });
 });

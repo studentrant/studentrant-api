@@ -1,6 +1,5 @@
 const rantConstants = {
   RANT_LENGTH_NOT_MORE_THAN_TWENTY: 'Rant cannot be created because it is less than 20',
-
   RANT_BODY_UNDEFINED: 'Rant body data is not defined',
   RANT_TAGS_NOT_AN_ARRAY: 'Expect an array as rant tags but got ',
   RANT_TAGS_UNDEFINED: 'Tag body data is not defined',
@@ -17,7 +16,8 @@ const rantConstants = {
   RANT_USER_UPVOTE_REMOVED: 'Your upvote has been removed',
   RANT_VOTER_NO_EXISTS: 'Rant voter is undefined',
   RANT_NOT_VALID_LOAD_NUM_REQUEST: 'numRequest is not a number',
-  RANT_READ_EXHAUSTED: "No Rant's to read",
+  RANT_READ_EXHAUSTED: 'No Rant\'s to read',
+  RANT_READ_TAG_NOT_ALLOWED: 'This tag has been muted by you, please update your settings and come back to this page',
 };
 
 export default rantConstants;

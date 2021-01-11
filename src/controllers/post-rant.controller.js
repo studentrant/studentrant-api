@@ -1,20 +1,22 @@
 import Diff from 'diff';
 import * as constants from '../constants/index.constant.js';
 import PostRantService from '../service/post-rant.service.js';
-import { NotFoundException, GoneException, UnAuthorizedAccessException } from '../core/exceptions.service.js';
+import {
+  NotFoundException, GoneException, UnAuthorizedAccessException, ForbiddenException,
+} from '../core/exceptions.service.js';
 
 export default class PostRant {
   constructor(
     RantDbUtils,
     UserDbUtils,
     Utils,
-    rantsCollection,
-    usersCollection,
+    RantsCollection,
+    UsersCollection,
   ) {
     this.Utils = Utils;
     PostRant.__POST_SERVICE_RANT = this.postRantService = new PostRantService(
-      new RantDbUtils(rantsCollection),
-      new UserDbUtils(usersCollection),
+      new RantDbUtils(RantsCollection, UsersCollection),
+      new UserDbUtils(UsersCollection),
     );
   }
 
@@ -206,6 +208,44 @@ export default class PostRant {
 
     try {
       const result = await this.postRantService.getRants(numRequest);
+
+      if (result.rants.length === 0) {
+        throw NotFoundException(
+          constants.rantConstants.RANT_READ_EXHAUSTED,
+        );
+      }
+
+      return res.status(200).json(
+        {
+          status: 200,
+          message: { rant: result },
+        },
+      );
+    } catch (ex) {
+      return next(ex);
+    }
+  }
+
+  async getRantsByTag(req, res, next) {
+    const { tag } = req.params;
+    const { numRequest } = req.query;
+
+    try {
+      const username = this.Utils.ExtractSessionObjectData(req, 'username');
+
+      // check if $tag is ignored
+      const isRantTagIgnored = await this.postRantService.isRantTagIgnored(username, tag);
+
+      if (isRantTagIgnored) {
+        throw ForbiddenException(
+          constants.rantConstants.RANT_READ_TAG_NOT_ALLOWED,
+        );
+      }
+
+      const result = await this.postRantService.getRants(
+        { deleted: false, tags: tag },
+        numRequest,
+      );
 
       if (result.rants.length === 0) {
         throw NotFoundException(
