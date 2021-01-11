@@ -93,7 +93,7 @@ export default class PostRant {
 
     try {
       PostRant.SetRantTagsToGeneralIfEmpty(tags);
-      const username = await this.Utils.ExtractSessionObjectData(req, 'username');
+      const username = this.Utils.ExtractSessionObjectData(req, 'username');
       const result = await this.postRantService.createRant({
         rantPoster: username,
         rant,
@@ -111,7 +111,7 @@ export default class PostRant {
     const { rantId } = req.params;
 
     try {
-      const username = await this.Utils.ExtractSessionObjectData(req, 'username');
+      const username = this.Utils.ExtractSessionObjectData(req, 'username');
 
       await PostRant.ValidateRantCreator(username, rantId);
       await this.postRantService.deleteRant(rantId);
@@ -132,7 +132,7 @@ export default class PostRant {
     try {
       PostRant.SetRantTagsToGeneralIfEmpty(tags);
 
-      const username = await this.Utils.ExtractSessionObjectData(req, 'username');
+      const username = this.Utils.ExtractSessionObjectData(req, 'username');
 
       await PostRant.ValidateRantCreator(username, rantId);
 
@@ -159,7 +159,7 @@ export default class PostRant {
     try {
       await PostRant.ValidateRantForModification(rantId);
 
-      const username = await this.Utils.ExtractSessionObjectData(req, 'username');
+      const username = this.Utils.ExtractSessionObjectData(req, 'username');
       const rantUpvoterUserId = await PostRant.ValidateRantUpvoter(username);
       const result = await this.postRantService.upvote(rantId, rantUpvoterUserId);
 
@@ -176,7 +176,7 @@ export default class PostRant {
 
     try {
       await PostRant.ValidateRantForModification(rantId);
-      const username = await this.Utils.ExtractSessionObjectData(req, 'username');
+      const username = this.Utils.ExtractSessionObjectData(req, 'username');
       const rantDownvoterUserId = await PostRant.ValidateRantUpvoter(username);
       const result = await this.postRantService.downvote(rantId, rantDownvoterUserId);
 
@@ -207,7 +207,7 @@ export default class PostRant {
     const { numRequest } = req.query;
 
     try {
-      const result = await this.postRantService.getRants(numRequest);
+      const result = await this.postRantService.getRants({ deleted: false }, numRequest);
 
       if (result.rants.length === 0) {
         throw NotFoundException(

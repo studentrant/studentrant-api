@@ -8,7 +8,7 @@ const agent = supertest(app);
 let cookie;
 
 
-describe('GetRant [Integration]', () => {
+describe('GetRant(s) [Integration]', () => {
 
   describe('Unauthenticated User', () => {
     it('should return 401 unauthroized access if user is not logged in', (done) => {
@@ -84,7 +84,7 @@ describe('GetRant [Integration]', () => {
       beforeAll(done => {
         testUtils.createMoreRants(
           agent,
-          { cookie, num: 50 },
+          { cookie, num: 50, tags: ['general', 'fakerant'] },
           done
         );
       });
@@ -193,7 +193,7 @@ describe('GetRant [Integration]', () => {
           done
         );
       });
-      it('should return rants for only specified tags ( for num request 0, no rants )', () => {
+      it('should return rants for only specified tags ( for num request 0, no rants )', done => {
         agent
           .get('/rant/post/rants?numRequest=0')
           .set('cookie', cookie)

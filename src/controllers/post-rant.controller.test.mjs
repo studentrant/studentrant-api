@@ -515,7 +515,10 @@ describe('PostRant [Unit]', () => {
       getRantsSpy.and.resolveTo({ rants: [] });
       const result = await controller.getRants(req,res,next);
       expect(controller.postRantService.getRants).toHaveBeenCalled();
-      expect(controller.postRantService.getRants).toHaveBeenCalledWith(req.query.numRequest);
+      expect(controller.postRantService.getRants).toHaveBeenCalledWith(
+        { deleted : false },
+        req.query.numRequest
+      );
       expect(result.status).toEqual(404);
       expect(result.message).toEqual(
         constants.rantConstants.RANT_READ_EXHAUSTED,
