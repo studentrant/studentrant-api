@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 
 export default class RantDbUtils {
-  constructor(rantsCollection, usersCollection) {
-    this.RantsCollection = rantsCollection;
-    this.UsersCollection = usersCollection;
+  constructor(RantsCollection, UsersCollection) {
+    this.RantsCollection = RantsCollection;
+    this.UsersCollection = UsersCollection;
   }
 
   async saveRant(data) {
@@ -138,5 +138,14 @@ export default class RantDbUtils {
 
   async getTotalRants(query) {
     return this.RantsCollection.countDocuments(query);
+  }
+
+  async findRantTags(username, tags) {
+    return this.UsersCollection.findOne(
+      {
+        username,
+        'settings.notAllowedTags': { $in: Array.isArray(tags) ? tags : [tags] },
+      },
+    );
   }
 }

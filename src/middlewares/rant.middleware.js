@@ -30,6 +30,11 @@ export default class RantValidators {
     return next();
   }
 
+  static VerifyRantTag(req, res, next) {
+    if (!req.params.tag) throw BadValueException(rantConstants.RANT_TAGS_UNDEFINED);
+    return next();
+  }
+
   static VerifyRantId(req, res, next) {
     if (!req.params.rantId) throw BadValueException(rantConstants.RANT_ID_IS_UNDEFINED);
     return next();

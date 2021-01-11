@@ -18,7 +18,7 @@ export default class PostRantRoute {
     routeHandler.post('/create', this.createRant());
     routeHandler.get('/rant/:rantId', this.getRant());
     routeHandler.get('/rants', this.getRants());
-    // routeHandler.get('/rants/tags/',             this.getRantsByTag());
+    routeHandler.get('/rants/tag/:tag', this.getRantsByTag());
     routeHandler.delete('/delete/:rantId', this.deleteRant());
     routeHandler.patch('/edit/:rantId', this.editRant());
     routeHandler.patch('/vote/upvote/:rantId', this.upvoteRant());
@@ -86,6 +86,14 @@ export default class PostRantRoute {
   replyRant() {
     return [
 
+    ];
+  }
+
+  getRantsByTag() {
+    return [
+      RantValidators.VerifyRantTag,
+      RantValidators.VerifyNumRequest,
+      this.controller.getRantsByTag.bind(this.controller),
     ];
   }
 }

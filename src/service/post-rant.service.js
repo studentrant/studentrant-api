@@ -107,14 +107,14 @@ export default class PostRantService {
     return this.rantDbUtils.removeOneVote('rantDownvote', rantId, rantDownvoterId);
   }
 
-  async getRants(numRequest) {
+  async getRants(matchBy, numRequest) {
     const rantCount = await this.rantDbUtils.getTotalRants({ deleted: false });
     const calculateNext = rantEnums.RANTS_LOAD_LIMIT * (numRequest + 1);
     const hasMore = calculateNext < rantCount;
 
     const rants = await this.rantDbUtils.findAllRants({
 
-      getRants: { $match: { deleted: false } },
+      getRants: { $match: matchBy },
 
       sortInInsertionOrder: {
         $sort: { _id: -1 },
@@ -204,5 +204,9 @@ export default class PostRantService {
         )),
       },
     };
+  }
+
+  async isRantTagIgnored(username, tag) {
+    return this.rantDbUtils.findRantTags(username, tag);
   }
 }
