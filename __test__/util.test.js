@@ -57,14 +57,14 @@ export const deleteRant = (agent, { cookie, rantId }, cb) => {
     });
 };
 
-export const createMoreRants = (agent, { cookie, num }, cb) => {
+export const createMoreRants = (agent, { cookie, num, tags }, cb) => {
   const lorem = new loremIpsum.LoremIpsum();
   const rantIds = [];
   for (let i = 0; i <= num; i += 1) {
     createRant(
       agent,
       {
-        tags: ['general', 'fakerant'],
+        tags,
         rant: `${lorem.generateSentences()} ${i}`,
         cookie,
       },
