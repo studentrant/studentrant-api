@@ -8,13 +8,17 @@ import { RantDbUtils, Collection, UserDbUtils } from '../../__test__/fakes/db.fa
 import Utils from '../utils/utils.util.js';
 
 describe('PostRant [Unit]', () => {
-  const controller = new PostRant(
-    RantDbUtils,
-    UserDbUtils,
-    Utils,
-    Collection,
-    Collection
-  );
+  const controller = new PostRant({
+    Collections: {
+      RantsCollection: Collection,
+      UsersCollection: Collection
+    },
+    DBUtils: {
+      RantDbUtils,
+      UserDbUtils
+    },
+    Utils
+  });
 
   beforeEach(() => {
     req.session = { user: { username: 'testuseraccount' } };

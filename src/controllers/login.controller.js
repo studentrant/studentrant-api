@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+
 import * as constants from '../constants/index.constant.js';
 import { NotFoundException } from '../core/exceptions.service.js';
 
