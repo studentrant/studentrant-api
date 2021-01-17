@@ -1,33 +1,35 @@
 import Diff from 'diff';
-import * as constants from '../constants/index.constant.js';
-import PostRantService from '../service/post-rant.service.js';
-import { NotFoundException, GoneException, UnAuthorizedAccessException } from '../core/exceptions.service.js';
 
+import * as constants from '../constants/index.constant.js';
+import {
+  NotFoundException, GoneException, UnAuthorizedAccessException, ForbiddenException,
+} from '../core/exceptions.service.js';
+import PostRantService from '../service/post-rant.service.js';
+
+/**
+ * have a separate functionality that calls
+ * every controller
+ *
+ *
+ * */
 export default class PostRant {
-  constructor(
-    RantDbUtils,
-    UserDbUtils,
-    Utils,
-    rantsCollection,
-    usersCollection,
-  ) {
+  constructor({ Collections, DBUtils, Utils }) {
     this.Utils = Utils;
-    PostRant.__POST_SERVICE_RANT = this.postRantService = new PostRantService(
-      new RantDbUtils(rantsCollection),
-      new UserDbUtils(usersCollection),
+    this.postRantService = new PostRantService(
+      new DBUtils.RantDbUtils(Collections.RantsCollection, Collections.UsersCollection),
+      new DBUtils.UserDbUtils(Collections.UsersCollection),
     );
   }
 
-  static SetRantTagsToGeneralIfEmpty = (tags) => tags.length === 0 && tags.push('general');
+  #setRantTagsToGeneralIfEmpty = (tags) => tags.length === 0 && tags.push('general');
 
   /**
    * extra guard to handle security that might occur
    * if someone tries to find a way to delete a rant
    * not created by them
    * */
-  static async ValidateRantForModification(rantId) {
-    const __postRantService = PostRant.__POST_SERVICE_RANT;
-    const validateAndGetRant = await __postRantService.validateRantExistence(rantId);
+  async #validateRantForModification (rantId) {
+    const validateAndGetRant = await this.postRantService.validateRantExistence(rantId);
 
     if (!validateAndGetRant) {
       throw NotFoundException(
@@ -42,21 +44,18 @@ export default class PostRant {
     }
   }
 
-  static async ValidateRantCreator(username, rantId) {
-    const __postRantService = PostRant.__POST_SERVICE_RANT;
+  async #validateRantCreator (username, rantId) {
+    await this.#validateRantForModification(rantId);
 
-    await PostRant.ValidateRantForModification(rantId);
-
-    if (!(await __postRantService.validateRantCreator(username, rantId))) {
+    if (!(await this.postRantService.validateRantCreator(username, rantId))) {
       throw UnAuthorizedAccessException(
         constants.rantConstants.RANT_NOT_USER,
       );
     }
   }
 
-  static async ValidateRantUpvoter(rantUpvoter) {
-    const __postRantService = PostRant.__POST_SERVICE_RANT;
-    const validateRantUpvoter = await __postRantService.validateRantUpvoter(rantUpvoter);
+  async #validateRantUpvoter (rantUpvoter) {
+    const validateRantUpvoter = await this.postRantService.validateRantUpvoter(rantUpvoter);
 
     if (!validateRantUpvoter) {
       throw NotFoundException(
@@ -73,12 +72,12 @@ export default class PostRant {
     return validateRantUpvoter._id;
   }
 
-  static DiffRants(currentRant, replaceRant) {
+  #diffRants (currentRant, replaceRant) {
     return Diff.diffChars(currentRant, replaceRant);
   }
 
   /* eslint-disable no-param-reassign */
-  static RantCountVoteDelete(result) {
+  #rantCountVoteDelete (result) {
     result.rantDownvoteCount = result.rantDownvote?.length;
     result.rantUpvoteCount = result.rantUpvote?.length;
     delete result.rantUpvote;
@@ -90,15 +89,17 @@ export default class PostRant {
     const { rant, tags, when } = req.body;
 
     try {
-      PostRant.SetRantTagsToGeneralIfEmpty(tags);
-      const username = await this.Utils.ExtractSessionObjectData(req, 'username');
+      this.#setRantTagsToGeneralIfEmpty(tags);
+
+      const username = this.Utils.ExtractSessionObjectData(req, 'username');
       const result = await this.postRantService.createRant({
         rantPoster: username,
         rant,
         when,
         tags,
       });
-      PostRant.RantCountVoteDelete(result);
+
+      this.#rantCountVoteDelete(result);
       return res.status(201).json({ status: 201, message: result });
     } catch (ex) {
       return next(ex);
@@ -109,9 +110,9 @@ export default class PostRant {
     const { rantId } = req.params;
 
     try {
-      const username = await this.Utils.ExtractSessionObjectData(req, 'username');
+      const username = this.Utils.ExtractSessionObjectData(req, 'username');
 
-      await PostRant.ValidateRantCreator(username, rantId);
+      await this.#validateRantCreator(username, rantId);
       await this.postRantService.deleteRant(rantId);
 
       return res.status(200).json({
@@ -128,15 +129,14 @@ export default class PostRant {
     const { tags, rant: editedRant, when } = req.body;
 
     try {
-      PostRant.SetRantTagsToGeneralIfEmpty(tags);
+      this.#setRantTagsToGeneralIfEmpty(tags);
 
-      const username = await this.Utils.ExtractSessionObjectData(req, 'username');
+      const username = this.Utils.ExtractSessionObjectData(req, 'username');
 
-      await PostRant.ValidateRantCreator(username, rantId);
+      await this.#validateRantCreator(username, rantId);
 
       const currentRantInDb = (await this.postRantService.getRant(rantId)).rant;
-      const diff = PostRant.DiffRants(currentRantInDb, editedRant);
-
+      const diff = this.#diffRants(currentRantInDb, editedRant);
       const result = await this.postRantService.editRant(username, rantId, {
         editedRant,
         currentRantInDb,
@@ -144,7 +144,7 @@ export default class PostRant {
         when,
         diff,
       });
-      PostRant.RantCountVoteDelete(result);
+      this.#rantCountVoteDelete(result);
       return res.status(200).json({ status: 200, message: result });
     } catch (ex) {
       return next(ex);
@@ -155,13 +155,13 @@ export default class PostRant {
     const { rantId } = req.params;
 
     try {
-      await PostRant.ValidateRantForModification(rantId);
+      await this.#validateRantForModification(rantId);
 
-      const username = await this.Utils.ExtractSessionObjectData(req, 'username');
-      const rantUpvoterUserId = await PostRant.ValidateRantUpvoter(username);
+      const username = this.Utils.ExtractSessionObjectData(req, 'username');
+      const rantUpvoterUserId = await this.#validateRantUpvoter(username);
       const result = await this.postRantService.upvote(rantId, rantUpvoterUserId);
 
-      PostRant.RantCountVoteDelete(result);
+      this.#rantCountVoteDelete(result);
 
       return res.status(200).json({ status: 200, message: result });
     } catch (ex) {
@@ -173,12 +173,13 @@ export default class PostRant {
     const { rantId } = req.params;
 
     try {
-      await PostRant.ValidateRantForModification(rantId);
-      const username = await this.Utils.ExtractSessionObjectData(req, 'username');
-      const rantDownvoterUserId = await PostRant.ValidateRantUpvoter(username);
+      await this.#validateRantForModification(rantId);
+
+      const username = this.Utils.ExtractSessionObjectData(req, 'username');
+      const rantDownvoterUserId = await this.#validateRantUpvoter(username);
       const result = await this.postRantService.downvote(rantId, rantDownvoterUserId);
 
-      PostRant.RantCountVoteDelete(result);
+      this.#rantCountVoteDelete(result);
 
       return res.status(200).json({ status: 200, message: result });
     } catch (ex) {
@@ -190,10 +191,10 @@ export default class PostRant {
     const { rantId } = req.params;
 
     try {
-      await PostRant.ValidateRantForModification(rantId);
+      await this.#validateRantForModification(rantId);
       const result = await this.postRantService.getRant(rantId);
 
-      PostRant.RantCountVoteDelete(result);
+      this.#rantCountVoteDelete(result);
 
       return res.status(200).json({ status: 200, message: result });
     } catch (ex) {
@@ -205,7 +206,45 @@ export default class PostRant {
     const { numRequest } = req.query;
 
     try {
-      const result = await this.postRantService.getRants(numRequest);
+      const result = await this.postRantService.getRants({ deleted: false }, numRequest);
+
+      if (result.rants.length === 0) {
+        throw NotFoundException(
+          constants.rantConstants.RANT_READ_EXHAUSTED,
+        );
+      }
+
+      return res.status(200).json(
+        {
+          status: 200,
+          message: { rant: result },
+        },
+      );
+    } catch (ex) {
+      return next(ex);
+    }
+  }
+
+  async getRantsByTag(req, res, next) {
+    const { tag } = req.params;
+    const { numRequest } = req.query;
+
+    try {
+      const username = this.Utils.ExtractSessionObjectData(req, 'username');
+
+      // check if $tag is ignored
+      const isRantTagIgnored = await this.postRantService.isRantTagIgnored(username, tag);
+
+      if (isRantTagIgnored) {
+        throw ForbiddenException(
+          constants.rantConstants.RANT_READ_TAG_NOT_ALLOWED,
+        );
+      }
+
+      const result = await this.postRantService.getRants(
+        { deleted: false, tags: tag },
+        numRequest,
+      );
 
       if (result.rants.length === 0) {
         throw NotFoundException(

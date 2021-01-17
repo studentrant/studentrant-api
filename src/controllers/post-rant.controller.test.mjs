@@ -8,13 +8,17 @@ import { RantDbUtils, Collection, UserDbUtils } from '../../__test__/fakes/db.fa
 import Utils from '../utils/utils.util.js';
 
 describe('PostRant [Unit]', () => {
-  const controller = new PostRant(
-    RantDbUtils,
-    UserDbUtils,
-    Utils,
-    Collection,
-    Collection
-  );
+  const controller = new PostRant({
+    Collections: {
+      RantsCollection: Collection,
+      UsersCollection: Collection
+    },
+    DBUtils: {
+      RantDbUtils,
+      UserDbUtils
+    },
+    Utils
+  });
 
   beforeEach(() => {
     req.session = { user: { username: 'testuseraccount' } };
@@ -515,7 +519,10 @@ describe('PostRant [Unit]', () => {
       getRantsSpy.and.resolveTo({ rants: [] });
       const result = await controller.getRants(req,res,next);
       expect(controller.postRantService.getRants).toHaveBeenCalled();
-      expect(controller.postRantService.getRants).toHaveBeenCalledWith(req.query.numRequest);
+      expect(controller.postRantService.getRants).toHaveBeenCalledWith(
+        { deleted : false },
+        req.query.numRequest
+      );
       expect(result.status).toEqual(404);
       expect(result.message).toEqual(
         constants.rantConstants.RANT_READ_EXHAUSTED,
@@ -526,7 +533,89 @@ describe('PostRant [Unit]', () => {
       getRantsSpy.and.resolveTo({ rants: [ 'a' , 'b', 'c' ] });
       const result = JSON.parse(await controller.getRants(req,res,next));
       expect(controller.postRantService.getRants).toHaveBeenCalled();
-      expect(controller.postRantService.getRants).toHaveBeenCalledWith(req.query.numRequest);
+      expect(controller.postRantService.getRants).toHaveBeenCalledWith(
+        { deleted : false },
+        req.query.numRequest
+      );
+      expect(result.status).toEqual(200);
+      expect(result.message.rant).toEqual({ rants: [ 'a', 'b', 'c' ]});
+    });
+  });
+
+  describe("::getRantsByTag", () => {
+
+    let getRantsSpy;
+    let isRantTagIgnoredSpy;
+
+    beforeEach(() => {
+      getRantsSpy = spyOn(controller.postRantService, 'getRants');
+      isRantTagIgnoredSpy = spyOn(controller.postRantService, 'isRantTagIgnored');
+    });
+
+    afterEach(() => {
+      getRantsSpy.calls.reset();
+      isRantTagIgnoredSpy.calls.reset();
+    });
+
+    beforeAll(() => {
+      req.query  = { numRequest: 0 };
+      req.params = { tag: "hello" };
+      req.session = { user: { username: "test" } };
+    });
+
+    it('should return 403 if the specified tag is ignored by the current user', async () => {
+      isRantTagIgnoredSpy.and.resolveTo({});
+      const result = await controller.getRantsByTag(req,res,next);
+      expect(controller.postRantService.isRantTagIgnored).toHaveBeenCalled();
+      expect(controller.postRantService.isRantTagIgnored).toHaveBeenCalledWith(
+        req.session.user.username,
+        req.params.tag
+      );
+      expect(result.status).toEqual(403);
+      expect(result.message).toEqual(
+        constants.rantConstants.RANT_READ_TAG_NOT_ALLOWED
+      );
+    });
+
+    it('should return rant read exhausted', async () => {
+      isRantTagIgnoredSpy.and.resolveTo(null);
+      getRantsSpy.and.resolveTo({ rants: [] });
+      const result = await controller.getRantsByTag(req,res,next);
+
+      expect(controller.postRantService.isRantTagIgnored).toHaveBeenCalled();
+      expect(controller.postRantService.isRantTagIgnored).toHaveBeenCalledWith(
+        req.session.user.username,
+        req.params.tag
+      );
+      expect(controller.postRantService.getRants).toHaveBeenCalled();
+      expect(controller.postRantService.getRants).toHaveBeenCalledWith(
+        { deleted: false, tags: req.params.tag },
+        req.query.numRequest
+      );
+      expect(result.status).toEqual(404);
+      expect(result.message).toEqual(
+        constants.rantConstants.RANT_READ_EXHAUSTED
+      );
+    });
+
+    it('should read rants by tag', async () => {
+
+      isRantTagIgnoredSpy.and.resolveTo(null);
+      getRantsSpy.and.resolveTo({ rants: [ 'a' , 'b', 'c' ] });
+
+      const result = JSON.parse(await controller.getRantsByTag(req,res,next));
+
+      expect(controller.postRantService.isRantTagIgnored).toHaveBeenCalled();
+      expect(controller.postRantService.isRantTagIgnored).toHaveBeenCalledWith(
+        req.session.user.username,
+        req.params.tag
+      );
+      expect(controller.postRantService.getRants).toHaveBeenCalled();
+      expect(controller.postRantService.getRants).toHaveBeenCalledWith(
+        { deleted: false, tags: req.params.tag },
+        req.query.numRequest
+      );
+
       expect(result.status).toEqual(200);
       expect(result.message.rant).toEqual({ rants: [ 'a', 'b', 'c' ]});
     });

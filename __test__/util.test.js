@@ -1,7 +1,8 @@
 /* eslint-disable no-undef */
 import faker from 'faker';
 import loremIpsum from 'lorem-ipsum';
-import * as models from '../src/models/dbmodels/index.model.js';
+
+import UsersCollection from '../src/models/dbmodels/user.model.js';
 
 export const login = (agent, cb) => {
   agent
@@ -39,7 +40,7 @@ export const createUser = (agent, cb) => {
     .post('/register/reg-first-step')
     .send(body).expect(201).end(async (err, res) => {
       expect(err).toBeNull();
-      await models.usersCollection.updateOne(
+      await UsersCollection.updateOne(
         { email: body.email },
         { $set: { completeReg: true, verified: true } },
       );
@@ -57,14 +58,14 @@ export const deleteRant = (agent, { cookie, rantId }, cb) => {
     });
 };
 
-export const createMoreRants = (agent, { cookie, num }, cb) => {
+export const createMoreRants = (agent, { cookie, num, tags }, cb) => {
   const lorem = new loremIpsum.LoremIpsum();
   const rantIds = [];
   for (let i = 0; i <= num; i += 1) {
     createRant(
       agent,
       {
-        tags: ['general', 'fakerant'],
+        tags,
         rant: `${lorem.generateSentences()} ${i}`,
         cookie,
       },

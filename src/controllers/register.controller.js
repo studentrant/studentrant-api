@@ -1,8 +1,9 @@
 import bcrypt from 'bcryptjs';
 import { v4 as uuid } from 'uuid';
+
 import * as constants from '../constants/index.constant.js';
-import { RegisterService } from '../service/register.service.js';
 import { ExistsException } from '../core/exceptions.service.js';
+import { RegisterService } from '../service/register.service.js';
 
 export default class Registration {
   constructor(

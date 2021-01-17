@@ -4,7 +4,7 @@ const uuid = new UIDGenerator(512, UIDGenerator.BASE62);
 
 export default class Utils {
   static ExtractSessionObjectData(req, type) {
-    if (!(type in req.session.user)) throw new Error(`${type} does not exists on session object`);
+    if (!req.session.user || !(type in req.session.user)) throw new Error(`${type} does not exists on session object`);
     return req.session.user[type];
   }
 

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+
 import { Logger } from './logger.config.js';
 
 export class Database {

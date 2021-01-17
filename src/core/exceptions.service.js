@@ -42,6 +42,15 @@ export const NotFoundException = (message) => new Exceptions(
   },
 );
 
+export const ForbiddenException = (message) => new Exceptions(
+  message,
+  'ForbiddenException',
+  {
+    status: 403,
+    message,
+  },
+);
+
 // thrown when trying to access a deleted resource
 export const GoneException = (message) => {
   throw new Exceptions(

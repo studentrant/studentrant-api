@@ -1,13 +1,13 @@
-import middleware from '../../middlewares/validator.middleware.js';
-import * as Utils from '../../utils/index.util.js';
 import Login from '../../controllers/login.controller.js';
-import { usersCollection } from '../../models/dbmodels/index.model.js';
+import middleware from '../../middlewares/validator.middleware.js';
+import UsersCollection from '../../models/dbmodels/user.model.js';
+import * as Utils from '../../utils/index.util.js';
 
 export default class LoginRoute {
   constructor(routeHandler) {
     this.controller = new Login(
       Utils,
-      usersCollection,
+      UsersCollection,
     );
     routeHandler.post('/', this.loginUser());
     return routeHandler;

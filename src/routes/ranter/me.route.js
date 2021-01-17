@@ -1,14 +1,14 @@
 import User from '../../controllers/ranter.controller.js';
-import UserDbUtils from '../../models/dbutils/user.db.util.js';
-import { usersCollection } from '../../models/dbmodels/index.model.js';
-import { Utils } from '../../utils/index.util.js';
 import RantValidators from '../../middlewares/rant.middleware.js';
+import UsersCollection from '../../models/dbmodels/user.model.js';
+import UserDbUtils from '../../models/dbutils/user.db.util.js';
+import { Utils } from '../../utils/index.util.js';
 
 export default class Me {
   constructor(routeHandler) {
     this.controller = new User(
       UserDbUtils,
-      usersCollection,
+      UsersCollection,
       Utils,
     );
 
