@@ -1,5 +1,5 @@
-import session from 'express-session';
 import mongoStore from 'connect-mongodb-session';
+import session from 'express-session';
 
 export class Session {
   constructor(config) {

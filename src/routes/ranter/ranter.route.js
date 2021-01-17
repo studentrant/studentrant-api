@@ -1,5 +1,7 @@
 import express from 'express';
+
 import Auth from '../../middlewares/auth.middleware.js';
+
 import Me from './me.route.js';
 
 export default class RantRoute {

@@ -1,8 +1,8 @@
-import middleware from '../../middlewares/validator.middleware.js';
-import Email from '../../service/email.service.js';
 import Registration from '../../controllers/register.controller.js';
+import middleware from '../../middlewares/validator.middleware.js';
+import UsersCollection from '../../models/dbmodels/user.model.js';
 import UserDbUtils from '../../models/dbutils/user.db.util.js';
-import { usersCollection } from '../../models/dbmodels/index.model.js';
+import Email from '../../service/email.service.js';
 import { Utils, PasswordUtils } from '../../utils/index.util.js';
 
 export default class RegisterRoute {
@@ -12,7 +12,7 @@ export default class RegisterRoute {
       Email,
       Utils,
       PasswordUtils,
-      usersCollection,
+      UsersCollection,
       config,
     );
     routeHandler.post('/reg-first-step', this.firstRegistrationStep());

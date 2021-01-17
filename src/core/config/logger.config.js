@@ -1,5 +1,5 @@
-import log4js from 'log4js';
 import { Client } from '@elastic/elasticsearch';
+import log4js from 'log4js';
 
 export class Logger {
   constructor(config) {

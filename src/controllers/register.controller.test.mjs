@@ -1,13 +1,11 @@
 import * as constants from '../constants/index.constant.js';
-import { usersCollection } from '../models/dbmodels/index.model.js';
 import { Utils, PasswordUtils } from '../utils/index.util.js';
+import { Collection, UserDbUtils } from '../../__test__/fakes/db.fakes.js';
 import config from '../../__test__/fakes/utils.fake.js';
 import next   from '../../__test__/fakes/next.fake.js';
 import req    from '../../__test__/fakes/req.fake.js';
 import res    from '../../__test__/fakes/res.fake.js';
 import Email  from '../service/email.service.js';
-
-import UserDbUtils from '../models/dbutils/user.db.util.js';
 import Registration from './register.controller.js';
 
 const sucessfullyRegistered = {
@@ -23,7 +21,7 @@ describe('Registration [Unit]', () => {
     Email,
     Utils,
     PasswordUtils,
-    usersCollection,
+    Collection,
     config,
   );
 

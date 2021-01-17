@@ -1,6 +1,6 @@
 import supertest from 'supertest';
 import app from '../src/server.js';
-import { usersCollection } from '../src/models/dbmodels/index.model.js';
+import UsersCollection from '../src/models/dbmodels/user.model.js';
 
 import {
   registerConstants,
@@ -258,7 +258,7 @@ describe('Register [Integration]', () => {
           expect(res.body.message.completeReg).toEqual(true);
           expect(res.body.message.email).toEqual('studentrant@example.com');
           expect(res.body.message.username).toEqual('studentrant');
-          const result = await usersCollection.findOne({ email: 'studentrant@example.com' }, { verificationLink: true }).lean();
+          const result = await UsersCollection.findOne({ email: 'studentrant@example.com' }, { verificationLink: true }).lean();
           expect(result.verificationLink).toBeUndefined();
           done();
         });

@@ -1,5 +1,7 @@
 import express from 'express';
+
 import Auth from '../../middlewares/auth.middleware.js';
+
 import PostRantRoute from './post-rant.route.js';
 // import { ReplyRantRoute } from "./reply-rant.js";
 
