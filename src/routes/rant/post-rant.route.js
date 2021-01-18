@@ -5,7 +5,7 @@ import RantsCollection from '../../models/dbmodels/rant.model.js';
 import TrendsCollection from '../../models/dbmodels/trends.model.js';
 import UsersCollection from '../../models/dbmodels/user.model.js';
 import RantDbUtils from '../../models/dbutils/rant.db.util.js';
-import TrendingDbUtils from '../../models/dbutils/trends.db.util.js';
+import TrendDbUtils from '../../models/dbutils/trends.db.util.js';
 import UserDbUtils from '../../models/dbutils/user.db.util.js';
 
 import { Utils } from '../../utils/index.util.js';
@@ -14,7 +14,7 @@ export default class PostRantRoute {
   constructor(routeHandler) {
     this.controller = new PostRant({
       Collections: { RantsCollection, UsersCollection, TrendsCollection },
-      DBUtils: { RantDbUtils, UserDbUtils, TrendingDbUtils },
+      DBUtils: { RantDbUtils, UserDbUtils, TrendDbUtils },
       Utils,
     });
 

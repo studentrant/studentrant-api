@@ -64,11 +64,10 @@ export default class RantValidators {
     return next();
   }
 
-  static VerifyNumRequest(req, res, next) {
-    req.query.numRequest = Number(req.query.numRequest);
-    if (Number.isNaN(req.query.numRequest)) {
+  static VerifyTrend(req, res, next) {
+    if (!req.params.trend.startsWith('#')) {
       throw BadValueException(
-        rantConstants.RANT_NOT_VALID_LOAD_NUM_REQUEST,
+        rantConstants.RANT_NOT_VALID_TREND,
       );
     }
     return next();

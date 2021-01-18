@@ -5,6 +5,7 @@ import {
   NotFoundException, GoneException, UnAuthorizedAccessException, ForbiddenException,
 } from '../core/exceptions.service.js';
 import PostRantService from '../service/post-rant.service.js';
+import TrendingService from '../service/trending.service.js';
 
 /**
  * have a separate functionality that calls
@@ -15,9 +16,14 @@ import PostRantService from '../service/post-rant.service.js';
 export default class PostRant {
   constructor({ Collections, DBUtils, Utils }) {
     this.Utils = Utils;
+
     this.postRantService = new PostRantService(
       new DBUtils.RantDbUtils(Collections.RantsCollection, Collections.UsersCollection),
       new DBUtils.UserDbUtils(Collections.UsersCollection),
+    );
+
+    this.trendingService = new TrendingService(
+      new DBUtils.TrendDbUtils(Collections.TrendingCollection),
     );
   }
 
@@ -92,6 +98,7 @@ export default class PostRant {
       this.#setRantTagsToGeneralIfEmpty(tags);
 
       const username = this.Utils.ExtractSessionObjectData(req, 'username');
+
       const result = await this.postRantService.createRant({
         rantPoster: username,
         rant,
@@ -99,7 +106,17 @@ export default class PostRant {
         tags,
       });
 
+      // write a logger service
+      Promise.resolve(
+        this.trendingService.createTrendIfExists({
+          text: result.rant,
+          uid: result.rantId,
+          col: 'rant',
+        }),
+      ).catch(({ message }) => console.log(message));
+
       this.#rantCountVoteDelete(result);
+
       return res.status(201).json({ status: 201, message: result });
     } catch (ex) {
       return next(ex);
@@ -144,7 +161,9 @@ export default class PostRant {
         when,
         diff,
       });
+
       this.#rantCountVoteDelete(result);
+
       return res.status(200).json({ status: 200, message: result });
     } catch (ex) {
       return next(ex);

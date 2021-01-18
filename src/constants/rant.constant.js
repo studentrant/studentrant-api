@@ -18,6 +18,7 @@ const rantConstants = {
   RANT_NOT_VALID_LOAD_NUM_REQUEST: 'numRequest is not a number',
   RANT_READ_EXHAUSTED: 'No Rant\'s to read',
   RANT_READ_TAG_NOT_ALLOWED: 'This tag has been muted by you, please update your settings and come back to this page',
+  RANT_NOT_VALID_TREND: 'Trend tags must start with #',
 };
 
 export default rantConstants;
