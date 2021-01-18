@@ -16,7 +16,6 @@ import TrendingService from '../service/trending.service.js';
 export default class PostRant {
   constructor({ Collections, DBUtils, Utils }) {
     this.Utils = Utils;
-
     this.postRantService = new PostRantService(
       new DBUtils.RantDbUtils(Collections.RantsCollection, Collections.UsersCollection),
       new DBUtils.UserDbUtils(Collections.UsersCollection),
@@ -98,7 +97,6 @@ export default class PostRant {
       this.#setRantTagsToGeneralIfEmpty(tags);
 
       const username = this.Utils.ExtractSessionObjectData(req, 'username');
-
       const result = await this.postRantService.createRant({
         rantPoster: username,
         rant,
