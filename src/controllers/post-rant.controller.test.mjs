@@ -4,18 +4,20 @@ import PostRant from './post-rant.controller.js';
 import req from '../../__test__/fakes/req.fake.js';
 import res from '../../__test__/fakes/res.fake.js';
 import next from '../../__test__/fakes/next.fake.js';
-import { RantDbUtils, Collection, UserDbUtils } from '../../__test__/fakes/db.fakes.js';
+import { RantDbUtils, Collection, UserDbUtils, TrendDbUtils } from '../../__test__/fakes/db.fakes.js';
 import Utils from '../utils/utils.util.js';
 
 describe('PostRant [Unit]', () => {
   const controller = new PostRant({
     Collections: {
       RantsCollection: Collection,
-      UsersCollection: Collection
+      UsersCollection: Collection,
+      TrendingCollection : Collection
     },
     DBUtils: {
       RantDbUtils,
-      UserDbUtils
+      UserDbUtils,
+      TrendDbUtils
     },
     Utils
   });

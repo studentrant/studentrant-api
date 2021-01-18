@@ -15,9 +15,11 @@ export default class TrendRoute {
     });
 
     routeHandler.get('/:trend', this.getTrends());
+
+    return routeHandler;
   }
 
-  static API_PATH = '/trend/'
+  static API_PATH = '/trend'
 
   getTrends() {
     return [
