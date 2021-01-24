@@ -5,7 +5,9 @@
     "jasmine": true
   },
   "extends": [
-    "airbnb-base"
+    "airbnb-base",
+    "plugin:import/errors",
+    "plugin:import/warnings"
   ],
   "ignorePatterns": [
     "loader.js",
@@ -17,16 +19,30 @@
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly"
   },
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
   "parserOptions": {
     "ecmaVersion": 2018,
+    "babelOptions": {
+      "plugins": [ "@babel/plugin-syntax-class-properties" ]
+    },
+    "requireConfigFile": false,
     "sourceType": "module"
   },
+  "plugins": [ "import" ],
   "rules": {
     "import/extensions": "off",
+    "import/order": [
+      "error",
+      {
+        "newlines-between": "always-and-inside-groups",
+        "alphabetize": { "order": "asc" }
+      }
+    ],
     "no-console": "off",
     "no-underscore-dangle": "off",
     "class-methods-use-this": "off",
-    "no-multi-assign": "off"
+    "no-multi-assign": "off",
+    // temprorary fix for eslint reporting private methods as functions without name
+    "func-names": "off"
   }
 }

@@ -4,7 +4,7 @@ import RantDbUtils from './rant.db.util.js';
 import { Collection } from '../../../__test__/fakes/db.fakes.js';
 
 describe('RantDbUtils [Unit]', () => {
-  const rantDbUtils = new RantDbUtils(Collection);
+  const rantDbUtils = new RantDbUtils(Collection,Collection);
 
   describe('::saveRant', () => {
     let collectionSaveSpy;

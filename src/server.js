@@ -1,13 +1,14 @@
-import express from 'express';
 import bodyParser from 'body-parser';
+import express from 'express';
 import helmet from 'helmet';
-import mountRoutes from './mountRoutes.js';
-import mountGlobalConfigurations from './mountGlobalConfigurations.js';
-import { NotFoundException } from './core/exceptions.service.js';
+
 import { badExceptionConstants } from './constants/index.constant.js';
 import {
   Config, Database, Session, Logger,
 } from './core/config/index.config.js';
+import { NotFoundException } from './core/exceptions.service.js';
+import mountGlobalConfigurations from './mountGlobalConfigurations.js';
+import mountRoutes from './mountRoutes.js';
 
 import * as routes from './routes/index.route.js';
 
@@ -34,7 +35,8 @@ mountRoutes(
     routes.RegisterRoute,
     routes.LoginRoute,
     routes.RantRoute,
-    routes.Ranter,
+    routes.RanterRoute,
+    routes.TrendRoute,
   ],
 );
 
@@ -56,6 +58,7 @@ app.use((err, req, res, next) => {
     const logger = new Logger(app.get('CONFIGURATION'));
     logger.setLogType('express');
     logger.log.fatal(message);
+    console.log(err);
   }
 
   return res.status(status).json({ status, message });

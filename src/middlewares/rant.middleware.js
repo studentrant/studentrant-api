@@ -63,4 +63,13 @@ export default class RantValidators {
     }
     return next();
   }
+
+  static VerifyTrend(req, res, next) {
+    if (!req.params.trend.startsWith('#')) {
+      throw BadValueException(
+        rantConstants.RANT_NOT_VALID_TREND,
+      );
+    }
+    return next();
+  }
 }

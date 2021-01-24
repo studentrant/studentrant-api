@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+
 import { rantEnums } from '../enums/rants.enums.js';
 
 export default class PostRantService {
@@ -107,9 +108,9 @@ export default class PostRantService {
     return this.rantDbUtils.removeOneVote('rantDownvote', rantId, rantDownvoterId);
   }
 
-  async getRants(matchBy, numRequest) {
-    const rantCount = await this.rantDbUtils.getTotalRants({ deleted: false });
-    const calculateNext = rantEnums.RANTS_LOAD_LIMIT * (numRequest + 1);
+  async getRantFromAggregation({
+    matchBy, numRequest, calculateNext, rantCount,
+  }) {
     const hasMore = calculateNext < rantCount;
 
     const rants = await this.rantDbUtils.findAllRants({
@@ -204,6 +205,17 @@ export default class PostRantService {
         )),
       },
     };
+  }
+
+  async getRants(matchBy, numRequest) {
+    return this.getRantFromAggregation(
+      {
+        numRequest,
+        matchBy,
+        rantCount: await this.rantDbUtils.getTotalRants({ deleted: false }),
+        calculateNext: rantEnums.RANTS_LOAD_LIMIT * (numRequest + 1),
+      },
+    );
   }
 
   async isRantTagIgnored(username, tag) {

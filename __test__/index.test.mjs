@@ -1,6 +1,7 @@
+import mongoose  from "mongoose";
 import supertest from "supertest";
 import app       from "../src/server.js";
-import * as models from "../src/models/dbmodels/index.model.js";
+
 
 const agent     = supertest(app);
 
@@ -14,7 +15,7 @@ beforeAll(done => {
     }).expect(201).end(async (err,res) => {
       expect(err).toBeNull();
       expect(res.body.message).toEqual(jasmine.any(Object));
-      await models.usersCollection.updateOne(
+      await mongoose.models.Users.updateOne(
         { email: "test@example.com"},
         { $set: { completeReg: true , verified: true } }
       );
@@ -23,6 +24,6 @@ beforeAll(done => {
 });
 
 afterAll(async () => {
-  for ( let model of Object.values(models) )
+  for ( let model of Object.values(mongoose.models) )
     await model.deleteMany();
 });
