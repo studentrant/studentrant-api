@@ -7,9 +7,9 @@ import TrendingService from '../service/trending.service.js';
 export default class Trend {
   constructor({ Collections, DBUtils }) {
     this.trendingService = new TrendingService(
-      new DBUtils.TrendDbUtils(Collections.TrendingCollection),
+      new DBUtils.TrendDbUtils(Collections.TrendsCollection),
       new DBUtils.RantDbUtils(Collections.RantsCollection),
-      new DBUtils.TrendDbUtils(Collections.TrendingCollection),
+      new DBUtils.UserDbUtils(Collections.UsersCollection),
     );
   }
 
@@ -19,16 +19,15 @@ export default class Trend {
 
     try {
       const trendIds = await this.trendingService.getPaginatedTrend(trendName, numRequest);
-
       if (trendIds.length === 0) {
         throw NotFoundException(
           constants.rantConstants.RANT_READ_EXHAUSTED,
         );
       }
 
-      const result = this.trendingService.getTrends(trendIds);
+      const result = await this.trendingService.getTrends(trendIds, trendName);
 
-      if (result.length === 0) {
+      if (!result) {
         throw NotFoundException(
           constants.rantConstants.RANT_READ_EXHAUSTED,
         );
@@ -37,7 +36,7 @@ export default class Trend {
       return res.status(200).json(
         {
           status: 200,
-          message: { rant: result },
+          message: result,
         },
       );
     } catch (ex) {

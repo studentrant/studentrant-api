@@ -22,7 +22,7 @@ export default class PostRant {
     );
 
     this.trendingService = new TrendingService(
-      new DBUtils.TrendDbUtils(Collections.TrendingCollection),
+      new DBUtils.TrendDbUtils(Collections.TrendsCollection),
     );
   }
 
@@ -108,10 +108,10 @@ export default class PostRant {
       Promise.resolve(
         this.trendingService.createTrendIfExists({
           text: result.rant,
-          uid: result.rantId,
+          identifier: result.rantId,
           col: 'rant',
         }),
-      ).catch(({ message }) => console.log(message));
+      ).catch((ex) => console.error(ex));
 
       this.#rantCountVoteDelete(result);
 
