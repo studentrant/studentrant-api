@@ -36,3 +36,11 @@ export class RantDbUtils {
 
   saveRant() {}
 }
+
+export class TrendDbUtils {
+  constructor() {}
+
+  getTotalRants() {}
+
+  getTrendsAggregation() {}
+}

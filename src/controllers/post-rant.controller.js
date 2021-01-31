@@ -5,6 +5,7 @@ import {
   NotFoundException, GoneException, UnAuthorizedAccessException, ForbiddenException,
 } from '../core/exceptions.service.js';
 import PostRantService from '../service/post-rant.service.js';
+import TrendingService from '../service/trending.service.js';
 
 /**
  * have a separate functionality that calls
@@ -18,6 +19,10 @@ export default class PostRant {
     this.postRantService = new PostRantService(
       new DBUtils.RantDbUtils(Collections.RantsCollection, Collections.UsersCollection),
       new DBUtils.UserDbUtils(Collections.UsersCollection),
+    );
+
+    this.trendingService = new TrendingService(
+      new DBUtils.TrendDbUtils(Collections.TrendsCollection),
     );
   }
 
@@ -99,7 +104,17 @@ export default class PostRant {
         tags,
       });
 
+      // write a logger service
+      Promise.resolve(
+        this.trendingService.createTrendIfExists({
+          text: result.rant,
+          identifier: result.rantId,
+          col: 'rant',
+        }),
+      ).catch((ex) => console.error(ex));
+
       this.#rantCountVoteDelete(result);
+
       return res.status(201).json({ status: 201, message: result });
     } catch (ex) {
       return next(ex);
@@ -144,7 +159,9 @@ export default class PostRant {
         when,
         diff,
       });
+
       this.#rantCountVoteDelete(result);
+
       return res.status(200).json({ status: 200, message: result });
     } catch (ex) {
       return next(ex);

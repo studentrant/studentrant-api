@@ -15,6 +15,7 @@ describe('RantValidators [Unit]', () => {
   afterEach(() => {
     nextSpy.calls.reset();
     req.body = {};
+    req.query = {};
   });
 
   describe('::VerifyRant', () => {

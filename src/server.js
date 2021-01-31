@@ -35,7 +35,8 @@ mountRoutes(
     routes.RegisterRoute,
     routes.LoginRoute,
     routes.RantRoute,
-    routes.Ranter,
+    routes.RanterRoute,
+    routes.TrendRoute,
   ],
 );
 
