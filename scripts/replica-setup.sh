@@ -33,10 +33,10 @@ if ( rs.status().codeName == 'NotYetInitialized' ) {
 
     rs.initiate();
 
-    sleep(10);
-
     rs.add('${HOST2}');
     rs.add('${HOST3}');
+
+    sleep(10);
 
     admin.createUser( {
         user: 'studentrantUserAdmin',
@@ -55,6 +55,8 @@ if ( rs.status().codeName == 'NotYetInitialized' ) {
         pwd: 'studentrant',
         roles: [ 'readWrite' ]
     });
+
+   print(tojson(rs.conf()))
 }
 print('Done....')
 "

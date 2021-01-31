@@ -73,4 +73,3 @@ export default class RantValidators {
     return next();
   }
 }
-
