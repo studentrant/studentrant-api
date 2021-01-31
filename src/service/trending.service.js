@@ -43,7 +43,7 @@ export default class Trending extends PostRantService {
       else rantCommentsTrend.push('rantcomment');
     }
 
-    if (rantsTrend.length && rantCommentsTrend.length) return null;
+    if (!rantsTrend.length && !rantCommentsTrend.length) return null;
 
     trendResult.rantsTrend = rantsTrend.length === 0
       ? null
