@@ -148,4 +148,53 @@ export default class RantDbUtils {
       },
     );
   }
+
+  async referenceNoParentComment({ match, update }) {
+    return this.RantsCollection.updateOne(
+      { rantId: match.rantId },
+      {
+        $push:
+        {
+          rantComments: {
+            rantCommentId: update.rantCommentId,
+            parentCommentId: null,
+          },
+        },
+      },
+    );
+  }
+
+  async referenceParentComment({ match, update }) {
+    const isParentExists = await this.RantsCollection.findOne(
+      {
+        rantId: match.rantId,
+        'rantComments.parentCommentId': match.parentCommentId,
+      },
+    );
+
+    if (!isParentExists) {
+      return this.RantsCollection.updateOne(
+        { rantId: match.rantId },
+        {
+          $push: {
+            'rantComments.0.childrenCommentId': update.childCommentId,
+          },
+          $set: { 'rantComments.0.parentCommentId': match.parentCommentId },
+        },
+      );
+    }
+
+    return this.RantsCollection.updateOne(
+
+      {
+        rantId: match.rantId,
+        'rantComments.parentCommentId': match.parentCommentId,
+      },
+      {
+        $push: {
+          'rantComments.$.childrenCommentId': update.childCommentId,
+        },
+      },
+    );
+  }
 }

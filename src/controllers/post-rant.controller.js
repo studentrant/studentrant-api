@@ -33,7 +33,7 @@ export default class PostRant {
    * if someone tries to find a way to delete a rant
    * not created by them
    * */
-  async #validateRantForModification (rantId) {
+  async validateRantForModification(rantId) {
     const validateAndGetRant = await this.postRantService.validateRantExistence(rantId);
 
     if (!validateAndGetRant) {
@@ -50,7 +50,7 @@ export default class PostRant {
   }
 
   async #validateRantCreator (username, rantId) {
-    await this.#validateRantForModification(rantId);
+    await this.validateRantForModification(rantId);
 
     if (!(await this.postRantService.validateRantCreator(username, rantId))) {
       throw UnAuthorizedAccessException(
@@ -82,7 +82,7 @@ export default class PostRant {
   }
 
   /* eslint-disable no-param-reassign */
-  #rantCountVoteDelete (result) {
+  rantCountVoteDelete(result) {
     result.rantDownvoteCount = result.rantDownvote?.length;
     result.rantUpvoteCount = result.rantUpvote?.length;
     delete result.rantUpvote;
@@ -113,7 +113,7 @@ export default class PostRant {
         }),
       ).catch((ex) => console.error(ex));
 
-      this.#rantCountVoteDelete(result);
+      this.rantCountVoteDelete(result);
 
       return res.status(201).json({ status: 201, message: result });
     } catch (ex) {
@@ -160,7 +160,7 @@ export default class PostRant {
         diff,
       });
 
-      this.#rantCountVoteDelete(result);
+      this.rantCountVoteDelete(result);
 
       return res.status(200).json({ status: 200, message: result });
     } catch (ex) {
@@ -172,13 +172,13 @@ export default class PostRant {
     const { rantId } = req.params;
 
     try {
-      await this.#validateRantForModification(rantId);
+      await this.validateRantForModification(rantId);
 
       const username = this.Utils.ExtractSessionObjectData(req, 'username');
       const rantUpvoterUserId = await this.#validateRantUpvoter(username);
       const result = await this.postRantService.upvote(rantId, rantUpvoterUserId);
 
-      this.#rantCountVoteDelete(result);
+      this.rantCountVoteDelete(result);
 
       return res.status(200).json({ status: 200, message: result });
     } catch (ex) {
@@ -190,13 +190,13 @@ export default class PostRant {
     const { rantId } = req.params;
 
     try {
-      await this.#validateRantForModification(rantId);
+      await this.validateRantForModification(rantId);
 
       const username = this.Utils.ExtractSessionObjectData(req, 'username');
       const rantDownvoterUserId = await this.#validateRantUpvoter(username);
       const result = await this.postRantService.downvote(rantId, rantDownvoterUserId);
 
-      this.#rantCountVoteDelete(result);
+      this.rantCountVoteDelete(result);
 
       return res.status(200).json({ status: 200, message: result });
     } catch (ex) {
@@ -208,10 +208,10 @@ export default class PostRant {
     const { rantId } = req.params;
 
     try {
-      await this.#validateRantForModification(rantId);
+      await this.validateRantForModification(rantId);
       const result = await this.postRantService.getRant(rantId);
 
-      this.#rantCountVoteDelete(result);
+      this.rantCountVoteDelete(result);
 
       return res.status(200).json({ status: 200, message: result });
     } catch (ex) {

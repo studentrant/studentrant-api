@@ -18,8 +18,14 @@ const RantSchema = new mongoose.Schema({
   rant: {
     type: String,
   },
+  /**
+   * parentCommentId, if the current rant has a parent
+   *
+   *
+   *
+   *
+   * */
   rantComments: [{
-    rantcommentId: String,
     parentCommentId: String,
     childrenCommentId: [{ type: String }],
   }],

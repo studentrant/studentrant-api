@@ -72,5 +72,20 @@ export default class RantValidators {
     }
     return next();
   }
-}
 
+  static VerifyReplyRant(req, res, next) {
+    if (!req.body.replyRant) {
+      throw BadValueException(
+        rantConstants.REPLY_RANT_UNDEFINED,
+      );
+    }
+
+    if (req.body.replyRant.trim().length <= 20) {
+      throw BadValueException(
+        rantConstants.REPLY_RANT_NOT_MORE_THAN_TWENTY,
+      );
+    }
+
+    return next();
+  }
+}
