@@ -42,135 +42,235 @@ describe('ReplyRant [Integration]', () => {
       })
     });
 
-    it('should not allow comment creation of replyRant is undefined' , done => {
-      agent
-        .post(`/rant/reply/${rantId}`)
-        .set("cookie", cookie)
-        .send({})
-        .expect(412).end((err,res) => {
-          expect(err).toBeNull();
-          expect(res.body.status).toEqual(412);
-          expect(res.body.message).toEqual(
-            rantConstants.REPLY_RANT_UNDEFINED
-          );
-          done();
-        });
+    describe("Create Comments", () => {
+      let deletedRantId;
+      beforeAll(done => {
+        testUtils.createRant(
+          agent,
+          {
+            rant: 'this is a rant to edit for the edit rant test test',
+            cookie
+          },
+          nRid => {
+            testUtils.deleteRant(
+              agent,
+              { cookie, rantId: nRid },
+              deleted => {
+                deletedRantId = deleted;
+                done();
+              }
+            );
+          }
+        );
+      });
+      
+      it('should not allow comment creation of replyRant is undefined' , done => {
+        agent
+          .post(`/rant/reply/${rantId}`)
+          .set("cookie", cookie)
+          .send({})
+          .expect(412).end((err,res) => {
+            expect(err).toBeNull();
+            expect(res.body.status).toEqual(412);
+            expect(res.body.message).toEqual(
+              rantConstants.REPLY_RANT_UNDEFINED
+            );
+            done();
+          });
+      });
+
+
+      it('should not allow comment creation of replyRant is less than 20' , done => {
+        agent
+          .post(`/rant/reply/${rantId}`)
+          .set("cookie", cookie)
+          .send({ replyRant: "hellow" })
+          .expect(412).end((err,res) => {
+            expect(err).toBeNull();
+            expect(res.body.status).toEqual(412);
+            expect(res.body.message).toEqual(
+              rantConstants.REPLY_RANT_NOT_MORE_THAN_TWENTY,
+            );
+            done();
+          });
+      });
+
+      it('should not allow comment creation if when is undefined', done => {
+        agent
+          .post(`/rant/reply/${rantId}`)
+          .set("cookie", cookie)
+          .send({ replyRant: "hellow".repeat(20) })
+          .expect(412).end((err,res) => {
+            expect(err).toBeNull();
+            expect(res.body.status).toEqual(412);
+            expect(res.body.message).toEqual(
+              rantConstants.RANT_WHEN_NO_EXISTS
+            );
+            done();
+          });
+      });
+
+      it('should not allow comment creation if when is not a number', done => {
+        agent
+          .post(`/rant/reply/${rantId}`)
+          .set("cookie", cookie)
+          .send({ replyRant: "hellow".repeat(20) , when: "2021, Augst 8" })
+          .expect(412).end((err,res) => {
+            expect(err).toBeNull();
+            expect(res.body.status).toEqual(412);
+            expect(res.body.message).toEqual(
+              rantConstants.RANT_NOT_NUMBER
+            );
+            done();
+          });
+      });
+
+
+      it('should not allow comment creation if when is an invalid timestamp', done => {
+        agent
+          .post(`/rant/reply/${rantId}`)
+          .set("cookie", cookie)
+          .send({ replyRant: "hellow".repeat(20) , when: 22222222222222222222222222222222 })
+          .expect(412).end((err,res) => {
+            expect(err).toBeNull();
+            expect(res.body.status).toEqual(412);
+            expect(res.body.message).toEqual(
+              rantConstants.RANT_NOT_VALID_TIMESTAMP,
+            );
+            done();
+          });
+      });
+
+      it('should not allow comment creation if rantId does not exists in database', done => {
+        agent
+          .post(`/rant/reply/not_exists`)
+          .set("cookie", cookie)
+          .send({ replyRant: "hellow".repeat(20) , when: Date.now() })
+          .expect(404).end((err,res) => {
+            expect(err).toBeNull();
+            expect(res.body.status).toEqual(404);
+            expect(res.body.message).toEqual(
+              rantConstants.RANT_DOES_NOT_EXISTS
+            );
+            done();
+          });
+      });
+
+      it('should not allow comment creation for deleted rant', done => {
+        agent
+          .post(`/rant/reply/${deletedRantId}`)
+          .set("cookie", cookie)
+          .send({ replyRant: "hellow".repeat(20) , when: Date.now() })
+          .expect(410).end((err,res) => {
+            expect(err).toBeNull();
+            expect(res.body.status).toEqual(410);
+            expect(res.body.message).toEqual(
+              rantConstants.RANT_HAS_ALREADY_BEEN_DELETED
+            );
+            done();
+          });
+      });
+
+      it('should create comment if parentCommentId is undefined', done => {
+        const when = Date.now();
+        agent
+          .post(`/rant/reply/${rantId}`)
+          .set("cookie", cookie)
+          .send({ replyRant: "hellow".repeat(20) , when })
+          .expect(200).end((err,res) => {
+            expect(err).toBeNull();
+            expect(res.body.status).toEqual(200);
+            expect(res.body.message.when).toEqual(when);
+            expect(res.body.message.rantId).toEqual(rantId)
+            expect(res.body.message.rantComment).toEqual("hellow".repeat(20));
+            expect(res.body.message.rantCommenter).toEqual('testaccount');
+            rantCommentId = res.body.message.rantCommentId
+            done();
+          });
+      });
+
+      // login with another user and create the reply
+
+      it('should create comment as a child of parentCommentId', done => {
+        const when = Date.now();
+        agent
+          .post(`/rant/reply/${rantId}`)
+          .set("cookie", cookie)
+          .send({ replyRant: "This is a reply".repeat(20) , when , parentCommentId: rantCommentId })
+          .expect(200).end((err,res) => {
+            expect(err).toBeNull();
+            expect(res.body.status).toEqual(200);
+            expect(res.body.message.when).toEqual(when);
+            expect(res.body.message.rantId).toEqual(rantId)
+            expect(res.body.message.rantComment).toEqual("This is a reply".repeat(20));
+            done();
+          });
+      });
+
+      it('should create more comment as a child comment of parrentCommentId' , done => {
+        const when = Date.now();
+        agent
+          .post(`/rant/reply/${rantId}`)
+          .set("cookie", cookie)
+          .send({ replyRant: "This is a nested reply".repeat(20) , when , parentCommentId: rantCommentId })
+          .expect(200).end((err,res) => {
+            expect(err).toBeNull();
+            expect(res.body.status).toEqual(200);
+            expect(res.body.message.when).toEqual(when);
+            expect(res.body.message.rantId).toEqual(rantId)
+            expect(res.body.message.rantComment).toEqual("This is a nested reply".repeat(20));
+            rantCommentId = res.body.message.rantCommentId
+            done();
+          });
+      });
+
+      it('should create more deeply nested child comment', done => {
+        const when = Date.now();
+        agent
+          .post(`/rant/reply/${rantId}`)
+          .set("cookie", cookie)
+          .send({ replyRant: "This is a nested reply".repeat(20) , when , parentCommentId: rantCommentId })
+          .expect(200).end((err,res) => {
+            expect(err).toBeNull();
+            expect(res.body.status).toEqual(200);
+            expect(res.body.message.when).toEqual(when);
+            expect(res.body.message.rantId).toEqual(rantId)
+            expect(res.body.message.rantComment).toEqual("This is a nested reply".repeat(20));
+            done();
+          });
+      });
+
+      it('should create another top level comment without a parentCommentId', done => {
+        const when = Date.now();
+        agent
+          .post(`/rant/reply/${rantId}`)
+          .set("cookie", cookie)
+          .send({ replyRant: "hellow heyxxxx".repeat(20) , when })
+          .expect(200).end((err,res) => {
+            expect(err).toBeNull();
+            expect(res.body.status).toEqual(200);
+            expect(res.body.message.when).toEqual(when);
+            expect(res.body.message.rantId).toEqual(rantId)
+            expect(res.body.message.rantComment).toEqual("hellow heyxxxx".repeat(20));
+            expect(res.body.message.rantCommenter).toEqual('testaccount');
+            done();
+          });
+      });
     });
 
+    describe('Read Comments', () => {
+      it('should test', done => {
+        agent
+          .get(`/rant/reply/${rantId}?numRequest=0`)
+          .set("cookie", cookie)
+          .expect(200).end((err,res) => {
+            expect(err).toBeNull();
+            console.log(res.body);
+            done();
+          });
+      });
 
-    it('should not allow comment creation of replyRant is less than 20' , done => {
-      agent
-        .post(`/rant/reply/${rantId}`)
-        .set("cookie", cookie)
-        .send({ replyRant: "hellow" })
-        .expect(412).end((err,res) => {
-          expect(err).toBeNull();
-          expect(res.body.status).toEqual(412);
-          expect(res.body.message).toEqual(
-            rantConstants.REPLY_RANT_NOT_MORE_THAN_TWENTY,
-          );
-          done();
-        });
     });
-
-    it('should not allow comment creation if when is undefined', done => {
-      agent
-        .post(`/rant/reply/${rantId}`)
-        .set("cookie", cookie)
-        .send({ replyRant: "hellow".repeat(20) })
-        .expect(412).end((err,res) => {
-          expect(err).toBeNull();
-          expect(res.body.status).toEqual(412);
-          expect(res.body.message).toEqual(
-            rantConstants.RANT_WHEN_NO_EXISTS
-          );
-          done();
-        });
-    });
-
-    it('should not allow comment creation if when is not a number', done => {
-      agent
-        .post(`/rant/reply/${rantId}`)
-        .set("cookie", cookie)
-        .send({ replyRant: "hellow".repeat(20) , when: "2021, Augst 8" })
-        .expect(412).end((err,res) => {
-          expect(err).toBeNull();
-          expect(res.body.status).toEqual(412);
-          expect(res.body.message).toEqual(
-            rantConstants.RANT_NOT_NUMBER
-          );
-          done();
-        });
-    });
-
-
-    it('should not allow comment creation if when is an invalid timestamp', done => {
-      agent
-        .post(`/rant/reply/${rantId}`)
-        .set("cookie", cookie)
-        .send({ replyRant: "hellow".repeat(20) , when: 22222222222222222222222222222222 })
-        .expect(412).end((err,res) => {
-          expect(err).toBeNull();
-          expect(res.body.status).toEqual(412);
-          expect(res.body.message).toEqual(
-            rantConstants.RANT_NOT_VALID_TIMESTAMP,
-          );
-          done();
-        });
-    });
-
-    it('should create comment if parentCommentId is undefined', done => {
-      const when = Date.now();
-      agent
-        .post(`/rant/reply/${rantId}`)
-        .set("cookie", cookie)
-        .send({ replyRant: "hellow".repeat(20) , when })
-        .expect(200).end((err,res) => {
-          expect(err).toBeNull();
-          expect(res.body.status).toEqual(200);
-          expect(res.body.message.when).toEqual(when);
-          expect(res.body.message.rantId).toEqual(rantId)
-          expect(res.body.message.rantComment).toEqual("hellow".repeat(20));
-          expect(res.body.message.rantCommenter).toEqual('testaccount');
-          rantCommentId = res.body.message.rantCommentId
-          done();
-        });
-    });
-
-    // login with another user and create the reply
-
-    it('should create comment as a child of parentCommentId', done => {
-      const when = Date.now();
-      agent
-        .post(`/rant/reply/${rantId}`)
-        .set("cookie", cookie)
-        .send({ replyRant: "This is a reply".repeat(20) , when , parentCommentId: rantCommentId })
-        .expect(200).end((err,res) => {
-          expect(err).toBeNull();
-          expect(res.body.status).toEqual(200);
-          expect(res.body.message.when).toEqual(when);
-          expect(res.body.message.rantId).toEqual(rantId)
-          expect(res.body.message.rantComment).toEqual("This is a reply".repeat(20));
-          done();
-        });      
-    });
-
-    it('should create more comment as a child comment of parrentCommentId' , done => {
-      const when = Date.now();
-      agent
-        .post(`/rant/reply/${rantId}`)
-        .set("cookie", cookie)
-        .send({ replyRant: "This is a nested reply".repeat(20) , when , parentCommentId: rantCommentId })
-        .expect(200).end((err,res) => {
-          expect(err).toBeNull();
-          expect(res.body.status).toEqual(200);
-          expect(res.body.message.when).toEqual(when);
-          expect(res.body.message.rantId).toEqual(rantId)
-          expect(res.body.message.rantComment).toEqual("This is a nested reply".repeat(20));
-          done();
-        });      
-    });
-
   });
 
 });

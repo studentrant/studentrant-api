@@ -133,7 +133,7 @@ export default class RantDbUtils {
         pipeline.skipAlreadyViewed,
         pipeline.limitToDefinedEnum,
       ],
-    );
+    ).allowDiskUse(true);
   }
 
   async getTotalRants(query) {
@@ -177,9 +177,16 @@ export default class RantDbUtils {
         { rantId: match.rantId },
         {
           $push: {
-            'rantComments.0.childrenCommentId': update.childCommentId,
+            rantComments: {
+              $each: [
+                {
+                  childrenCommentId: [update.childCommentId],
+                  parentCommentId: match.parentCommentId,
+                },
+              ],
+              $position: -1,
+            },
           },
-          $set: { 'rantComments.0.parentCommentId': match.parentCommentId },
         },
       );
     }
@@ -194,7 +201,36 @@ export default class RantDbUtils {
         $push: {
           'rantComments.$.childrenCommentId': update.childCommentId,
         },
+        $set: {
+          'rantComments.$.rantCommentId': update.rantCommentId,
+        },
       },
     );
+  }
+
+  async getRepliesAggregator(pipeline) {
+    console.log(
+      [
+        pipeline.matchQuery,
+        pipeline.unwindCommentsArray,
+        pipeline.removeNonNullValues,
+        pipeline.skipAlreadyRead,
+        pipeline.limit,
+        pipeline.lookupIdsInComments,
+        pipeline.projectValues,
+      ],
+    );
+    return this.RantsCollection.aggregate([
+      pipeline.matchQuery,
+      pipeline.showRantCommentsOnly,
+      pipeline.unwindCommentsArray,
+      pipeline.removeNonNullValues,
+      pipeline.skipAlreadyRead,
+      pipeline.limit,
+      pipeline.lookupIdsInComments,
+      pipeline.removeRantCommentsField,
+      pipeline.unwindRantCommentsCollection,
+      // pipeline.projectValues
+    ]).allowDiskUse(true);
   }
 }

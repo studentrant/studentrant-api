@@ -26,6 +26,8 @@ const RantSchema = new mongoose.Schema({
    *
    * */
   rantComments: [{
+    // rantCommentId is the current comment/reply that might have a parent and/or children
+    rantCommentId: String,
     parentCommentId: String,
     childrenCommentId: [{ type: String }],
   }],

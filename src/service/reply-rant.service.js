@@ -43,7 +43,7 @@ export default class ReplyRantService {
     await this.rantDbUtils.referenceParentComment(
       {
         match: { rantId, parentCommentId },
-        update: { childCommentId: rantCommentId },
+        update: { childCommentId: rantCommentId, rantCommentId },
       },
     );
 
@@ -51,19 +51,23 @@ export default class ReplyRantService {
   }
 
   async getReplies({ numRequest, parentCommentId, rantId }) {
+    let result;
     if (!parentCommentId) {
-      return this.rantDbUtils.getRepliesAggregator({
+      result = this.rantDbUtils.getRepliesAggregator({
 
         matchQuery: { $match: { rantId } },
+        showRantCommentsOnly: { $project: { rantComments: true } },
 
+        // this will return an empty array
+        // if rantComments is an empty array
         unwindCommentsArray: { $unwind: '$rantComments' },
 
         removeNonNullValues: {
           $redact: {
             $cond: {
-              if: { $eq: ['$parentCommentId', null] },
-              then: '$$PRUNE',
-              else: '$$DESCEND',
+              if: { $eq: ['$rantComments.parentCommentId', null] },
+              then: '$$KEEP',
+              else: '$$PRUNE',
             },
           },
         },
@@ -72,17 +76,23 @@ export default class ReplyRantService {
         limit: { $limit: 20 },
 
         lookupIdsInComments: {
-          from: 'rantcomments',
-          localField: 'rantComments.rantCommentId',
-          foriegnField: 'rantCommentId',
-          as: 'rantcomments',
+          $lookup: {
+            from: 'rantcomments',
+            localField: 'rantComments.rantCommentId',
+            foreignField: 'rantCommentId',
+            as: 'rantReplies',
+          },
         },
+
+        removeRantCommentsField: { $project: { rantComments: false, _id: false } },
+        unwindRantCommentsCollection: { $unwind: '$rantReplies' },
 
         projectValues: {
-          $project: { _id: false },
+          $project: { rantReplies: true },
         },
-
       });
+      return result;
+      // result = result.flatMap();
     }
     return false;
   }

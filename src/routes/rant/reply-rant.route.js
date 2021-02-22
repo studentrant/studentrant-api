@@ -25,12 +25,21 @@ export default class ReplyRantRoute {
     });
 
     routeHandler.post('/:rantId', this.replyReply());
+    routeHandler.get('/:rantId', this.showReply());
     // routeHandler.delete('/delete/:reply-rant-id', this.deleteReply());
     // routeHandler.patch('/edit/:reply-rant-id', this.editReply());
     return routeHandler;
   }
 
   static API_PATH = '/reply'
+
+  showReply() {
+    return [
+      RantValidators.VerifyReplyRantParams,
+      RantValidators.VerifyNumRequest,
+      this.controller.showReply.bind(this.controller),
+    ];
+  }
 
   deleteReply() {
     return [

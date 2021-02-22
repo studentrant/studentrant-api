@@ -88,4 +88,28 @@ export default class RantValidators {
 
     return next();
   }
+
+  static VerifyReplyRantParams(req, res, next) {
+    if (
+      !req.params.rantId
+        && !req.query.parentCommentId
+    ) {
+      throw BadValueException(
+        rantConstants.REPLY_RANT_NO_PARAMS,
+      );
+    }
+
+    if (
+      req.query.parentCommentId
+        && !req.params.rantId
+    ) {
+      throw BadValueException(
+        rantConstants.REPLY_RANT_NO_RANT_ID,
+      );
+    }
+
+    if (!req.params.rantId) throw BadValueException(rantConstants.RANT_ID_IS_UNDEFINED);
+
+    return next();
+  }
 }

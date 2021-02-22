@@ -2,7 +2,7 @@ import { v4 as uuid } from 'uuid';
 
 import * as constants from '../constants/index.constant.js';
 
-import { NotFoundException } from '../core/exceptions.service.js';
+import { GoneException, NotFoundException } from '../core/exceptions.service.js';
 import ReplyRantService from '../service/reply-rant.service.js';
 
 import PostRant from './post-rant.controller.js';
@@ -24,6 +24,27 @@ export default class ReplyRant extends PostRant {
       ),
       new DBUtils.RantReplyDbUtils(Collections.RantReplyCollection),
     );
+  }
+
+  // parentCommentId is always a rantCommentId
+  async validateParentCommentId(parentCommentId) {
+    if (!parentCommentId) return;
+
+    const validatedParentCommentId = await this.replyService.validateParentCommentId(
+      parentCommentId,
+    );
+
+    if (!validatedParentCommentId) {
+      throw NotFoundException(
+        constants.rantConstants.RANT_REPLY_PARENT_COMMENT_ID_INVALID,
+      );
+    }
+
+    if (validatedParentCommentId.deleted) {
+      throw GoneException(
+        constants.rantConstants.RANT_REPLY_PARENT_COMMENT_ID_DELETED,
+      );
+    }
   }
 
   async replyRant(req, res, next) {
@@ -66,12 +87,13 @@ export default class ReplyRant extends PostRant {
     }
   }
 
-  async getReply(req, res, next) {
+  async showReply(req, res, next) {
     const { numRequest, parentCommentId } = req.query;
     const { rantId } = req.params;
 
     try {
       await this.validateRantForModification(rantId);
+      await this.validateParentCommentId(parentCommentId);
 
       const result = await this.replyRantService.getReplies(
         {
@@ -86,6 +108,7 @@ export default class ReplyRant extends PostRant {
           constants.rantConstants.RANT_READ_EXHAUSTED,
         );
       }
+      console.dir(result, { depth: null });
       return res.status(200).json({ status: 200 });
     } catch (ex) {
       return next(ex);
