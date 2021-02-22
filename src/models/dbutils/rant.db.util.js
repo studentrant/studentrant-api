@@ -133,7 +133,7 @@ export default class RantDbUtils {
         pipeline.skipAlreadyViewed,
         pipeline.limitToDefinedEnum,
       ],
-    ).allowDiskUse(true);
+    );
   }
 
   async getTotalRants(query) {
