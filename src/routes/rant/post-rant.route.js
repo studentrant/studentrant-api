@@ -26,7 +26,6 @@ export default class PostRantRoute {
     routeHandler.patch('/edit/:rantId', this.editRant());
     routeHandler.patch('/vote/upvote/:rantId', this.upvoteRant());
     routeHandler.patch('/vote/downvote/:rantId', this.downvoteRant());
-    // routeHandler.post("/reply/:rant-id", this.replyRant());
     return routeHandler;
   }
 
@@ -83,12 +82,6 @@ export default class PostRantRoute {
     return [
       RantValidators.VerifyRantId,
       this.controller.downvoteRant.bind(this.controller),
-    ];
-  }
-
-  replyRant() {
-    return [
-
     ];
   }
 
