@@ -186,7 +186,6 @@ describe('CreateRant [Integration]', () => {
           expect(err).toBeNull();
           expect(res.body.status).toEqual(201);
           expect(res.body.message.tags).toEqual(['abuse', 'student', 'auchipoly']);
-          expect(res.body.message.rantComments).toEqual([]);
           expect(res.body.message.rantId).toBeDefined();
           expect(res.body.message.rantPoster).toEqual('testaccount');
           expect(res.body.message.rant).toEqual('This is a rant about abuse in a school and how it has affected students');
@@ -208,7 +207,6 @@ describe('CreateRant [Integration]', () => {
           expect(err).toBeNull();
           expect(res.body.status).toEqual(201);
           expect(res.body.message.tags).toEqual(['general']);
-          expect(res.body.message.rantComments).toEqual([]);
           expect(res.body.message.rantId).toBeDefined();
           expect(res.body.message.rantPoster).toEqual('testaccount');
           expect(res.body.message.rant).toEqual('This is a rant about abuse in a school and how it has affected students');

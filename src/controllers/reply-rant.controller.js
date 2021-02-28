@@ -30,7 +30,7 @@ export default class ReplyRant extends PostRant {
   async validateParentCommentId(parentCommentId) {
     if (!parentCommentId) return;
 
-    const validatedParentCommentId = await this.replyService.validateParentCommentId(
+    const validatedParentCommentId = await this.replyRantService.validateParentCommentId(
       parentCommentId,
     );
 
@@ -103,13 +103,20 @@ export default class ReplyRant extends PostRant {
         },
       );
 
-      if (!result) {
+      if (!result || result.replies.length === 0) {
         throw NotFoundException(
           constants.rantConstants.RANT_READ_EXHAUSTED,
         );
       }
-      console.dir(result, { depth: null });
-      return res.status(200).json({ status: 200 });
+
+      result.replies.forEach(this.rantCountVoteDelete);
+
+      return res.status(200).json(
+        {
+          status: 200,
+          message: result,
+        },
+      );
     } catch (ex) {
       return next(ex);
     }

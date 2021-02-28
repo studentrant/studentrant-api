@@ -154,11 +154,20 @@ export default class PostRantService {
         },
       },
 
+      lookUpRantCommentsSize: {
+        $lookup: {
+          from: 'rantcomments',
+          localField: 'rantId',
+          foreignField: 'rantId',
+          as: 'rantCommentSize',
+        },
+      },
+
       filterOutUnwanted: {
         $project: {
           rantUpvote: { $size: '$rantUpvote' },
           rantDownvote: { $size: '$rantDownvote' },
-          rantComments: { $size: '$rantComments' },
+          rantComments: { $size: '$rantCommentSize' },
           edit: true,
           deleted: true,
           rant: true,

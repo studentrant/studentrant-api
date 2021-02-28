@@ -83,10 +83,12 @@ export default class PostRant {
 
   /* eslint-disable no-param-reassign */
   rantCountVoteDelete(result) {
-    result.rantDownvoteCount = result.rantDownvote?.length;
-    result.rantUpvoteCount = result.rantUpvote?.length;
-    delete result.rantUpvote;
-    delete result.rantDownvote;
+    const downvote = result.rantDownvote ? 'rantDownvote' : 'rantCommentDownvote';
+    const upvote = result.rantUpvote ? 'rantUpvote' : 'rantCommentUpvote';
+    result[`${downvote}Count`] = result[downvote]?.length;
+    result[`${upvote}Count`] = result[upvote]?.length;
+    delete result[downvote];
+    delete result[upvote];
   }
   /* eslint-enable no-param-reassign */
 

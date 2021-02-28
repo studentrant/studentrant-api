@@ -1,3 +1,5 @@
+import { rantEnums } from '../enums/rants.enums.js';
+
 export default class ReplyRantService {
   constructor(rantDbUtils, replyRantDbUtils) {
     this.rantDbUtils = rantDbUtils;
@@ -12,7 +14,7 @@ export default class ReplyRantService {
       rantPoster,
       rantComment,
       rantCommentId,
-      parentCommentId,
+      parentCommentId = null,
     },
   ) {
     const result = await this.replyRantDbUtils.saveReply(
@@ -21,79 +23,45 @@ export default class ReplyRantService {
         rantId,
         rantComment,
         rantCommentId,
+        parentCommentId,
         rantCommenter: username,
         rantOriginalPoster: username === rantPoster,
       },
     );
-
-    /**
-     * no parent comment id simply means
-     * the comment is a root comment
-     * */
-    if (!parentCommentId) {
-      await this.rantDbUtils.referenceNoParentComment(
-        {
-          match: { rantId },
-          update: { rantCommentId },
-        },
-      );
-      return result;
-    }
-
-    await this.rantDbUtils.referenceParentComment(
-      {
-        match: { rantId, parentCommentId },
-        update: { childCommentId: rantCommentId, rantCommentId },
-      },
-    );
-
     return { ...result, parentCommentId };
   }
 
-  async getReplies({ numRequest, parentCommentId, rantId }) {
-    let result;
-    if (!parentCommentId) {
-      result = this.rantDbUtils.getRepliesAggregator({
+  async validateParentCommentId(parentCommentId) {
+    return this.replyRantDbUtils.findOneReply({ key: 'parentCommentId', value: parentCommentId });
+  }
 
-        matchQuery: { $match: { rantId } },
-        showRantCommentsOnly: { $project: { rantComments: true } },
+  async getReplies({ numRequest, parentCommentId = null, rantId }) {
+    const replyRantCount = await this.replyRantDbUtils.getRepliesCount({ rantId, parentCommentId });
+    const calculateNext = rantEnums.RANTS_LOAD_LIMIT * (numRequest + 1);
+    const hasMore = calculateNext < replyRantCount;
 
-        // this will return an empty array
-        // if rantComments is an empty array
-        unwindCommentsArray: { $unwind: '$rantComments' },
+    const result = await this.replyRantDbUtils.getReplies(
+      {
+        rantId,
+        parentCommentId,
+      },
+      {
+        skip: rantEnums.RANTS_LOAD_LIMIT * numRequest,
+        limit: rantEnums.RANTS_LOAD_LIMIT,
+      },
+    );
 
-        removeNonNullValues: {
-          $redact: {
-            $cond: {
-              if: { $eq: ['$rantComments.parentCommentId', null] },
-              then: '$$KEEP',
-              else: '$$PRUNE',
-            },
-          },
-        },
-
-        skipAlreadyRead: { $skip: numRequest * 20 },
-        limit: { $limit: 20 },
-
-        lookupIdsInComments: {
-          $lookup: {
-            from: 'rantcomments',
-            localField: 'rantComments.rantCommentId',
-            foreignField: 'rantCommentId',
-            as: 'rantReplies',
-          },
-        },
-
-        removeRantCommentsField: { $project: { rantComments: false, _id: false } },
-        unwindRantCommentsCollection: { $unwind: '$rantReplies' },
-
-        projectValues: {
-          $project: { rantReplies: true },
-        },
-      });
-      return result;
-      // result = result.flatMap();
-    }
-    return false;
+    return {
+      replies: result,
+      hasMore,
+      page: {
+        totalRant: replyRantCount,
+        remainingRant: Math.abs(replyRantCount - (
+          result.length < rantEnums.RANTS_LOAD_LIMIT
+            ? replyRantCount
+            : calculateNext
+        )),
+      },
+    };
   }
 }

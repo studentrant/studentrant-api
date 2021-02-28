@@ -11,4 +11,19 @@ export default class RantRepliesDbUtils {
       __v: false,
     }).lean();
   }
+
+  async getReplies(query, options) {
+    return this.RantCommentCollection.find(
+      query,
+      { _id: false, __v: 0 },
+    ).skip(options.skip).limit(options.limit).lean();
+  }
+
+  async getRepliesCount(query) {
+    return this.RantCommentCollection.countDocuments(query);
+  }
+
+  async findOneReply(key, value) {
+    return this.RantsCommentCollection.findOne({ [key]: value });
+  }
 }

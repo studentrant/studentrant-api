@@ -259,13 +259,30 @@ describe('ReplyRant [Integration]', () => {
     });
 
     describe('Read Comments', () => {
-      it('should test', done => {
+      it('should read rant comment where parentCommentId is not define', done => {
         agent
           .get(`/rant/reply/${rantId}?numRequest=0`)
           .set("cookie", cookie)
           .expect(200).end((err,res) => {
             expect(err).toBeNull();
+            expect(res.body.status).toEqual(200);
+            expect(res.body.message.replies.length).toBeGreaterThan(0);
+            expect(res.body.message.hasMore).toEqual(false);
+            expect(res.body.message.page.totalRant).toEqual(2);
+            expect(res.body.message.page.remainingRant).toEqual(0);
             console.log(res.body);
+            done();
+          });
+      });
+
+      it('should read rant comment where parentCommentId is not define but should return 404 (rant comments as been exhausts)', done => {
+        agent
+          .get(`/rant/reply/${rantId}?numRequest=1`)
+          .set("cookie", cookie)
+          .expect(404).end((err,res) => {
+            expect(err).toBeNull();
+            expect(res.body.status).toEqual(404);
+            expect(res.body.message).toEqual(rantConstants.RANT_READ_EXHAUSTED);
             done();
           });
       });

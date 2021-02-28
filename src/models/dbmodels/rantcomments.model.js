@@ -9,6 +9,11 @@ const RantCommentSchema = new mongoose.Schema({
     unique: true,
   },
 
+  parentCommentId: {
+    type: String,
+    index: true,
+  },
+
   rantCommenter: {
     type: String,
     index: true,
@@ -16,11 +21,21 @@ const RantCommentSchema = new mongoose.Schema({
 
   when: Number,
 
-  rantOriginalPosterComment: Boolean,
+  rantOriginalPoster: {
+    type: Boolean,
+    default: false,
+  },
+
   rantComment: String,
 
   rantCommentUpvote: [mongoose.Types.ObjectId],
   rantCommentDownvote: [mongoose.Types.ObjectId],
+
+  deleted: {
+    type: Boolean,
+    default: false,
+    index: true,
+  },
 
 }, { timestamp: true });
 

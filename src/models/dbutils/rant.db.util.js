@@ -128,6 +128,7 @@ export default class RantDbUtils {
         pipeline.filterOutIds,
         pipeline.spreadUsers,
         pipeline.limitSearchByVerifiedUsers,
+        pipeline.lookUpRantCommentsSize,
         pipeline.filterOutUnwanted,
         pipeline.limitByAllowedTags,
         pipeline.skipAlreadyViewed,
@@ -147,90 +148,5 @@ export default class RantDbUtils {
         'settings.notAllowedTags': { $in: Array.isArray(tags) ? tags : [tags] },
       },
     );
-  }
-
-  async referenceNoParentComment({ match, update }) {
-    return this.RantsCollection.updateOne(
-      { rantId: match.rantId },
-      {
-        $push:
-        {
-          rantComments: {
-            rantCommentId: update.rantCommentId,
-            parentCommentId: null,
-          },
-        },
-      },
-    );
-  }
-
-  async referenceParentComment({ match, update }) {
-    const isParentExists = await this.RantsCollection.findOne(
-      {
-        rantId: match.rantId,
-        'rantComments.parentCommentId': match.parentCommentId,
-      },
-    );
-
-    if (!isParentExists) {
-      return this.RantsCollection.updateOne(
-        { rantId: match.rantId },
-        {
-          $push: {
-            rantComments: {
-              $each: [
-                {
-                  childrenCommentId: [update.childCommentId],
-                  parentCommentId: match.parentCommentId,
-                },
-              ],
-              $position: -1,
-            },
-          },
-        },
-      );
-    }
-
-    return this.RantsCollection.updateOne(
-
-      {
-        rantId: match.rantId,
-        'rantComments.parentCommentId': match.parentCommentId,
-      },
-      {
-        $push: {
-          'rantComments.$.childrenCommentId': update.childCommentId,
-        },
-        $set: {
-          'rantComments.$.rantCommentId': update.rantCommentId,
-        },
-      },
-    );
-  }
-
-  async getRepliesAggregator(pipeline) {
-    console.log(
-      [
-        pipeline.matchQuery,
-        pipeline.unwindCommentsArray,
-        pipeline.removeNonNullValues,
-        pipeline.skipAlreadyRead,
-        pipeline.limit,
-        pipeline.lookupIdsInComments,
-        pipeline.projectValues,
-      ],
-    );
-    return this.RantsCollection.aggregate([
-      pipeline.matchQuery,
-      pipeline.showRantCommentsOnly,
-      pipeline.unwindCommentsArray,
-      pipeline.removeNonNullValues,
-      pipeline.skipAlreadyRead,
-      pipeline.limit,
-      pipeline.lookupIdsInComments,
-      pipeline.removeRantCommentsField,
-      pipeline.unwindRantCommentsCollection,
-      // pipeline.projectValues
-    ]).allowDiskUse(true);
   }
 }
