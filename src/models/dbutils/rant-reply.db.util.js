@@ -12,11 +12,17 @@ export default class RantRepliesDbUtils {
     }).lean();
   }
 
-  async getReplies(query, options) {
-    return this.RantCommentCollection.find(
-      query,
-      { _id: false, __v: 0 },
-    ).skip(options.skip).limit(options.limit).lean();
+  async getReplies(pipeline) {
+    return this.RantCommentCollection.aggregate(
+      [
+        pipeline.matchComments,
+        pipeline.skipUnwanted,
+        pipeline.limitComment,
+        pipeline.getNReplyCountAndFirstNReply,
+        pipeline.removeUnwanted,
+        // pipeline.getChildCommentAsObject
+      ],
+    );
   }
 
   async getRepliesCount(query) {

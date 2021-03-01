@@ -42,12 +42,42 @@ export default class ReplyRantService {
 
     const result = await this.replyRantDbUtils.getReplies(
       {
-        rantId,
-        parentCommentId,
-      },
-      {
-        skip: rantEnums.RANTS_LOAD_LIMIT * numRequest,
-        limit: rantEnums.RANTS_LOAD_LIMIT,
+        matchComments: { $match: { rantId, parentCommentId } },
+        skipUnwanted: { $skip: rantEnums.RANTS_LOAD_LIMIT * numRequest },
+        limitComment: { $limit: rantEnums.RANTS_LOAD_LIMIT },
+        getNReplyCountAndFirstNReply: {
+          $lookup: {
+            let: { rant_comment_id: '$rantCommentId' },
+            from: 'rantcomments',
+            pipeline: [
+              {
+                $match: { $expr: { $eq: ['$parentCommentId', '$$rant_comment_id'] } },
+              },
+              {
+                $project: {
+                  fullDocument: '$$CURRENT',
+                  rantCommentUpvoteSize: { $size: '$rantCommentUpvote' },
+                },
+              },
+              {
+                $sort: { rantCommentUpvoteSize: -1 },
+              },
+              {
+                $group: {
+                  _id: '$fullDocument.rantId',
+                  shallowNestedCommentCount: { $sum: 1 },
+                  mostUpvoted: { $first: '$$ROOT' },
+                },
+              },
+              {
+                $project: { collapsedComment: '$mostUpvoted.fullDocument', commentCountRelativeToParentId: '$shallowNestedCommentCount' },
+              },
+            ],
+            as: 'childComments',
+          },
+        },
+        removeUnwanted: { $project: { _id: false, 'childComments._id': false, 'childComments.collapsedComment._id': false } },
+        // getChildCommentAsObject : { $unwind: "$childComments" }
       },
     );
 
