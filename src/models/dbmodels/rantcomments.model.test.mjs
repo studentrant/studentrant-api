@@ -19,11 +19,10 @@ describe("RantComments [Model]", () => {
     expect(rantComments).toBeDefined();
   });
   it('should have all fields', () => {
-    console.log(rantComments);
     expect(rantComments.rantId).toBeDefined();
     expect(rantComments.rantCommentId).toBeDefined();
     expect(rantComments.rantCommenter).toEqual('xxxx');
-    expect(rantComments.rantCommentUpvote).toEqual(1);
-    expect(rantComments.rantCommentDownvote).toEqual(3);
+    expect(rantComments.rantCommentUpvote).toEqual(jasmine.any(Array));
+    expect(rantComments.rantCommentDownvote).toEqual(jasmine.any(Array));
   });
 });

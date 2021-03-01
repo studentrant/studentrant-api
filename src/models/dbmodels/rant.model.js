@@ -18,11 +18,6 @@ const RantSchema = new mongoose.Schema({
   rant: {
     type: String,
   },
-  rantComments: [{
-    rantcommentId: String,
-    parentCommentId: String,
-    childrenCommentId: [{ type: String }],
-  }],
   deleted: {
     type: Boolean,
     default: false,

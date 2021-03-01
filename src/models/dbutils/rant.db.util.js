@@ -128,6 +128,7 @@ export default class RantDbUtils {
         pipeline.filterOutIds,
         pipeline.spreadUsers,
         pipeline.limitSearchByVerifiedUsers,
+        pipeline.lookUpRantCommentsSize,
         pipeline.filterOutUnwanted,
         pipeline.limitByAllowedTags,
         pipeline.skipAlreadyViewed,
