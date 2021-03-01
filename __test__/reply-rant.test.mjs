@@ -300,6 +300,23 @@ describe('ReplyRant [Integration]', () => {
             done();
           });
       });
+      
+      it('should read deeploy nested reply', done => {
+        agent
+          .get(`/rant/reply/${rantId}?numRequest=0&parentCommentId=${deeplyNestedRantCommentId}`)
+          .set("cookie", cookie)
+          .expect(200).end((err,res) => {
+            expect(err).toBeNull();
+            expect(res.body.status).toEqual(200);
+            expect(res.body.message.replies.length).toBeGreaterThan(0);
+            res.body.message.replies.forEach( reply => expect(reply.parentCommentId).not.toBeNull());
+            done();
+          });
+      });
+
+      it('should collapse all sub comment of a comment (not paginated)', done => {
+        done();
+      });
     });
   });
 

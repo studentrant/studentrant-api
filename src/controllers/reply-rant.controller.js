@@ -26,6 +26,21 @@ export default class ReplyRant extends PostRant {
     );
   }
 
+  /* eslint-disable no-param-reassign , prefer-destructuring */
+
+  #replyVoteTransform (value) {
+    value.childComment = value.childComments[0];
+
+    delete value.childComments;
+
+    this.rantCountVoteDelete(value);
+
+    if (value.childComment) this.rantCountVoteDelete(value.childComment.collapsedComment);
+
+    return value;
+  }
+  /* eslint-enable no-param-reassign , prefer-destructuring */
+
   // parentCommentId is always a rantCommentId
   async validateParentCommentId(parentCommentId) {
     if (!parentCommentId) return;
@@ -109,7 +124,7 @@ export default class ReplyRant extends PostRant {
         );
       }
 
-      result.replies.forEach(this.rantCountVoteDelete);
+      result.replies.forEach(this.#replyVoteTransform.bind(this));
 
       return res.status(200).json(
         {
