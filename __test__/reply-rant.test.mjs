@@ -1,3 +1,4 @@
+
 import supertest from 'supertest';
 import app from '../src/server.js';
 import * as testUtils from './util.test.js';
@@ -24,7 +25,7 @@ describe('ReplyRant [Integration]', () => {
 
   describe('Authenticated User', () => {
 
-    let rantId, rantCommentId;
+    let rantId, shallowNestedRantCommentId, deeplyNestedRantCommentId
 
     beforeAll((done) => {
       testUtils.login(agent, (cookieArg) => {
@@ -184,7 +185,7 @@ describe('ReplyRant [Integration]', () => {
             expect(res.body.message.rantId).toEqual(rantId)
             expect(res.body.message.rantComment).toEqual("hellow".repeat(20));
             expect(res.body.message.rantCommenter).toEqual('testaccount');
-            rantCommentId = res.body.message.rantCommentId
+            shallowNestedRantCommentId = res.body.message.rantCommentId
             done();
           });
       });
@@ -196,7 +197,7 @@ describe('ReplyRant [Integration]', () => {
         agent
           .post(`/rant/reply/${rantId}`)
           .set("cookie", cookie)
-          .send({ replyRant: "This is a reply".repeat(20) , when , parentCommentId: rantCommentId })
+          .send({ replyRant: "This is a reply".repeat(20) , when , parentCommentId: shallowNestedRantCommentId })
           .expect(200).end((err,res) => {
             expect(err).toBeNull();
             expect(res.body.status).toEqual(200);
@@ -212,14 +213,14 @@ describe('ReplyRant [Integration]', () => {
         agent
           .post(`/rant/reply/${rantId}`)
           .set("cookie", cookie)
-          .send({ replyRant: "This is a nested reply".repeat(20) , when , parentCommentId: rantCommentId })
+          .send({ replyRant: "This is a nested reply".repeat(20) , when , parentCommentId: shallowNestedRantCommentId })
           .expect(200).end((err,res) => {
             expect(err).toBeNull();
             expect(res.body.status).toEqual(200);
             expect(res.body.message.when).toEqual(when);
             expect(res.body.message.rantId).toEqual(rantId)
             expect(res.body.message.rantComment).toEqual("This is a nested reply".repeat(20));
-            rantCommentId = res.body.message.rantCommentId
+            deeplyNestedRantCommentId = res.body.message.rantCommentId
             done();
           });
       });
@@ -229,13 +230,13 @@ describe('ReplyRant [Integration]', () => {
         agent
           .post(`/rant/reply/${rantId}`)
           .set("cookie", cookie)
-          .send({ replyRant: "This is a nested reply".repeat(20) , when , parentCommentId: rantCommentId })
+          .send({ replyRant: "This is a deeply nested reply".repeat(20) , when , parentCommentId: deeplyNestedRantCommentId })
           .expect(200).end((err,res) => {
             expect(err).toBeNull();
             expect(res.body.status).toEqual(200);
             expect(res.body.message.when).toEqual(when);
             expect(res.body.message.rantId).toEqual(rantId)
-            expect(res.body.message.rantComment).toEqual("This is a nested reply".repeat(20));
+            expect(res.body.message.rantComment).toEqual("This is a deeply nested reply".repeat(20));
             done();
           });
       });
@@ -262,6 +263,7 @@ describe('ReplyRant [Integration]', () => {
       it('should read rant comment where parentCommentId is not define', done => {
         agent
           .get(`/rant/reply/${rantId}?numRequest=0`)
+
           .set("cookie", cookie)
           .expect(200).end((err,res) => {
             expect(err).toBeNull();
@@ -270,7 +272,6 @@ describe('ReplyRant [Integration]', () => {
             expect(res.body.message.hasMore).toEqual(false);
             expect(res.body.message.page.totalRant).toEqual(2);
             expect(res.body.message.page.remainingRant).toEqual(0);
-            console.log(res.body);
             done();
           });
       });
@@ -287,6 +288,18 @@ describe('ReplyRant [Integration]', () => {
           });
       });
 
+      it('should read nested reply', done => {
+        agent
+          .get(`/rant/reply/${rantId}?numRequest=0&parentCommentId=${shallowNestedRantCommentId}`)
+          .set("cookie", cookie)
+          .expect(200).end((err,res) => {
+            expect(err).toBeNull();
+            expect(res.body.status).toEqual(200);
+            expect(res.body.message.replies.length).toBeGreaterThan(0);
+            res.body.message.replies.forEach( reply => expect(reply.parentCommentId).not.toBeNull());
+            done();
+          });
+      });
     });
   });
 

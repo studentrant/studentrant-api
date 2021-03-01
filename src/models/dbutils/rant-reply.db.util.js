@@ -24,6 +24,6 @@ export default class RantRepliesDbUtils {
   }
 
   async findOneReply(key, value) {
-    return this.RantsCommentCollection.findOne({ [key]: value });
+    return this.RantCommentCollection.findOne({ [key]: value });
   }
 }
