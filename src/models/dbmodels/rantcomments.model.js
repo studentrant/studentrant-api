@@ -2,7 +2,10 @@ import mongoose from 'mongoose';
 
 const RantCommentSchema = new mongoose.Schema({
 
-  rantId: String,
+  rantId: {
+    type: String,
+    index: true,
+  },
 
   rantCommentId: {
     type: String,
