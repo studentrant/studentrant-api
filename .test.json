@@ -1,15 +1,15 @@
 {
     "dbConnectionString": {
 	"replOne"  : {
-	    "host" : "localhost",
+	    "host" : "mongo1",
 	    "port" : 27077
 	},
 	"replTwo"  : {
-	    "host" : "localhost",
+	    "host" : "mongo2",
 	    "port"  : 27081
 	},
 	"replThree" : {
-	    "host" : "localhost",
+	    "host" : "mongo3",
 	    "port" : 27091
 	},
 	"extraArgument": "readPreference=primary&retryWrites=true&maxIdleTimeMS=10000&compressors=zlib&storageEngine=inMemory",
