@@ -31,8 +31,16 @@ export default class ReplyRantService {
     return { ...result, parentCommentId };
   }
 
-  async validateParentCommentId(parentCommentId) {
-    return this.replyRantDbUtils.findOneReply({ key: 'parentCommentId', value: parentCommentId });
+  async validateRantCommentExistence(value) {
+    return this.replyRantDbUtils.getReply({ query: value });
+  }
+
+  async validateRantCommentIdDeleter(username, rantCommentId) {
+    return this.replyRantDbUtils.findIfUserIsCommenter({ rantCommenter: username, rantCommentId });
+  }
+
+  async deleteReply(rantCommentId) {
+    return this.replyRantDbUtils.deleteUserReply(rantCommentId);
   }
 
   async getReplies({ numRequest, parentCommentId = null, rantId }) {

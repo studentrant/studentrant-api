@@ -91,3 +91,21 @@ export const updateUserInfo = (
       cb();
     });
 };
+
+export const createRantReply = (
+  agent,
+  {
+    rantId, when, replyRant, cookie,
+  },
+  cb,
+) => {
+  agent
+    .post(`/rant/reply/${rantId}`)
+    .set('cookie', cookie)
+    .send({ replyRant, when })
+    .expect(200)
+    .end((err, res) => {
+      expect(err).toBeNull();
+      cb(res.body.message.rantCommentId);
+    });
+};
