@@ -4,11 +4,24 @@ import loremIpsum from 'lorem-ipsum';
 
 import UsersCollection from '../src/models/dbmodels/user.model.js';
 
-export const login = (agent, cb) => {
+export const login = (agent, cred, cb) => {
+  let username; let password;
+
+  if (typeof (cred) === 'object') {
+    ({ username, password } = cred);
+  }
+
+  if (typeof (cred) === 'function') {
+    cb = cred; // eslint-disable-line
+    username = 'testaccount';
+    password = '12345689234TesT$$';
+  }
+
   agent
     .post('/login')
-    .send({ username: 'testaccount', password: '12345689234TesT$$' })
+    .send({ username, password })
     .expect(200).end((err, res) => {
+      console.log(err);
       expect(err).toBeNull();
       cb(res.headers['set-cookie']);
     });
