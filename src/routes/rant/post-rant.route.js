@@ -1,3 +1,5 @@
+import express from 'express';
+
 import PostRant from '../../controllers/post-rant.controller.js';
 import RantValidators from '../../middlewares/rant.middleware.js';
 
@@ -11,7 +13,8 @@ import UserDbUtils from '../../models/dbutils/user.db.util.js';
 import { Utils } from '../../utils/index.util.js';
 
 export default class PostRantRoute {
-  constructor(routeHandler) {
+  constructor() {
+    const routeHandler = express.Router();
     this.controller = new PostRant({
       Collections: { RantsCollection, UsersCollection, TrendsCollection },
       DBUtils: { RantDbUtils, UserDbUtils, TrendDbUtils },
