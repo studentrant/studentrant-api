@@ -12,7 +12,7 @@ describe('ReplyRant [Integration]', () => {
   describe('Unauthenticated User', () => {
     it('should return 401 unauthroized access if user is not logged in', (done) => {
       agent
-        .post('/rant/post/create')
+        .post('/rant/reply/fff')
         .send({})
         .expect(401).end((err, res) => {
           expect(err).toBeNull();
@@ -74,7 +74,7 @@ describe('ReplyRant [Integration]', () => {
             expect(err).toBeNull();
             expect(res.body.status).toEqual(412);
             expect(res.body.message).toEqual(
-              rantConstants.REPLY_RANT_UNDEFINED
+              rantConstants.RANT_REPLY_UNDEFINED
             );
             done();
           });
@@ -90,7 +90,7 @@ describe('ReplyRant [Integration]', () => {
             expect(err).toBeNull();
             expect(res.body.status).toEqual(412);
             expect(res.body.message).toEqual(
-              rantConstants.REPLY_RANT_NOT_MORE_THAN_TWENTY,
+              rantConstants.RANT_REPLY_NOT_MORE_THAN_TWENTY,
             );
             done();
           });
