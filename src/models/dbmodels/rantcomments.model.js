@@ -45,7 +45,6 @@ const RantCommentSchema = new mongoose.Schema({
     default: false,
     index: true,
   },
-
 }, { timestamp: true });
 
 const rantComments = mongoose.model('rantcomments', RantCommentSchema);

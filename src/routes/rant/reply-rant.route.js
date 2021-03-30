@@ -17,6 +17,7 @@ import { Utils } from '../../utils/index.util.js';
 export default class ReplyRantRoute {
   constructor() {
     const routeHandler = express.Router();
+
     this.controller = new ReplyRant({
       Collections: {
         RantsCollection, UsersCollection, TrendsCollection, RantReplyCollection,

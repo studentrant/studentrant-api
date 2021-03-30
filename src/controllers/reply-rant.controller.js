@@ -71,7 +71,7 @@ export default class ReplyRant extends PostRant {
 
     if (validatedRantCommentId.deleted) {
       throw GoneException(
-        constants.rantConstants.RANT_REPLY_RANT_ALREADY_DELETED,
+        constants.rantConstants.RANT_REPLY_RANT_ALREADY_DELETED
       );
     }
   }
@@ -121,6 +121,7 @@ export default class ReplyRant extends PostRant {
     const { rantId } = req.params;
 
     try {
+      
       await this.validateRantForModification(rantId);
       await this.validateRantCommentId({ parentCommentId });
 
@@ -151,7 +152,7 @@ export default class ReplyRant extends PostRant {
     }
   }
 
-  async deleteReply(req, res, next) {
+async deleteReply(req, res, next) {
     const { replyRantId } = req.params;
 
     try {

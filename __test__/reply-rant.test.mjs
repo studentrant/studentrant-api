@@ -89,8 +89,8 @@ describe('ReplyRant [Integration]', () => {
           .expect(412).end((err,res) => {
             expect(err).toBeNull();
             expect(res.body.status).toEqual(412);
-            expect(res.body.message).toEqual(
-              rantConstants.RANT_REPLY_NOT_MORE_THAN_TWENTY,
+            expect(res.body.message).toEqual
+              rantConstants.RANT_REPLY_NOT_MORE_THAN_TWENTY
             );
             done();
           });
