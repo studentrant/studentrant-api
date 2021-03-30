@@ -162,6 +162,15 @@ export default class PostRant {
         diff,
       });
 
+      // write a logger service
+      Promise.resolve(
+        this.trendingService.createTrendIfExists({
+          text: result.rant,
+          identifier: result.rantId,
+          col: 'rant',
+        }),
+      ).catch((ex) => console.error(ex));
+
       this.rantCountVoteDelete(result);
 
       return res.status(200).json({ status: 200, message: result });

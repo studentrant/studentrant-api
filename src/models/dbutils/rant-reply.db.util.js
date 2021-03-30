@@ -1,6 +1,5 @@
 export default class RantRepliesDbUtils {
   constructor(rantCommentCollection) {
-    console.log(rantCommentCollection);
     this.RantCommentCollection = rantCommentCollection;
   }
 
@@ -29,7 +28,15 @@ export default class RantRepliesDbUtils {
     return this.RantCommentCollection.countDocuments(query);
   }
 
-  async findOneReply(key, value) {
-    return this.RantCommentCollection.findOne({ [key]: value });
+  async getReply(dbOps) {
+    return this.RantCommentCollection.findOne(dbOps.query);
+  }
+
+  async findIfUserIsCommenter(rantCommenter, rantCommentId) {
+    return this.RantCommentCollection.findOne({ rantCommenter, rantCommentId });
+  }
+
+  async deleteUserReply(rantCommentId) {
+    return this.RantCommentCollection.updateOne({ rantCommentId }, { $set: { deleted: true } });
   }
 }

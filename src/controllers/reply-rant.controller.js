@@ -2,7 +2,7 @@ import { v4 as uuid } from 'uuid';
 
 import * as constants from '../constants/index.constant.js';
 
-import { GoneException, NotFoundException } from '../core/exceptions.service.js';
+import { GoneException, NotFoundException, UnAuthorizedAccessException } from '../core/exceptions.service.js';
 import ReplyRantService from '../service/reply-rant.service.js';
 
 import PostRant from './post-rant.controller.js';
@@ -26,6 +26,25 @@ export default class ReplyRant extends PostRant {
     );
   }
 
+  async #validateRantCommentForModification (username, replyRantId) {
+    await this.validateRantCommentId({ rantCommentId: replyRantId });
+
+    // check if the reply to modify was created by the user
+    // trying to modify it
+    const result = await this.replyRantService.validateRantCommentExistence(
+      {
+        rantCommenter: username,
+        rantCommentId: replyRantId,
+      },
+    );
+
+    if (!result) {
+      throw UnAuthorizedAccessException(
+        constants.rantConstants.RANT_REPLY_UNAUTHORIZED_OPERATION,
+      );
+    }
+  }
+
   /* eslint-disable no-param-reassign , prefer-destructuring */
 
   #replyVoteTransform (value) {
@@ -41,23 +60,18 @@ export default class ReplyRant extends PostRant {
   }
   /* eslint-enable no-param-reassign , prefer-destructuring */
 
-  // parentCommentId is always a rantCommentId
-  async validateParentCommentId(parentCommentId) {
-    if (!parentCommentId) return;
+  async validateRantCommentId(value) {
+    const validatedRantCommentId = await this.replyRantService.validateRantCommentExistence(value);
 
-    const validatedParentCommentId = await this.replyRantService.validateParentCommentId(
-      parentCommentId,
-    );
-
-    if (!validatedParentCommentId) {
+    if (!validatedRantCommentId) {
       throw NotFoundException(
-        constants.rantConstants.RANT_REPLY_PARENT_COMMENT_ID_INVALID,
+        constants.rantConstants.RANT_REPLY_RANT_COMMENT_ID_INVALID,
       );
     }
 
-    if (validatedParentCommentId.deleted) {
+    if (validatedRantCommentId.deleted) {
       throw GoneException(
-        constants.rantConstants.RANT_REPLY_PARENT_COMMENT_ID_DELETED,
+        constants.rantConstants.RANT_REPLY_RANT_ALREADY_DELETED
       );
     }
   }
@@ -107,8 +121,9 @@ export default class ReplyRant extends PostRant {
     const { rantId } = req.params;
 
     try {
+      
       await this.validateRantForModification(rantId);
-      await this.validateParentCommentId(parentCommentId);
+      await this.validateRantCommentId({ parentCommentId });
 
       const result = await this.replyRantService.getReplies(
         {
@@ -125,6 +140,60 @@ export default class ReplyRant extends PostRant {
       }
 
       result.replies.forEach(this.#replyVoteTransform.bind(this));
+
+      return res.status(200).json(
+        {
+          status: 200,
+          message: result,
+        },
+      );
+    } catch (ex) {
+      return next(ex);
+    }
+  }
+
+async deleteReply(req, res, next) {
+    const { replyRantId } = req.params;
+
+    try {
+      const username = this.Utils.ExtractSessionObjectData(req, 'username');
+      await this.#validateRantCommentForModification(username, replyRantId);
+      await this.replyRantService.deleteReply(replyRantId);
+
+      return res.status(200).json({
+        status: 200,
+        message: constants.rantConstants.RANT_REPLY_SUCCESSFULLY_DELETED,
+      });
+    } catch (ex) {
+      return next(ex);
+    }
+  }
+
+  async editReply(req, res, next) {
+    const { replyRant } = req.body;
+    const { replyRantId } = req.params;
+
+    try {
+      const username = this.Utils.ExtractSessionObjectData(req, 'username');
+      await this.#validateRantCommentForModification(username, replyRantId);
+
+      const result = await this.replyRantService.editReply(replyRant);
+
+      if (!result) {
+        throw NotFoundException(
+          constants.rantConstants.RANT_COMMENT_CANNOT_EDIT,
+        );
+      }
+
+      // write a logger service
+      // emit event or not ?
+      Promise.resolve(
+        this.trendingService.createTrendIfExists({
+          text: result.rantComment,
+          identifier: result.rantId,
+          col: 'rantcomments',
+        }),
+      ).catch((ex) => console.error(ex));
 
       return res.status(200).json(
         {

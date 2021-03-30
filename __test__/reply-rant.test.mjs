@@ -12,7 +12,7 @@ describe('ReplyRant [Integration]', () => {
   describe('Unauthenticated User', () => {
     it('should return 401 unauthroized access if user is not logged in', (done) => {
       agent
-        .post('/rant/post/create')
+        .post('/rant/reply/fff')
         .send({})
         .expect(401).end((err, res) => {
           expect(err).toBeNull();
@@ -74,7 +74,7 @@ describe('ReplyRant [Integration]', () => {
             expect(err).toBeNull();
             expect(res.body.status).toEqual(412);
             expect(res.body.message).toEqual(
-              rantConstants.REPLY_RANT_UNDEFINED
+              rantConstants.RANT_REPLY_UNDEFINED
             );
             done();
           });
@@ -89,8 +89,8 @@ describe('ReplyRant [Integration]', () => {
           .expect(412).end((err,res) => {
             expect(err).toBeNull();
             expect(res.body.status).toEqual(412);
-            expect(res.body.message).toEqual(
-              rantConstants.REPLY_RANT_NOT_MORE_THAN_TWENTY,
+            expect(res.body.message).toEqual
+              rantConstants.RANT_REPLY_NOT_MORE_THAN_TWENTY
             );
             done();
           });
@@ -313,11 +313,123 @@ describe('ReplyRant [Integration]', () => {
             done();
           });
       });
+    });
+    
+    describe("Delete Comments", () => {
+      it('should return not found if rantId is fake', done => {
+        agent
+          .delete('/rant/reply/delete/fake_id')
+          .set('cookie', cookie)
+          .expect(404).end((err,res) => {
+            expect(err).toBeNull();
+            expect(res.body.status).toEqual(404)
+            expect(res.body.message).toEqual(rantConstants.RANT_REPLY_RANT_COMMENT_ID_INVALID);
+            done();
+          });
+      });
 
-      it('should collapse all sub comment of a comment (not paginated)', done => {
-        done();
+      it('should not delete a rant comment created by someone else', done => {
+        testUtils.createUser(agent, arg => {
+          let newCookie = arg;
+          agent
+            .delete(`/rant/reply/delete/${shallowNestedRantCommentId}`)
+            .set('cookie', newCookie)
+            .expect(401).end((err,res) => {
+              expect(err).toBeNull();
+              expect(res.body.status).toEqual(401);
+              expect(res.body.message).toEqual(rantConstants.RANT_REPLY_UNAUTHORIZED_OPERATION);
+              done();
+            });
+        });
+      });
+
+      it('should delete a rant comment created by the deleter', done => {
+        agent
+          .delete(`/rant/reply/delete/${shallowNestedRantCommentId}`)
+          .set('cookie', cookie)
+          .expect(200).end((err,res) => {
+            expect(err).toBeNull();
+            expect(res.body.status).toEqual(200)
+            expect(res.body.message).toEqual(rantConstants.RANT_REPLY_SUCCESSFULLY_DELETED);
+            done();
+          });
+      });
+
+      it('should fail when trying to delete deleted comment', done => {
+        agent
+          .delete(`/rant/reply/delete/${shallowNestedRantCommentId}`)
+          .set('cookie', cookie)
+          .expect(410).end((err,res) => {
+            expect(err).toBeNull();
+            expect(res.body.status).toEqual(410)
+            expect(res.body.message).toEqual(rantConstants.RANT_REPLY_RANT_ALREADY_DELETED);
+            done();
+          });
       });
     });
-  });
 
+    describe("Edit Reply", () => {      
+      it('should not allow comment editing if replyRant is undefined' , done => {
+        agent
+          .patch(`/rant/reply/edit/xxxxx`)
+          .set("cookie", cookie)
+          .send({})
+          .expect(412).end((err,res) => {
+            expect(err).toBeNull();
+            expect(res.body.status).toEqual(412);
+            expect(res.body.message).toEqual(
+              rantConstants.RANT_REPLY_UNDEFINED
+            );
+            done();
+          });
+      });
+
+      it('should return 404 for non exiting replyRantId', done => {
+        agent
+          .patch(`/rant/reply/edit/xxxxxx`)
+          .set("cookie", cookie)
+          .send({ replyRant: "hellow".repeat(20) })
+          .expect(404).end((err,res) => {
+            expect(err).toBeNull();
+            expect(res.body.status).toEqual(404);
+            expect(res.body.message).toEqual(
+              rantConstants.RANT_REPLY_RANT_COMMENT_ID_INVALID
+            );
+            done();
+          });
+      });
+
+      it('should not allow editing of deleted comment', done => {
+        agent
+          .patch(`/rant/reply/edit/${shallowNestedRantCommentId}`)
+          .set("cookie", cookie)
+          .send({ replyRant: "hellow".repeat(20) })
+          .expect(410).end((err,res) => {
+            expect(err).toBeNull();
+            expect(res.body.status).toEqual(410);
+            expect(res.body.message).toEqual(
+              rantConstants.RANT_REPLY_RANT_ALREADY_DELETED
+            );
+            done();
+          });
+      });
+
+      it('should not allow editing of comment created by another user', done => {
+        testUtils.createUser(agent, arg => {
+          let newCookie = arg;
+          agent
+            .patch(`/rant/reply/edit/${deeplyNestedRantCommentId}`)
+            .set("cookie", newCookie)
+            .send({ replyRant: "hellow".repeat(20) })
+            .expect(401).end((err,res) => {
+              expect(err).toBeNull();
+              expect(res.body.status).toEqual(401);
+              expect(res.body.message).toEqual(rantConstants.RANT_REPLY_UNAUTHORIZED_OPERATION);
+              done();
+            });
+        });
+      });
+      
+    });
+  });
 });

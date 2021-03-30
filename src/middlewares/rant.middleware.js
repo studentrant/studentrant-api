@@ -76,19 +76,27 @@ export default class RantValidators {
   static VerifyReplyRant(req, res, next) {
     if (!req.body.replyRant) {
       throw BadValueException(
-        rantConstants.REPLY_RANT_UNDEFINED,
+        rantConstants.RANT_REPLY_UNDEFINED,
       );
     }
 
     if (req.body.replyRant.trim().length <= 20) {
       throw BadValueException(
-        rantConstants.REPLY_RANT_NOT_MORE_THAN_TWENTY,
+        rantConstants.RANT_REPLY_NOT_MORE_THAN_TWENTY,
       );
     }
 
     return next();
   }
 
+  static VerifyReplyRantId(req, res, next) {
+    if (!req.params.replyRantId) {
+      throw BadValueException(
+        rantConstants.REPLY_RANT_NO_RANT_ID,
+      );
+    }
+    return next();
+  }
   static VerifyReplyRantParams(req, res, next) {
     if (
       !req.params.rantId

@@ -40,6 +40,11 @@ const RantCommentSchema = new mongoose.Schema({
     index: true,
   },
 
+  edited: {
+    type: Boolean,
+    default: false,
+    index: true,
+  },
 }, { timestamp: true });
 
 const rantComments = mongoose.model('rantcomments', RantCommentSchema);
