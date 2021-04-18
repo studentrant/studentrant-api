@@ -19,8 +19,8 @@ export default class UserDbUtils {
 
   verifyUserRegTokenAndGetData(token) {
     return this.UsersCollection.findOneAndUpdate(
-      { verificationLink: token },
-      { $unset: { verificationLink: 1 } },
+      { verificationToken: token },
+      { $unset: { verificationToken: 1 } },
       {
         new: false,
         fields: {
@@ -49,7 +49,7 @@ export default class UserDbUtils {
         passwod: false,
         verified: false,
         completeReg: false,
-        verificationLink: false,
+        verificationToken: false,
       },
     );
   }
@@ -57,7 +57,7 @@ export default class UserDbUtils {
   getUserVerificationToken(userId) {
     return this.UsersCollection.findOne(
       { userId },
-      { verificationLink: true },
+      { verificationToken: true },
     );
   }
 }

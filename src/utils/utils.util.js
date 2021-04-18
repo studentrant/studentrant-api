@@ -1,6 +1,4 @@
-import UIDGenerator from 'uid-generator';
-
-const uuid = new UIDGenerator(512, UIDGenerator.BASE62);
+import { v4 as uuid } from 'uuid';
 
 export default class Utils {
   static ExtractSessionObjectData(req, type) {
@@ -16,7 +14,7 @@ export default class Utils {
     Object.assign(req.session.user, { ...req.session.user, ...data });
   }
 
-  static UniqueCodeGenerator() {
-    return uuid.generate();
+  static GenerateUniqueId() {
+    return uuid();
   }
 }

@@ -15,18 +15,18 @@ export default class Email {
   static GetUserTemplateData(toEmail) {
     return UsersCollection.findOne(
       { email: toEmail },
-      { verificationLink: true, username: true },
+      { verificationToken: true, username: true },
     ).lean();
   }
 
   async sendEmailVerification(toEmail) {
-    const { username: user, verificationLink } = await Email.GetUserTemplateData(toEmail);
+    const { username: user, verificationToken } = await Email.GetUserTemplateData(toEmail);
     return this.sendEmail.send({
       from: {
         email: this.fromEmail,
         name: this.fromName,
       },
-      dynamic_template_data: { user, verificationLink: `${this.verificationUrl}/${verificationLink}` },
+      dynamic_template_data: { user, verificationToken: `${this.verificationUrl}/${verificationToken}` },
       personalizations: [
         {
           to: toEmail,

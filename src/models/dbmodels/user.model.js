@@ -33,7 +33,7 @@ const UserSchema = new mongoose.Schema({
     default: false,
     type: Boolean,
   },
-  verificationLink: {
+  verificationToken: {
     type: String,
     index: true,
   },

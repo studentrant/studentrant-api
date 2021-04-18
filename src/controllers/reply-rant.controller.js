@@ -1,5 +1,3 @@
-import { v4 as uuid } from 'uuid';
-
 import * as constants from '../constants/index.constant.js';
 
 import { GoneException, NotFoundException, UnAuthorizedAccessException } from '../core/exceptions.service.js';
@@ -94,7 +92,7 @@ export default class ReplyRant extends PostRant {
           rantPoster,
           parentCommentId,
           rantComment: replyRant,
-          rantCommentId: uuid(),
+          rantCommentId: this.Utils.GenerateUniqueId(),
         },
       );
 
@@ -121,6 +119,8 @@ export default class ReplyRant extends PostRant {
     const { rantId } = req.params;
 
     try {
+      // in this case we just want to check if the id is valid
+      // ::showReply does not modify a comment
       await this.validateRantForModification(rantId);
       await this.validateRantCommentId({ parentCommentId });
 
@@ -134,7 +134,7 @@ export default class ReplyRant extends PostRant {
 
       if (!result || result.replies.length === 0) {
         throw NotFoundException(
-          constants.rantConstants.RANT_READ_EXHAUSTED,
+          constants.rantConstants.RANT_REPLY_COMMENT_READ_EXHAUSTED,
         );
       }
 
