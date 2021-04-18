@@ -101,6 +101,7 @@ describe('Trends [Integration]', () => {
                 expect(err).toBeNull();
                 expect(res.body.status).toEqual(200);
                 expect(res.body.message.rantsTrend.length).toBeGreaterThan(0);
+                console.dir(res.body, { depth: null })
                 expect(res.body.message.hasMore).toEqual(false);
                 done();
               });
