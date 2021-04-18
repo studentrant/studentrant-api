@@ -10,6 +10,7 @@ export default class Trend {
       new DBUtils.TrendDbUtils(Collections.TrendsCollection),
       new DBUtils.RantDbUtils(Collections.RantsCollection),
       new DBUtils.UserDbUtils(Collections.UsersCollection),
+      new DBUtils.ReplyRantDbUtils(Collections.ReplyRantCollection),
     );
   }
 

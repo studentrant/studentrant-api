@@ -11,7 +11,7 @@ export default class RantRepliesDbUtils {
     }).lean();
   }
 
-  async getReplies(pipeline) {
+  async findAllReplies(pipeline) {
     return this.RantCommentCollection.aggregate(
       [
         pipeline.matchComments,
@@ -38,5 +38,26 @@ export default class RantRepliesDbUtils {
 
   async deleteUserReply(rantCommentId) {
     return this.RantCommentCollection.updateOne({ rantCommentId }, { $set: { deleted: true } });
+  }
+
+  async aggregate(pipeline) {
+    return this.RantCommentCollection.aggregate(
+      [
+        pipeline.first,
+      ],
+    );
+  }
+
+  async editUserReply({ replyRantId, replyRant }) {
+    return this.RantCommentCollection.findOneAndUpdate(
+      { rantCommentId: replyRantId },
+      {
+        $set: {
+          rantComment: replyRant,
+          edited: true,
+        },
+      },
+      { new: true, fields: { _id: false } },
+    );
   }
 }

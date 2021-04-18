@@ -40,6 +40,8 @@ mountRoutes(
   ],
 );
 
+const logger = new Logger(app.get('CONFIGURATION'));
+
 app.use('*', (req, res, next) => next(NotFoundException(`route ${req.url} does not exists`)));
 
 // eslint-disable-next-line
@@ -55,17 +57,16 @@ app.use((err, req, res, next) => {
     };
 
   if (process.env.NODE_ENV !== 'production' && status === 500) {
-    const logger = new Logger(app.get('CONFIGURATION'));
     logger.setLogType('express');
     logger.log.fatal(message);
-    console.log(err);
+    logger.log.error(JSON.stringify(err));
   }
 
   return res.status(status).json({ status, message });
 });
 
 app.listen(app.get('PORT'), () => {
-  console.log(`listening on port ${app.get('PORT')}`);
+  logger.log.info(`listening on port ${app.get('PORT')}`);
 });
 
 export default app;

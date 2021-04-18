@@ -43,14 +43,17 @@ export default class ReplyRantService {
     return this.replyRantDbUtils.deleteUserReply(rantCommentId);
   }
 
-  async getReplies({ numRequest, parentCommentId = null, rantId }) {
-    const replyRantCount = await this.replyRantDbUtils.getRepliesCount({ rantId, parentCommentId });
-    const calculateNext = rantEnums.RANTS_LOAD_LIMIT * (numRequest + 1);
-    const hasMore = calculateNext < replyRantCount;
+  async editReply({ replyRantId, replyRant }) {
+    return this.replyRantDbUtils.editUserReply({ replyRantId, replyRant });
+  }
 
-    const result = await this.replyRantDbUtils.getReplies(
+  async getRantRepliesFromAggregation({
+    matchBy, numRequest, calculateNext, replyRantCount,
+  }) {
+    const hasMore = calculateNext < replyRantCount;
+    const result = await this.replyRantDbUtils.findAllReplies(
       {
-        matchComments: { $match: { rantId, parentCommentId } },
+        matchComments: { $match: matchBy },
         skipUnwanted: { $skip: rantEnums.RANTS_LOAD_LIMIT * numRequest },
         limitComment: { $limit: rantEnums.RANTS_LOAD_LIMIT },
         getNReplyCountAndFirstNReply: {
@@ -88,7 +91,6 @@ export default class ReplyRantService {
         // getChildCommentAsObject : { $unwind: "$childComments" }
       },
     );
-
     return {
       replies: result,
       hasMore,
@@ -101,5 +103,16 @@ export default class ReplyRantService {
         )),
       },
     };
+  }
+
+  async getReplies({ numRequest, parentCommentId = null, rantId }) {
+    return this.getRantRepliesFromAggregation(
+      {
+        numRequest,
+        matchBy: { rantId, parentCommentId },
+        replyRantCount: await this.replyRantDbUtils.getRepliesCount({ rantId, parentCommentId }),
+        calculateNext: rantEnums.RANTS_LOAD_LIMIT * (numRequest + 1),
+      },
+    );
   }
 }

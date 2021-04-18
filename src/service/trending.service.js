@@ -3,24 +3,30 @@ import { v4 as uuid4 } from 'uuid';
 import { rantEnums } from '../enums/rants.enums.js';
 
 import PostRantService from './post-rant.service.js';
+import ReplyRantService from './reply-rant.service.js';
 
-export default class Trending extends PostRantService {
-  constructor(trendingDbUtils, rantDbUtils, userDbUtils) {
-    super(rantDbUtils, userDbUtils);
+export default class Trending {
+  constructor(trendingDbUtils, rantDbUtils, userDbUtils, replyRantDbUtils) {
     this.trendingDbUtils = trendingDbUtils;
+    this.postRantService = new PostRantService(rantDbUtils, userDbUtils);
+    this.replyRantService = new ReplyRantService(rantDbUtils, replyRantDbUtils);
   }
 
   async createTrendIfExists({ text, identifier, col }) {
     const chunkWithHashTag = this.#getTrendFromText(text);
-    if (chunkWithHashTag.length === 0) return;
-    await this.trendingDbUtils.createOrUpdateTrend({
-      query: { trendName: { $in: chunkWithHashTag } },
-      update: {
-        $setOnInsert: { trendId: uuid4() },
-        $push: { trend: { againstCollection: col, uniqueIdentifier: identifier } },
-      },
-      options: { upsert: true },
-    });
+    // eslint-disable-next-line no-restricted-syntax
+    for (const chunk of chunkWithHashTag) {
+      Promise.resolve(
+        this.trendingDbUtils.createOrUpdateTrend({
+          query: { trendName: chunk },
+          update: {
+            $setOnInsert: { trendId: uuid4() },
+            $push: { trend: { againstCollection: col, uniqueIdentifier: identifier } },
+          },
+          options: { upsert: true },
+        }),
+      );
+    }
   }
 
   async getPaginatedTrend(trendName, numRequest) {
@@ -40,7 +46,7 @@ export default class Trending extends PostRantService {
     // eslint-disable-next-line no-restricted-syntax
     for (const { trend: { againstCollection, uniqueIdentifier } } of trendIds) {
       if (againstCollection === 'rant') rantsTrend.push(uniqueIdentifier);
-      else rantCommentsTrend.push('rantcomment');
+      else rantCommentsTrend.push(uniqueIdentifier);
     }
 
     if (!rantsTrend.length && !rantCommentsTrend.length) return null;
@@ -49,7 +55,7 @@ export default class Trending extends PostRantService {
       ? null
       : await this.#getTrendForRants(trendName, rantsTrend);
 
-    trendResult.rantCommentsTrend = trendResult.length === 0
+    trendResult.rantCommentsTrend = rantCommentsTrend.length === 0
       ? null
       : await this.#getTrendForRantComments(trendName, rantCommentsTrend);
 
@@ -59,12 +65,11 @@ export default class Trending extends PostRantService {
      *       and also merge page of rants and rantcomments object just as hasMore property
      * */
     trendResult.hasMore = !!(trendResult.rantsTrend?.hasMore
-                                || trendResult.rantCommentsTrend?.hasMore
+                             || trendResult.rantCommentsTrend?.hasMore
     );
-    trendResult.rantsTrend = trendResult.rantsTrend?.rants;
 
-    // pending implementation
-    // trendResult.rantCommentsTrend = trendResult.rantCommentsTrend?.blablal
+    trendResult.rantsTrend = trendResult.rantsTrend?.rants;
+    trendResult.rantCommentsTrend = trendResult.rantCommentsTrend?.replies;
 
     delete trendResult.rantsTrend?.hasMore;
     delete trendResult.rantCommentsTrend?.hasMore;
@@ -72,15 +77,24 @@ export default class Trending extends PostRantService {
     return trendResult;
   }
 
-  async #getTrendForRantComments () {
-    return {};
+  async #getCountOfTrend (trendName) {
+    return (await this.trendingDbUtils.getTotalTrendRants({ trendName })).trend.length;
+  }
+
+  async #getTrendForRantComments (trendName, replyRantTrendIds) {
+    const replyRantCount = await this.#getCountOfTrend(trendName);
+    return this.replyRantService.getRantRepliesFromAggregation(
+      {
+        numRequest: 0,
+        replyRantCount,
+        matchBy: { rantCommentId: { $in: replyRantTrendIds }, deleted: false },
+      },
+    );
   }
 
   async #getTrendForRants (trendName, rantsTrendIds) {
-    const rantCount = (
-      await this.trendingDbUtils.getTotalTrendRants({ trendName })
-    ).trend.length;
-    return this.getRantFromAggregation(
+    const rantCount = await this.#getCountOfTrend(trendName);
+    return this.postRantService.getRantFromAggregation(
       {
         /**
          * already used in the controller

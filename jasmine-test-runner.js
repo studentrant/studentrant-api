@@ -21,8 +21,8 @@ export async function loadFiles(config, testFiles) {
   jasmine.loadConfigFile(config);
   for (const file of testFiles) {
     await import(file).catch((e) => {
-      console.error('error loading ', file);
-      console.error({ e });
+      console.error('error loading ', file); // eslint-disable-line
+      console.error({ e }); // eslint-disable-line
       process.exit(1);
     });
   }

@@ -113,7 +113,7 @@ export default class PostRant {
           identifier: result.rantId,
           col: 'rant',
         }),
-      ).catch((ex) => console.error(ex));
+      ).catch((ex) => console.error(ex)); // eslint-disable-line
 
       this.rantCountVoteDelete(result);
 
@@ -169,7 +169,7 @@ export default class PostRant {
           identifier: result.rantId,
           col: 'rant',
         }),
-      ).catch((ex) => console.error(ex));
+      ).catch((ex) => console.error(ex)); // eslint-disable-line
 
       this.rantCountVoteDelete(result);
 
