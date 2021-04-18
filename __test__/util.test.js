@@ -21,7 +21,6 @@ export const login = (agent, cred, cb) => {
     .post('/login')
     .send({ username, password })
     .expect(200).end((err, res) => {
-      console.log(err);
       expect(err).toBeNull();
       cb(res.headers['set-cookie']);
     });

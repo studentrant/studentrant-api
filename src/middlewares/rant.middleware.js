@@ -97,6 +97,7 @@ export default class RantValidators {
     }
     return next();
   }
+
   static VerifyReplyRantParams(req, res, next) {
     if (
       !req.params.rantId

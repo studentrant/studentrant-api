@@ -36,7 +36,7 @@ describe('Trends [Integration]', () => {
     });
 
     describe("Get Trend", () => {
-      
+      let rantId;
       it('should fail if trend param does not start with a #', done => {
         agent
           .get('/trend/hello_world?numRequest=1')
@@ -48,7 +48,7 @@ describe('Trends [Integration]', () => {
             done();
           });
       });
-      
+
       it('should fail if numRequest is not anything other than a number', done => {
         agent
           .get(`/trend/${encodeURIComponent('#studentRant')}?numRequest=abcdeg`)
@@ -60,7 +60,7 @@ describe('Trends [Integration]', () => {
             done();
           });
       });
-      
+
       it('should not save trend if no trend was found in the rant', done => {
         testUtils.createRant(
           agent,
@@ -69,7 +69,8 @@ describe('Trends [Integration]', () => {
             tags: [ "trend" ],
             cookie: cookie,
           },
-          () => {
+          (rid) => {
+            rantId = rid;
             agent
               .get(`/trend/${encodeURIComponent('#studentRant')}?numRequest=0`)
               .set('cookie', cookie)
@@ -79,11 +80,11 @@ describe('Trends [Integration]', () => {
                 expect(res.body.message).toEqual(rantConstants.RANT_READ_EXHAUSTED);
                 done();
               });
-            
+
           },
         );
       });
-      
+
       it('should save trend if a hashtag was found in the rant', done => {
         testUtils.createRant(
           agent,
@@ -100,14 +101,52 @@ describe('Trends [Integration]', () => {
                 expect(err).toBeNull();
                 expect(res.body.status).toEqual(200);
                 expect(res.body.message.rantsTrend.length).toBeGreaterThan(0);
+                console.dir(res.body, { depth: null })
                 expect(res.body.message.hasMore).toEqual(false);
                 done();
               });
-            
           },
         );
+      })
+
+      it('should save trend if hashtag was found in a rant comment', done => {
+        testUtils.createRantReply(
+          agent,
+          {
+            rantId,
+            cookie,
+            when: Date.now(),
+            replyRant: `${"Hello world".repeat(15)} #newstudentranter #studentRant`
+          },
+          () => {
+            agent
+              .get(`/trend/${encodeURIComponent('#newstudentranter')}?numRequest=0`)
+              .set('cookie', cookie)
+              .expect(200).end((err,res) => {
+                expect(err).toBeNull();
+                expect(res.body.status).toEqual(200);
+                expect(res.body.message).toBeDefined();
+                expect(res.body.message.rantCommentsTrend).toBeDefined();
+                expect(res.body.message.rantCommentsTrend.length).toBeGreaterThan(0)
+                done();
+              });
+          })
       });
-      
+
+      it('should return trend from both rant and rantcomments', done => {
+        agent
+          .get(`/trend/${encodeURIComponent('#studentRant')}?numRequest=0`)
+          .set('cookie', cookie)
+          .expect(200).end((err,res) => {
+            expect(err).toBeNull();
+            expect(res.body.status).toEqual(200);
+            expect(res.body.message.rantsTrend).toBeDefined();
+            expect(res.body.message.rantsTrend.length).toBeGreaterThan(0);
+            expect(res.body.message.rantCommentsTrend).toBeDefined();
+            expect(res.body.message.rantCommentsTrend.length).toBeGreaterThan(0);
+            done();
+          });
+      });
     });
   });
 });

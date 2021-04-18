@@ -64,7 +64,7 @@ describe('ReplyRant [Integration]', () => {
           }
         );
       });
-      
+
       it('should not allow comment creation of replyRant is undefined' , done => {
         agent
           .post(`/rant/reply/${rantId}`)
@@ -89,7 +89,7 @@ describe('ReplyRant [Integration]', () => {
           .expect(412).end((err,res) => {
             expect(err).toBeNull();
             expect(res.body.status).toEqual(412);
-            expect(res.body.message).toEqual
+            expect(res.body.message).toEqual(
               rantConstants.RANT_REPLY_NOT_MORE_THAN_TWENTY
             );
             done();
@@ -300,7 +300,7 @@ describe('ReplyRant [Integration]', () => {
             done();
           });
       });
-      
+
       it('should read deeploy nested reply', done => {
         agent
           .get(`/rant/reply/${rantId}?numRequest=0&parentCommentId=${deeplyNestedRantCommentId}`)
@@ -314,7 +314,7 @@ describe('ReplyRant [Integration]', () => {
           });
       });
     });
-    
+
     describe("Delete Comments", () => {
       it('should return not found if rantId is fake', done => {
         agent
@@ -368,7 +368,8 @@ describe('ReplyRant [Integration]', () => {
       });
     });
 
-    describe("Edit Reply", () => {      
+
+    describe("Edit Reply", () => {
       it('should not allow comment editing if replyRant is undefined' , done => {
         agent
           .patch(`/rant/reply/edit/xxxxx`)
@@ -429,7 +430,24 @@ describe('ReplyRant [Integration]', () => {
             });
         });
       });
-      
+
+      it('should allow editing of comment created by current loggedin user', done => {
+        agent
+          .patch(`/rant/reply/edit/${deeplyNestedRantCommentId}`)
+          .set("cookie", cookie)
+          .send({ replyRant: "hellow edited".repeat(20) })
+          .expect(200).end((err,res) => {
+            expect(err).toBeNull();
+            expect(res.body.status).toEqual(200);
+            expect(res.body.message.rantComment).toEqual("hellow edited".repeat(20));
+            expect(res.body.message.edited).toBeTruthy();
+            expect(res.body.message.deleted).toBeFalsy();
+            expect(res.body.message.rantCommentId).toEqual(deeplyNestedRantCommentId);
+            expect(res.body.message.rantId).toBeDefined();
+            expect(res.body.message.rantOriginalPoster).toBeTruthy()
+            done();
+          });
+      });
     });
   });
 });

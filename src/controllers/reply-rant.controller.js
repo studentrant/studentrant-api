@@ -71,7 +71,7 @@ export default class ReplyRant extends PostRant {
 
     if (validatedRantCommentId.deleted) {
       throw GoneException(
-        constants.rantConstants.RANT_REPLY_RANT_ALREADY_DELETED
+        constants.rantConstants.RANT_REPLY_RANT_ALREADY_DELETED,
       );
     }
   }
@@ -103,10 +103,10 @@ export default class ReplyRant extends PostRant {
       Promise.resolve(
         this.trendingService.createTrendIfExists({
           text: result.rantComment,
-          identifier: result.rantId,
+          identifier: result.rantCommentId,
           col: 'rantcomments',
         }),
-      ).catch((ex) => console.error(ex));
+      ).catch((ex) => console.error(ex)); // eslint-disable-line
 
       this.rantCountVoteDelete(result);
 
@@ -121,7 +121,6 @@ export default class ReplyRant extends PostRant {
     const { rantId } = req.params;
 
     try {
-      
       await this.validateRantForModification(rantId);
       await this.validateRantCommentId({ parentCommentId });
 
@@ -152,7 +151,7 @@ export default class ReplyRant extends PostRant {
     }
   }
 
-async deleteReply(req, res, next) {
+  async deleteReply(req, res, next) {
     const { replyRantId } = req.params;
 
     try {
@@ -177,7 +176,7 @@ async deleteReply(req, res, next) {
       const username = this.Utils.ExtractSessionObjectData(req, 'username');
       await this.#validateRantCommentForModification(username, replyRantId);
 
-      const result = await this.replyRantService.editReply(replyRant);
+      const result = await this.replyRantService.editReply({ replyRantId, replyRant });
 
       if (!result) {
         throw NotFoundException(
@@ -190,10 +189,10 @@ async deleteReply(req, res, next) {
       Promise.resolve(
         this.trendingService.createTrendIfExists({
           text: result.rantComment,
-          identifier: result.rantId,
+          identifier: result.rantCommentId,
           col: 'rantcomments',
         }),
-      ).catch((ex) => console.error(ex));
+      ).catch((ex) => console.error(ex));  // eslint-disable-line
 
       return res.status(200).json(
         {
