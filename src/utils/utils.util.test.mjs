@@ -26,7 +26,7 @@ describe("Utils [Utilities]", () => {
 
   describe('::UniqueCodeGenerator', () => {
     it('should return unique code', () => {
-      expect(Utils.UniqueCodeGenerator()).toBeDefined();
+      expect(Utils.GenerateUniqueId()).toBeDefined();
     });
   });
 });

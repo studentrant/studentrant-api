@@ -25,8 +25,10 @@ const rantConstants = {
   RANT_REPLY_UNAUTHORIZED_OPERATION: 'Unauthorized delete operation.',
   RANT_REPLY_SUCCESSFULLY_DELETED: 'Comment deleted succesfully.',
   RANT_REPLY_RANT_ALREADY_DELETED: 'This comment has been already been deleted.',
+  RANT_REPLY_COMMENT_READ_EXHAUSTED: 'No comments to read.',
   RANT_REPLY_UNDEFINED: 'rantReply is required in the request body.',
   RANT_REPLY_NOT_MORE_THAN_TWENTY: 'Comment cannot be created because it is less than 20.',
+  RANT_COMMENT_CANNOT_EDIT: 'There was a problem editing this comment.',
 };
 
 export default rantConstants;

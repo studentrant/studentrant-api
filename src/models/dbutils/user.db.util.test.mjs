@@ -69,8 +69,8 @@ describe('UserdbUtils [Unit]', () => {
       await userdbUtils.verifyUserRegTokenAndGetData('xxxx');
       expect(Collection.findOneAndUpdate).toHaveBeenCalled();
       expect(Collection.findOneAndUpdate).toHaveBeenCalledWith(
-        { verificationLink: 'xxxx' },
-        { $unset: { verificationLink: 1 } },
+        { verificationToken: 'xxxx' },
+        { $unset: { verificationToken: 1 } },
         {
           new: false,
           fields: {
@@ -166,7 +166,7 @@ describe('UserdbUtils [Unit]', () => {
           passwod: false,
           verified: false,
           completeReg: false,
-          verificationLink: false,
+          verificationToken: false,
         },
       );
     });
@@ -186,7 +186,7 @@ describe('UserdbUtils [Unit]', () => {
       expect(userdbUtils.UsersCollection.findOne).toHaveBeenCalled();
       expect(userdbUtils.UsersCollection.findOne).toHaveBeenCalledWith(
         { userId },
-        { verificationLink: true },
+        { verificationToken: true },
       );
     });
   });

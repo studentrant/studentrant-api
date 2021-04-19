@@ -10,7 +10,7 @@ import {
 
 const agent = supertest(app);
 let cookie; let
-  verificationLink;
+  verificationToken;
 
 describe('Register [Integration]', () => {
   describe('POST /reg-first-step', () => {
@@ -244,13 +244,13 @@ describe('Register [Integration]', () => {
           expect(res.body.message.completeReg).toEqual(true);
           expect(res.body.message.email).toEqual('studentrant@example.com');
           expect(res.body.message.username).toEqual('studentrant');
-          verificationLink = res.body.message.verificationLink;
+          verificationToken = res.body.message.verificationToken;
           done();
         });
     });
     it('should return status code of 200 after verifing users email address', (done) => {
       agent
-        .patch(`/register/verification/${verificationLink}`)
+        .patch(`/register/verification/${verificationToken}`)
         .expect(200).end(async (err, res) => {
           expect(err).toBeNull();
           expect(res.body.status).toEqual(200);
@@ -258,8 +258,8 @@ describe('Register [Integration]', () => {
           expect(res.body.message.completeReg).toEqual(true);
           expect(res.body.message.email).toEqual('studentrant@example.com');
           expect(res.body.message.username).toEqual('studentrant');
-          const result = await UsersCollection.findOne({ email: 'studentrant@example.com' }, { verificationLink: true }).lean();
-          expect(result.verificationLink).toBeUndefined();
+          const result = await UsersCollection.findOne({ email: 'studentrant@example.com' }, { verificationToken: true }).lean();
+          expect(result.verificationToken).toBeUndefined();
           done();
         });
     });

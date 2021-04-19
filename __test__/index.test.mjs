@@ -24,6 +24,8 @@ beforeAll(done => {
 });
 
 afterAll(async () => {
-  for ( let model of Object.values(mongoose.models) )
+  for ( let model of Object.values(mongoose.models) ) {
     await model.deleteMany();
+    await model.collection.dropIndexes();
+  }
 });

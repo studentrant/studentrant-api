@@ -66,6 +66,7 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(app.get('PORT'), () => {
+  logger.setLogType('express');
   logger.log.info(`listening on port ${app.get('PORT')}`);
 });
 

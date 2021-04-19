@@ -7,25 +7,25 @@ import { RantDbUtils, Collection, UserDbUtils } from '../../__test__/fakes/db.fa
 import Utils from '../utils/utils.util.js';
 
 describe("Ranter [Unit]", () => {
-  
+
   const controller = new Ranter(
     UserDbUtils,
     Collection,
     Utils
   );
-  
+
   describe("::updateTags", () => {
-    
+
     let updateUserTagsSpy;
-    
+
     beforeEach(() => {
       updateUserTagsSpy = spyOn(controller.ranterService, 'updateUserTags');
     });
-    
+
     afterEach(() => {
       updateUserTagsSpy.calls.reset();
     });
-    
+
     beforeAll(() => {
       req.body = { tags: [ 'test', 'oops' ] };
       req.session = { user: { username: "test" } };
@@ -42,7 +42,13 @@ describe("Ranter [Unit]", () => {
       expect(result.status).toEqual(200);
       expect(result.message).toEqual({ ignoredTags: [ 'test', 'oops' ] });
     });
-    
+
+    it('should call next on error', async () => {
+      updateUserTagsSpy.and.throwError('x');
+      await controller.updateTags(req,res,next);
+      expect(controller.ranterService.updateUserTags).toThrow(new Error('x'));
+    });
+
   });
-  
+
 });

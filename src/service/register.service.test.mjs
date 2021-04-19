@@ -99,9 +99,9 @@ describe('RegisterService [Unit]', () => {
       const result = await service.verifyValidationTokenAndSetVerified('xxxx');
       expect(RegisterService.UpdateUserDetails).toHaveBeenCalled();
       expect(RegisterService.UpdateUserDetails).toHaveBeenCalledWith(
-        ['verificationLink', 'xxxx'],
+        ['verificationToken', 'xxxx'],
         {
-          $unset: { verificationLink: 1 },
+          $unset: { verificationToken: 1 },
           $set: { verified: true },
         },
       );

@@ -33,9 +33,9 @@ export class RegisterService {
 
   verifyValidationTokenAndSetVerified(token) {
     return RegisterService.UpdateUserDetails(
-      ['verificationLink', token],
+      ['verificationToken', token],
       {
-        $unset: { verificationLink: 1 },
+        $unset: { verificationToken: 1 },
         $set: { verified: true },
       },
     );

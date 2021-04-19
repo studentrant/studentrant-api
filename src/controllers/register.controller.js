@@ -57,12 +57,12 @@ export default class Registration {
 
     try {
       const email = await this.Utils.ExtractSessionObjectData(req, 'email');
-      const verificationLink = await this.Utils.UniqueCodeGenerator(email);
+      const verificationToken = await this.Utils.GenerateUniqueId();
       const result = await this.registerService.updateUserAndCompletetReg({
-        email, country, interests, verificationLink,
+        email, country, interests, verificationToken,
       });
 
-      if (this.env !== 'test') delete result.verificationLink;
+      if (this.env !== 'test') delete result.verificationToken;
 
       Promise.resolve(
         this.email.sendEmailVerification(email),

@@ -215,6 +215,7 @@ describe('PostRant [Unit]', () => {
       validateRantCreatorSpy.and.resolveTo({});
       getRantSpy.and.resolveTo({ rant: "hellow world" });
       editRantSpy.and.resolveTo({
+        rant: "hello earthlings",
         edit: {
           isEdited: true,
           editHistory: [
@@ -617,7 +618,6 @@ describe('PostRant [Unit]', () => {
         { deleted: false, tags: req.params.tag },
         req.query.numRequest
       );
-
       expect(result.status).toEqual(200);
       expect(result.message.rant).toEqual({ rants: [ 'a', 'b', 'c' ]});
     });

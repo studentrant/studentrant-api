@@ -16,7 +16,7 @@ const sucessfullyRegistered = {
 };
 
 describe('Registration [Unit]', () => {
-  const registerController = new Registration(
+  const controller = new Registration(
     UserDbUtils,
     Email,
     Utils,
@@ -35,9 +35,9 @@ describe('Registration [Unit]', () => {
     let hashPasswordSpy;
 
     beforeEach(() => {
-      checkUserExistenceSpy = spyOn(registerController.registerService, 'checkUserExistence');
-      saveUserSpy = spyOn(registerController.registerService, 'saveUser');
-      hashPasswordSpy = spyOn(registerController.passwordUtils, "hashPassword");
+      checkUserExistenceSpy = spyOn(controller.registerService, 'checkUserExistence');
+      saveUserSpy = spyOn(controller.registerService, 'saveUser');
+      hashPasswordSpy = spyOn(controller.passwordUtils, "hashPassword");
     });
 
     afterEach(() => {
@@ -49,28 +49,28 @@ describe('Registration [Unit]', () => {
     it('should throw ExistsException error when searching email that already exists', async () => {
       req.body = { email: 'exists@example.com', password: 'password', username: 'notexists' };
       checkUserExistenceSpy.and.resolveTo({ email: 'exists@example.com' });
-      const result = await registerController.firstRegStep(req, res, next);
+      const result = await controller.firstRegStep(req, res, next);
       expect(result.status).toEqual(409);
       expect(result.message).toEqual(constants.registerConstants.EMAIL_ALREADY_EXISTS);
-      expect(registerController.registerService.checkUserExistence).toHaveBeenCalled();
+      expect(controller.registerService.checkUserExistence).toHaveBeenCalled();
       expect(
-        registerController.registerService.checkUserExistence,
+        controller.registerService.checkUserExistence,
       ).toHaveBeenCalledWith(req.body.email, req.body.username);
     });
 
     it('should return username if it already exists', async () => {
       req.body = { email: 'notexists@example.com', password: 'password', username: 'existsusername' };
       checkUserExistenceSpy.and.resolveTo({ username: 'existsusername' });
-      const register = await registerController.firstRegStep(req, res, next);
+      const register = await controller.firstRegStep(req, res, next);
       expect(register.status).toEqual(409);
       expect(register.message).toEqual(
         constants.registerConstants.USERNAME_ALREADY_EXISTS,
       );
       expect(
-        registerController.registerService.checkUserExistence,
+        controller.registerService.checkUserExistence,
       ).toHaveBeenCalled();
       expect(
-        registerController.registerService.checkUserExistence,
+        controller.registerService.checkUserExistence,
       ).toHaveBeenCalledWith(req.body.email, req.body.username);
     });
 
@@ -81,8 +81,8 @@ describe('Registration [Unit]', () => {
       checkUserExistenceSpy.and.resolveTo(undefined);
       saveUserSpy.and.resolveTo(sucessfullyRegistered);
 
-      const result = JSON.parse(await registerController.firstRegStep(req, res, next));
-      expect(registerController.passwordUtils.hashPassword).toHaveBeenCalledWith("password");
+      const result = JSON.parse(await controller.firstRegStep(req, res, next));
+      expect(controller.passwordUtils.hashPassword).toHaveBeenCalledWith("password");
       expect(result.status).toEqual(201);
       expect(result.message.password).toBeUndefined();
       expect(result.message._id).toBeUndefined();
@@ -93,7 +93,7 @@ describe('Registration [Unit]', () => {
     });
     it("call next on error", async () => {
       checkUserExistenceSpy.and.throwError('x');
-      await registerController.firstRegStep(req,res,next);
+      await controller.firstRegStep(req,res,next);
     });
   });
 
@@ -101,8 +101,8 @@ describe('Registration [Unit]', () => {
     let uniqueCodeGeneatorspy ;
     let updateUserAndCompleteRegSpy;
     beforeEach(() => {
-      uniqueCodeGeneatorspy = spyOn(registerController.Utils, 'UniqueCodeGenerator');
-      updateUserAndCompleteRegSpy = spyOn(registerController.registerService, 'updateUserAndCompletetReg');
+      uniqueCodeGeneatorspy = spyOn(controller.Utils, 'GenerateUniqueId');
+      updateUserAndCompleteRegSpy = spyOn(controller.registerService, 'updateUserAndCompletetReg');
       req.body    = { country: "Nigeria", interests: [ "exposed" ] };
       req.session = { user: { email: "test@example.com" } };
     });
@@ -117,64 +117,62 @@ describe('Registration [Unit]', () => {
     it("should complete last reg step", async () => {
       uniqueCodeGeneatorspy.and.resolveTo("xxxx");
       updateUserAndCompleteRegSpy.and.resolveTo({ verified: false });
-      const result = JSON.parse(await registerController.lastRegStep(req,res,next));
-      expect(registerController.Utils.UniqueCodeGenerator).toHaveBeenCalled();
-      expect(registerController.Utils.UniqueCodeGenerator).toHaveBeenCalledWith(req.session.user.email);
-      expect(registerController.registerService.updateUserAndCompletetReg).toHaveBeenCalled();
-      expect(registerController.registerService.updateUserAndCompletetReg).toHaveBeenCalledWith({
+      const result = JSON.parse(await controller.lastRegStep(req,res,next));
+      expect(controller.Utils.GenerateUniqueId).toHaveBeenCalled();
+      expect(controller.registerService.updateUserAndCompletetReg).toHaveBeenCalled();
+      expect(controller.registerService.updateUserAndCompletetReg).toHaveBeenCalledWith({
         email: req.session.user.email,
         ...req.body,
-        verificationLink:  "xxxx"
+        verificationToken:  "xxxx"
       });
       expect(result.status).toEqual(201);
       expect(result.message.verified).toEqual(false);
     });
-    it("should delete verificationLink if this.env is not test", async () => {
+    it("should delete verificationToken if this.env is not test", async () => {
       uniqueCodeGeneatorspy.and.resolveTo("xxxx");
-      updateUserAndCompleteRegSpy.and.resolveTo({ verified: false , verificationLink : "xxxx" });
-      registerController.env = "not-test";
-      const result = JSON.parse(await registerController.lastRegStep(req,res,next));
-      expect(registerController.Utils.UniqueCodeGenerator).toHaveBeenCalled();
-      expect(registerController.Utils.UniqueCodeGenerator).toHaveBeenCalledWith(req.session.user.email);
-      expect(registerController.registerService.updateUserAndCompletetReg).toHaveBeenCalled();
-      expect(registerController.registerService.updateUserAndCompletetReg).toHaveBeenCalledWith({
+      updateUserAndCompleteRegSpy.and.resolveTo({ verified: false , verificationToken : "xxxx" });
+      controller.env = "not-test";
+      const result = JSON.parse(await controller.lastRegStep(req,res,next));
+      expect(controller.Utils.GenerateUniqueId).toHaveBeenCalled();
+      expect(controller.registerService.updateUserAndCompletetReg).toHaveBeenCalled();
+      expect(controller.registerService.updateUserAndCompletetReg).toHaveBeenCalledWith({
         email: req.session.user.email,
         ...req.body,
-        verificationLink:  "xxxx"
+        verificationToken:  "xxxx"
       });
       expect(result.status).toEqual(201);
       expect(result.message.verified).toEqual(false);
-      expect(result.message.verificationLink).not.toBeDefined();
+      expect(result.message.verificationToken).not.toBeDefined();
     });
     it("call next on error", async () => {
       uniqueCodeGeneatorspy.and.throwError('x');
-      await registerController.lastRegStep(req,res,next);
+      await controller.lastRegStep(req,res,next);
     });
   });
 
-  describe("::verificationLink", () => {
-    let verifyValidationTokenAndSetVerifiedSpy;
+  describe("::verificationToken", () => {
+    let validateTokenAndSetVerify;
     beforeEach(() => {
-      verifyValidationTokenAndSetVerifiedSpy = spyOn(registerController.registerService, "verifyValidationTokenAndSetVerified");
+      validateTokenAndSetVerify = spyOn(controller.registerService, "verifyValidationTokenAndSetVerified");
       req.params = { token: "xxxx" };
     });
     afterEach(() => {
-      verifyValidationTokenAndSetVerifiedSpy.calls.reset();
+      validateTokenAndSetVerify.calls.reset();
       req.params = {};
     });
     it("should verify user token and set verified to true", async () => {
-      verifyValidationTokenAndSetVerifiedSpy.and.resolveTo({ verified: true });
-      const result = JSON.parse(await registerController.verificationToken(req,res,next));
-      expect(registerController.registerService.verifyValidationTokenAndSetVerified).toHaveBeenCalled();
-      expect(registerController.registerService.verifyValidationTokenAndSetVerified).toHaveBeenCalledWith(
+      validateTokenAndSetVerify.and.resolveTo({ verified: true });
+      const result = JSON.parse(await controller.verificationToken(req,res,next));
+      expect(controller.registerService.verifyValidationTokenAndSetVerified).toHaveBeenCalled();
+      expect(controller.registerService.verifyValidationTokenAndSetVerified).toHaveBeenCalledWith(
         "xxxx"
       );
       expect(result.status).toEqual(200);
       expect(result.message.verified).toEqual(true);
     });
     it("call next on error", async () => {
-      verifyValidationTokenAndSetVerifiedSpy.and.throwError('x');
-      await registerController.verificationToken(req,res,next);
+      validateTokenAndSetVerify.and.throwError('x');
+      await controller.verificationToken(req,res,next);
     });
   });
 });

@@ -44,3 +44,21 @@ export class TrendDbUtils {
 
   getTrendsAggregation() {}
 }
+
+export class ReplyRantDbUtils {
+  constructor() {}
+
+  saveReply() {}
+
+  findAllReplies() {}
+
+  getRepliesCount() {}
+
+  getReply() {}
+
+  findIfUserIsCommenter() {}
+
+  deleteUserReply() {}
+
+  editUserReply() {}
+}

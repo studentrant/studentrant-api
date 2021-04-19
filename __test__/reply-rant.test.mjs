@@ -260,7 +260,7 @@ describe('ReplyRant [Integration]', () => {
     });
 
     describe('Read Comments', () => {
-      it('should read rant comment where parentCommentId is not define', done => {
+      it('should read rant comment where parentCommentId is not defined', done => {
         agent
           .get(`/rant/reply/${rantId}?numRequest=0`)
 
@@ -283,7 +283,7 @@ describe('ReplyRant [Integration]', () => {
           .expect(404).end((err,res) => {
             expect(err).toBeNull();
             expect(res.body.status).toEqual(404);
-            expect(res.body.message).toEqual(rantConstants.RANT_READ_EXHAUSTED);
+            expect(res.body.message).toEqual(rantConstants.RANT_REPLY_COMMENT_READ_EXHAUSTED);
             done();
           });
       });
