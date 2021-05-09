@@ -17,6 +17,8 @@ export class Collection {
   static aggregate(value) { return Promise.resolve(value); }
 
   static countDocuments(value) { return Promise.resolve(value); }
+
+  static bulkWrite(value) { return Promise.resolve(value); }
 }
 
 export class UserDbUtils {
