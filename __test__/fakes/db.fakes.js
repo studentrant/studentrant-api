@@ -37,6 +37,28 @@ export class RantDbUtils {
   constructor() {}
 
   saveRant() {}
+
+  findOneRant() {}
+
+  checkUserName() {}
+
+  deleteOneRant() {}
+
+  editOneRant() {}
+
+  upvote() {}
+
+  findOneVoter() {}
+
+  removeOneVote() {}
+
+  downvote() {}
+
+  findAllRants() {}
+
+  getTotalRants() {}
+
+  findRantTags() {}
 }
 
 export class TrendDbUtils {
