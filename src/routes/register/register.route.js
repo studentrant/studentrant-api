@@ -2,19 +2,16 @@ import Registration from '../../controllers/register.controller.js';
 import middleware from '../../middlewares/validator.middleware.js';
 import UsersCollection from '../../models/dbmodels/user.model.js';
 import UserDbUtils from '../../models/dbutils/user.db.util.js';
-import Email from '../../service/email.service.js';
 import { Utils, PasswordUtils } from '../../utils/index.util.js';
 
 export default class RegisterRoute {
   constructor(routeHandler, config) {
-    this.controller = new Registration(
-      UserDbUtils,
-      Email,
-      Utils,
-      PasswordUtils,
-      UsersCollection,
+    this.controller = new Registration({
+      Collections: { UsersCollection },
+      DBUtils: { UserDbUtils },
+      Utils: { Utils, PasswordUtils },
       config,
-    );
+    });
     routeHandler.post('/reg-first-step', this.firstRegistrationStep());
     routeHandler.patch('/reg-last-step', this.lastRegistrationStep());
     routeHandler.patch('/verification/:token', this.tokenVerification());

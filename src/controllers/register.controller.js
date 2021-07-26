@@ -3,25 +3,23 @@ import { v4 as uuid } from 'uuid';
 
 import * as constants from '../constants/index.constant.js';
 import { ExistsException } from '../core/exceptions.service.js';
+import EmailService from '../service/email.service.js';
 import { RegisterService } from '../service/register.service.js';
 
 export default class Registration {
-  constructor(
-    RegisterDbUtils,
-    Email,
-    Utils,
-    PasswordUtils,
-    usersCollection,
-    config,
-  ) {
-    this.Utils = Utils;
-    this.passwordUtils = new PasswordUtils(bcrypt);
+  constructor({
+    Collections, DBUtils, Utils, config,
+  }) {
+    this.Utils = Utils.Utils;
+    this.passwordUtils = new Utils.PasswordUtils(bcrypt);
     this.registerService = new RegisterService(
-      new RegisterDbUtils(usersCollection),
+      new DBUtils.UserDbUtils(Collections.usersCollection),
       Utils,
     );
-    this.email = new Email(config);
-    this.env = config.get('env');
+    this.email = new EmailService(
+      new DBUtils.UserDbUtils(Collections.usersCollection),
+      config,
+    );
   }
 
   async firstRegStep(req, res, next) {

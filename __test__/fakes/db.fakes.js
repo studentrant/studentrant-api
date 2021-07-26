@@ -31,6 +31,10 @@ export class UserDbUtils {
   checkUserName() {}
 
   saveNewUser() {}
+
+  getUserVerificationToken() {}
+
+  getUserVerificationTokenAndEmail() {}
 }
 
 export class RantDbUtils {
