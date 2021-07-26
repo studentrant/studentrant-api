@@ -11,10 +11,12 @@ describe('RegisterService [Unit]', () => {
 
   let updateUserInfo;
   let UpdateUserDetails;
+  let getUserVerificationTokenSpy;
 
   beforeEach(() => {
     updateUserInfo = spyOn(service.registerDbUtils, 'updateUserInfo');
     UpdateUserDetails = spyOn(RegisterService, 'UpdateUserDetails').and.callThrough();
+    getUserVerificationTokenSpy = spyOn(service.registerDbUtils, 'getUserVerificationToken')
   });
 
   afterEach(() => {
@@ -119,6 +121,16 @@ describe('RegisterService [Unit]', () => {
           $set: { email: 'email@example.com', completeReg: true },
         },
       );
+    });
+  });
+
+  describe('::getVerificationToken', () => {
+    it('should get verification token', async () => {
+      getUserVerificationTokenSpy.and.resolveTo('verification_token');
+      const result = await service.getVerificationToken('user_id');
+      expect(result).toEqual('verification_token');
+      expect(service.registerDbUtils.getUserVerificationToken).toHaveBeenCalled();
+      expect(service.registerDbUtils.getUserVerificationToken).toHaveBeenCalledWith('user_id');
     });
   });
 });

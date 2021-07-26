@@ -60,4 +60,11 @@ export default class UserDbUtils {
       { verificationToken: true },
     );
   }
+
+  getUserVerificationTokenAndEmail(userEmailAddress) {
+    return this.UsersCollection.findOne(
+      { email: userEmailAddress },
+      { verificationToken: true, username: true },
+    );
+  }
 }

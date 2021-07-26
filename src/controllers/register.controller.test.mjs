@@ -17,12 +17,12 @@ const sucessfullyRegistered = {
 
 describe('Registration [Unit]', () => {
   const controller = new Registration(
-    UserDbUtils,
-    Email,
-    Utils,
-    PasswordUtils,
-    Collection,
-    config,
+    {
+      Collections: { UsersCollection: Collection },
+      DBUtils: { UserDbUtils },
+      Utils: { Utils, PasswordUtils },
+      config
+    }
   );
 
   afterEach(() => {
@@ -103,6 +103,10 @@ describe('Registration [Unit]', () => {
     beforeEach(() => {
       uniqueCodeGeneatorspy = spyOn(controller.Utils, 'GenerateUniqueId');
       updateUserAndCompleteRegSpy = spyOn(controller.registerService, 'updateUserAndCompletetReg');
+      spyOn(
+        controller.email,
+        'sendEmailVerification'
+      ).and.callFake(() => { });
       req.body    = { country: "Nigeria", interests: [ "exposed" ] };
       req.session = { user: { email: "test@example.com" } };
     });
