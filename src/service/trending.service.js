@@ -77,11 +77,11 @@ export default class Trending {
     return trendResult;
   }
 
-  async #getCountOfTrend (trendName) {
+  async #getCountOfTrend(trendName) {
     return (await this.trendingDbUtils.getTotalTrendRants({ trendName })).trend.length;
   }
 
-  async #getTrendForRantComments (trendName, replyRantTrendIds) {
+  async #getTrendForRantComments(trendName, replyRantTrendIds) {
     const replyRantCount = await this.#getCountOfTrend(trendName);
     return this.replyRantService.getRantRepliesFromAggregation(
       {
@@ -92,7 +92,7 @@ export default class Trending {
     );
   }
 
-  async #getTrendForRants (trendName, rantsTrendIds) {
+  async #getTrendForRants(trendName, rantsTrendIds) {
     const rantCount = await this.#getCountOfTrend(trendName);
     return this.postRantService.getRantFromAggregation(
       {
@@ -108,7 +108,7 @@ export default class Trending {
     );
   }
 
-  #getTrendFromText (text) {
+  #getTrendFromText(text) {
     const markedAsTrend = text.split(' ').filter(
       (chunk) => chunk.startsWith('#'),
     );

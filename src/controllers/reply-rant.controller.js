@@ -24,7 +24,7 @@ export default class ReplyRant extends PostRant {
     );
   }
 
-  async #validateRantCommentForModification (username, replyRantId) {
+  async #validateRantCommentForModification(username, replyRantId) {
     await this.validateRantCommentId({ rantCommentId: replyRantId });
 
     // check if the reply to modify was created by the user
@@ -45,7 +45,7 @@ export default class ReplyRant extends PostRant {
 
   /* eslint-disable no-param-reassign , prefer-destructuring */
 
-  #replyVoteTransform (value) {
+  #replyVoteTransform(value) {
     value.childComment = value.childComments[0];
 
     delete value.childComments;

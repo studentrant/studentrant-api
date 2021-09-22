@@ -43,6 +43,8 @@
     "class-methods-use-this": "off",
     "no-multi-assign": "off",
     // temprorary fix for eslint reporting private methods as functions without name
-    "func-names": "off"
+    "func-names": "off",
+    // for the time been, this is failing on private fields
+    "no-dupe-class-members": "off"
   }
 }

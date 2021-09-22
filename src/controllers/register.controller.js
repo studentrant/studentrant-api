@@ -13,11 +13,11 @@ export default class Registration {
     this.Utils = Utils.Utils;
     this.passwordUtils = new Utils.PasswordUtils(bcrypt);
     this.registerService = new RegisterService(
-      new DBUtils.UserDbUtils(Collections.usersCollection),
+      new DBUtils.UserDbUtils(Collections.UsersCollection),
       Utils,
     );
     this.email = new EmailService(
-      new DBUtils.UserDbUtils(Collections.usersCollection),
+      new DBUtils.UserDbUtils(Collections.UsersCollection),
       config,
     );
   }

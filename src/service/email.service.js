@@ -11,11 +11,11 @@ export default class Email {
     this.userDbUtils = userDbUtils;
   }
 
- #getUserTemplateData (userEmailAddress) {
-   return this.userDbUtils.getUserVerificationTokenAndEmail(
-     userEmailAddress,
-   );
- }
+ #getUserTemplateData(userEmailAddress) {
+    return this.userDbUtils.getUserVerificationTokenAndEmail(
+      userEmailAddress,
+    );
+  }
 
  async sendEmailVerification(userEmailAddress) {
    const { username: user, verificationToken } = await this.#getUserTemplateData(userEmailAddress);

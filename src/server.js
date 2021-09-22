@@ -61,7 +61,6 @@ app.use((err, req, res, next) => {
     logger.log.fatal(message);
     logger.log.error(JSON.stringify(err));
   }
-
   return res.status(status).json({ status, message });
 });
 

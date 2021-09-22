@@ -49,7 +49,7 @@ export default class PostRant {
     }
   }
 
-  async #validateRantCreator (username, rantId) {
+  async #validateRantCreator(username, rantId) {
     await this.validateRantForModification(rantId);
 
     if (!(await this.postRantService.validateRantCreator(username, rantId))) {
@@ -59,7 +59,7 @@ export default class PostRant {
     }
   }
 
-  async #validateRantUpvoter (rantUpvoter) {
+  async #validateRantUpvoter(rantUpvoter) {
     const validateRantUpvoter = await this.postRantService.validateRantUpvoter(rantUpvoter);
 
     if (!validateRantUpvoter) {
@@ -77,7 +77,7 @@ export default class PostRant {
     return validateRantUpvoter._id;
   }
 
-  #diffRants (currentRant, replaceRant) {
+  #diffRants(currentRant, replaceRant) {
     return Diff.diffChars(currentRant, replaceRant);
   }
 
