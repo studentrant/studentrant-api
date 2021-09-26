@@ -3,7 +3,7 @@ import req from '../../__test__/fakes/req.fake.js';
 import res from '../../__test__/fakes/res.fake.js';
 import next from '../../__test__/fakes/next.fake.js';
 import * as Utils from '../utils/index.util.js';
-import * as constants from '../constants/index.constant.js';
+import loginConstants from './login.constant.js';
 import { Collection } from '../../__test__/fakes/db.fakes.js';
 
 const successfulLoggedIn = {
@@ -46,7 +46,7 @@ describe('Login [Unit]', () => {
     expect(Collection.findOne).toHaveBeenCalled();
     expect(Collection.findOne).toHaveBeenCalledWith({ username: 'fake' });
     expect(login.status).toEqual(404);
-    expect(login.message).toEqual(constants.loginConstants.INVALID_LOGIN_CREDENTIALS);
+    expect(login.message).toEqual(loginConstants.INVALID_LOGIN_CREDENTIALS);
   });
 
   it('should not allow invalid logins for email', async () => {
@@ -56,7 +56,7 @@ describe('Login [Unit]', () => {
     expect(Collection.findOne).toHaveBeenCalled();
     expect(Collection.findOne).toHaveBeenCalledWith({ email: 'fake@example.com' });
     expect(login.status).toEqual(404);
-    expect(login.message).toEqual(constants.loginConstants.INVALID_LOGIN_CREDENTIALS);
+    expect(login.message).toEqual(loginConstants.INVALID_LOGIN_CREDENTIALS);
   });
 
   it('should not allow invalid logins for password', async () => {
@@ -67,7 +67,7 @@ describe('Login [Unit]', () => {
     expect(Collection.findOne).toHaveBeenCalled();
     expect(Collection.findOne).toHaveBeenCalledWith({ email: 'real' });
     expect(login.status).toEqual(404);
-    expect(login.message).toEqual(constants.loginConstants.INVALID_LOGIN_CREDENTIALS);
+    expect(login.message).toEqual(loginConstants.INVALID_LOGIN_CREDENTIALS);
   });
 
   it('should allow user to login', async () => {

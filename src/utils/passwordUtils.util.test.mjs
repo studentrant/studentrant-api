@@ -1,5 +1,4 @@
 import { bcrypt } from "../../__test__/fakes/modules.fakes.js";
-import * as constants from "../constants/index.constant.js";
 import PasswordUtils from "./passwordUtils.util.js";
 
 describe("PasswordUtils [Utilities]", () => {
@@ -16,7 +15,7 @@ describe("PasswordUtils [Utilities]", () => {
       hashSyncSpy.and.returnValue("$$$$$$$$");
       const result = passwordUtils.hashPassword("abcd");
       expect(passwordUtils.bcrypt.hashSync).toHaveBeenCalled();
-      expect(passwordUtils.bcrypt.hashSync).toHaveBeenCalledWith("abcd",constants.registerConstants.BCRYPT_SALT);
+      expect(passwordUtils.bcrypt.hashSync).toHaveBeenCalledWith("abcd",passwordUtils.BCRYPT_SALT);
       expect(result).toEqual("$$$$$$$$");
     });
   });

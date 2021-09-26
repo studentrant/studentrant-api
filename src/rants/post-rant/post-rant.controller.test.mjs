@@ -1,11 +1,11 @@
-import * as constants from '../constants/index.constant.js';
+import rantConstants from '../rant.constant.js';
 import { v4 as uuidv4 } from 'uuid';
 import PostRant from './post-rant.controller.js';
-import req from '../../__test__/fakes/req.fake.js';
-import res from '../../__test__/fakes/res.fake.js';
-import next from '../../__test__/fakes/next.fake.js';
-import { RantDbUtils, Collection, UserDbUtils, TrendDbUtils } from '../../__test__/fakes/db.fakes.js';
-import Utils from '../utils/utils.util.js';
+import req from '../../../__test__/fakes/req.fake.js';
+import res from '../../../__test__/fakes/res.fake.js';
+import next from '../../../__test__/fakes/next.fake.js';
+import { RantDbUtils, Collection, UserDbUtils, TrendDbUtils } from '../../../__test__/fakes/db.fakes.js';
+import Utils from '../../utils/utils.util.js';
 
 describe('PostRant [Unit]', () => {
   const controller = new PostRant({
@@ -101,7 +101,7 @@ describe('PostRant [Unit]', () => {
       expect(controller.postRantService.deleteRant).not.toHaveBeenCalled();
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
       expect(result.status).toEqual(404);
-      expect(result.message).toEqual(constants.rantConstants.RANT_DOES_NOT_EXISTS);
+      expect(result.message).toEqual(rantConstants.RANT_DOES_NOT_EXISTS);
     });
 
     it("should return rant has already been deleted", async () => {
@@ -110,7 +110,7 @@ describe('PostRant [Unit]', () => {
       expect(controller.postRantService.deleteRant).not.toHaveBeenCalled();
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
       expect(result.status).toEqual(410);
-      expect(result.message).toEqual(constants.rantConstants.RANT_HAS_ALREADY_BEEN_DELETED);
+      expect(result.message).toEqual(rantConstants.RANT_HAS_ALREADY_BEEN_DELETED);
     });
 
     it("should return unauthroized access when trying to delete rant that does not belong to you", async () => {
@@ -121,7 +121,7 @@ describe('PostRant [Unit]', () => {
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
       expect(controller.postRantService.validateRantCreator).toHaveBeenCalledWith(req.session.user.username, req.params.rantId);
       expect(result.status).toEqual(401);
-      expect(result.message).toEqual(constants.rantConstants.RANT_NOT_USER);
+      expect(result.message).toEqual(rantConstants.RANT_NOT_USER);
     });
 
     it("should delete rant and return rant has been sucefully deleted", async () => {
@@ -133,7 +133,7 @@ describe('PostRant [Unit]', () => {
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
       expect(controller.postRantService.validateRantCreator).toHaveBeenCalledWith(req.session.user.username, req.params.rantId);
       expect(result.status).toEqual(200);
-      expect(result.message).toEqual(constants.rantConstants.RANT_SUCCESSFULLY_DELETED);
+      expect(result.message).toEqual(rantConstants.RANT_SUCCESSFULLY_DELETED);
     });
 
     it("call next on error", async () => {
@@ -172,7 +172,7 @@ describe('PostRant [Unit]', () => {
       expect(controller.postRantService.editRant).not.toHaveBeenCalled();
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
       expect(result.status).toEqual(404);
-      expect(result.message).toEqual(constants.rantConstants.RANT_DOES_NOT_EXISTS);
+      expect(result.message).toEqual(rantConstants.RANT_DOES_NOT_EXISTS);
     });
 
     it("should return rant has already been editd", async () => {
@@ -182,7 +182,7 @@ describe('PostRant [Unit]', () => {
       expect(controller.postRantService.editRant).not.toHaveBeenCalled();
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
       expect(result.status).toEqual(410);
-      expect(result.message).toEqual(constants.rantConstants.RANT_HAS_ALREADY_BEEN_DELETED);
+      expect(result.message).toEqual(rantConstants.RANT_HAS_ALREADY_BEEN_DELETED);
     });
 
     it("should return unauthroized access when trying to edit rant that does not belong to you", async () => {
@@ -194,7 +194,7 @@ describe('PostRant [Unit]', () => {
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
       expect(controller.postRantService.validateRantCreator).toHaveBeenCalledWith(req.session.user.username, req.params.rantId);
       expect(result.status).toEqual(401);
-      expect(result.message).toEqual(constants.rantConstants.RANT_NOT_USER);
+      expect(result.message).toEqual(rantConstants.RANT_NOT_USER);
     });
 
     it("should return the diff of rants", async () => {
@@ -292,7 +292,7 @@ describe('PostRant [Unit]', () => {
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
       expect(result.status).toEqual(404);
       expect(result.message).toEqual(
-        constants.rantConstants.RANT_DOES_NOT_EXISTS
+        rantConstants.RANT_DOES_NOT_EXISTS
       );
     });
 
@@ -303,7 +303,7 @@ describe('PostRant [Unit]', () => {
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
       expect(result.status).toEqual(410);
       expect(result.message).toEqual(
-        constants.rantConstants.RANT_HAS_ALREADY_BEEN_DELETED
+        rantConstants.RANT_HAS_ALREADY_BEEN_DELETED
       );
 
     });
@@ -319,7 +319,7 @@ describe('PostRant [Unit]', () => {
       expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalledWith(req.session.user.username);
       expect(result.status).toEqual(404);
       expect(result.message).toEqual(
-        constants.rantConstants.RANT_USER_UPVOTER_NOT_EXISTS
+        rantConstants.RANT_USER_UPVOTER_NOT_EXISTS
       );
     });
 
@@ -333,7 +333,7 @@ describe('PostRant [Unit]', () => {
       expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalledWith(req.session.user.username);
       expect(result.status).toEqual(404);
       expect(result.message).toEqual(
-        constants.rantConstants.RANT_USER_UPVOTER_DEACTIVATED
+        rantConstants.RANT_USER_UPVOTER_DEACTIVATED
       );
     });
 
@@ -384,7 +384,7 @@ describe('PostRant [Unit]', () => {
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
       expect(result.status).toEqual(404);
       expect(result.message).toEqual(
-        constants.rantConstants.RANT_DOES_NOT_EXISTS
+        rantConstants.RANT_DOES_NOT_EXISTS
       );
     });
 
@@ -395,7 +395,7 @@ describe('PostRant [Unit]', () => {
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
       expect(result.status).toEqual(410);
       expect(result.message).toEqual(
-        constants.rantConstants.RANT_HAS_ALREADY_BEEN_DELETED
+        rantConstants.RANT_HAS_ALREADY_BEEN_DELETED
       );
 
     });
@@ -411,7 +411,7 @@ describe('PostRant [Unit]', () => {
       expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalledWith(req.session.user.username);
       expect(result.status).toEqual(404);
       expect(result.message).toEqual(
-        constants.rantConstants.RANT_USER_UPVOTER_NOT_EXISTS
+        rantConstants.RANT_USER_UPVOTER_NOT_EXISTS
       );
     });
 
@@ -425,7 +425,7 @@ describe('PostRant [Unit]', () => {
       expect(controller.postRantService.validateRantUpvoter).toHaveBeenCalledWith(req.session.user.username);
       expect(result.status).toEqual(404);
       expect(result.message).toEqual(
-        constants.rantConstants.RANT_USER_UPVOTER_DEACTIVATED
+        rantConstants.RANT_USER_UPVOTER_DEACTIVATED
       );
     });
 
@@ -471,7 +471,7 @@ describe('PostRant [Unit]', () => {
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
       expect(result.status).toEqual(404);
       expect(result.message).toEqual(
-        constants.rantConstants.RANT_DOES_NOT_EXISTS
+        rantConstants.RANT_DOES_NOT_EXISTS
       );
     });
 
@@ -482,7 +482,7 @@ describe('PostRant [Unit]', () => {
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
       expect(result.status).toEqual(410);
       expect(result.message).toEqual(
-        constants.rantConstants.RANT_HAS_ALREADY_BEEN_DELETED
+        rantConstants.RANT_HAS_ALREADY_BEEN_DELETED
       );
     });
 
@@ -528,7 +528,7 @@ describe('PostRant [Unit]', () => {
       );
       expect(result.status).toEqual(404);
       expect(result.message).toEqual(
-        constants.rantConstants.RANT_READ_EXHAUSTED,
+        rantConstants.RANT_READ_EXHAUSTED,
       );
     });
 
@@ -576,7 +576,7 @@ describe('PostRant [Unit]', () => {
       );
       expect(result.status).toEqual(403);
       expect(result.message).toEqual(
-        constants.rantConstants.RANT_READ_TAG_NOT_ALLOWED
+        rantConstants.RANT_READ_TAG_NOT_ALLOWED
       );
     });
 
@@ -597,7 +597,7 @@ describe('PostRant [Unit]', () => {
       );
       expect(result.status).toEqual(404);
       expect(result.message).toEqual(
-        constants.rantConstants.RANT_READ_EXHAUSTED
+        rantConstants.RANT_READ_EXHAUSTED
       );
     });
 

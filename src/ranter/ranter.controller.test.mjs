@@ -1,4 +1,3 @@
-import * as constants from '../constants/index.constant.js';
 import Ranter from './ranter.controller.js';
 import req from '../../__test__/fakes/req.fake.js';
 import res from '../../__test__/fakes/res.fake.js';

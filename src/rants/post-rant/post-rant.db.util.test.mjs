@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { v4 as uuid } from 'uuid';
-import RantDbUtils from './rant.db.util.js';
+import RantDbUtils from './post-rant.db.util.js';
 import { Collection } from '../../../__test__/fakes/db.fakes.js';
 
 describe('RantDbUtils [Unit]', () => {

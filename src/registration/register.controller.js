@@ -1,12 +1,16 @@
 import bcrypt from 'bcryptjs';
 import { v4 as uuid } from 'uuid';
 
-import registerConstants from './register.constant.js';
 import { ExistsException } from '../core/exceptions.service.js';
 import EmailService from '../notification/emails/email.service.js';
+
+import registerConstants from './register.constant.js';
+// eslint-disable-next-line import/no-named-as-default
 import RegisterService from './register.service.js';
 
 export default class Registration {
+  #env = process.env.NODE_ENV;
+
   constructor({
     Collections, DBUtils, Utils, config,
   }) {

@@ -1,4 +1,4 @@
-import RantsCollection from "./rant.model.js";
+import RantsCollection from "./post-rant.model.js";
 
 describe("Rant [Model]", () => {
   const when  = Date.now();

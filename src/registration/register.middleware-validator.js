@@ -1,8 +1,10 @@
-import LoginMiddlewareValidator from '../login/login.middleware-validator.js';
-import registerConstants from '../registration/register.constant.js';
 import { BadValueException } from '../core/exceptions.service.js';
+import LoginMiddlewareValidator from '../login/login.middleware-validator.js';
+
+import registerConstants from './register.constant.js';
 
 export default class RegisterMiddlewareValidator extends LoginMiddlewareValidator {
+  // eslint-disable-next-line no-useless-constructor
   constructor() {
     super();
   }
@@ -53,5 +55,4 @@ export default class RegisterMiddlewareValidator extends LoginMiddlewareValidato
     }
     return next();
   }
-
 }

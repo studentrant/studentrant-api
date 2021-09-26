@@ -1,4 +1,4 @@
-import RantRepliesDbUtils from './rant-reply.db.util.js';
+import RantRepliesDbUtils from './reply-rant.db.util.js';
 import { Collection, ReplyRantDbUtils } from '../../../__test__/fakes/db.fakes.js';
 
 describe("RantReplyDbUtils [Unit]", () => {

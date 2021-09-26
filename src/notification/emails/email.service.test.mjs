@@ -1,6 +1,6 @@
 import EmailService from './email.service.js';
-import { RantDbUtils, UserDbUtils, Collection } from '../../__test__/fakes/db.fakes.js';
-import config from '../../__test__/fakes/config.fakes.js';
+import { RantDbUtils, UserDbUtils, Collection } from '../../../__test__/fakes/db.fakes.js';
+import config from '../../../__test__/fakes/config.fakes.js';
 
 
 describe('EmailService [Unit]', () => {

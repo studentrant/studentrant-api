@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import PostRantService from './post-rant.service.js';
-import { RantDbUtils, UserDbUtils, Collection } from '../../__test__/fakes/db.fakes.js';
-import { rantEnums } from '../enums/rants.enums.js';
+import { RantDbUtils, UserDbUtils, Collection } from '../../../__test__/fakes/db.fakes.js';
+const RANTS_LOAD_LIMIT = 20;
 
 describe('PostRantService [Unit]', () => {
   const service = new PostRantService(
@@ -379,11 +379,11 @@ describe('PostRantService [Unit]', () => {
           },
 
           skipAlreadyViewed: {
-            $skip: rantEnums.RANTS_LOAD_LIMIT * 20,
+            $skip: RANTS_LOAD_LIMIT * 20,
           },
 
           limitToDefinedEnum: {
-            $limit: rantEnums.RANTS_LOAD_LIMIT,
+            $limit: RANTS_LOAD_LIMIT,
           },
 
         }

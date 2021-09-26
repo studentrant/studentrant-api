@@ -1,4 +1,4 @@
-import UsersCollection from "./user.model.js";
+import UsersCollection from "./ranter.model.js";
 
 describe('User [Model]', () => {
   const user = new UsersCollection({

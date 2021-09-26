@@ -1,4 +1,4 @@
-import RantsCommentCollection from "./rantcomments.model.js";
+import RantsCommentCollection from "./reply-rant.model.js";
 
 import mongoose from 'mongoose';
 

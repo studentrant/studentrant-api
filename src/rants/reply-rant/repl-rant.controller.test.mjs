@@ -1,18 +1,18 @@
-import * as constants from '../constants/index.constant.js';
+import rantConstants from '../rant.constant.js';
 import { v4 as uuidv4 } from 'uuid';
 import ReplyRant from './reply-rant.controller.js';
-import req from '../../__test__/fakes/req.fake.js';
-import res from '../../__test__/fakes/res.fake.js';
-import next from '../../__test__/fakes/next.fake.js';
+import req from '../../../__test__/fakes/req.fake.js';
+import res from '../../../__test__/fakes/res.fake.js';
+import next from '../../../__test__/fakes/next.fake.js';
 import {
   RantDbUtils,
   Collection,
   UserDbUtils,
   TrendDbUtils,
   ReplyRantDbUtils
-} from '../../__test__/fakes/db.fakes.js';
+} from '../../../__test__/fakes/db.fakes.js';
 
-import Utils from '../utils/utils.util.js';
+import Utils from '../../utils/utils.util.js';
 
 describe('PostRant [Unit]', () => {
 
@@ -71,7 +71,7 @@ describe('PostRant [Unit]', () => {
       validateRantExistenceSpy.and.resolveTo(null);
       const result = await controller.replyRant(req,res,next);
       expect(result.status).toEqual(404);
-      expect(result.message).toEqual(constants.rantConstants.RANT_DOES_NOT_EXISTS)
+      expect(result.message).toEqual(rantConstants.RANT_DOES_NOT_EXISTS)
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalled();
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
     });
@@ -80,7 +80,7 @@ describe('PostRant [Unit]', () => {
       validateRantExistenceSpy.and.resolveTo({ deleted: true });
       const result = await controller.replyRant(req,res,next);
       expect(result.status).toEqual(410);
-      expect(result.message).toEqual(constants.rantConstants.RANT_HAS_ALREADY_BEEN_DELETED);
+      expect(result.message).toEqual(rantConstants.RANT_HAS_ALREADY_BEEN_DELETED);
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalled();
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
     });
@@ -164,7 +164,7 @@ describe('PostRant [Unit]', () => {
       validateRantExistenceSpy.and.resolveTo(null);
       const result = await controller.replyRant(req,res,next);
       expect(result.status).toEqual(404);
-      expect(result.message).toEqual(constants.rantConstants.RANT_DOES_NOT_EXISTS)
+      expect(result.message).toEqual(rantConstants.RANT_DOES_NOT_EXISTS)
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalled();
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
     });
@@ -173,7 +173,7 @@ describe('PostRant [Unit]', () => {
       validateRantExistenceSpy.and.resolveTo({ deleted: true });
       const result = await controller.replyRant(req,res,next);
       expect(result.status).toEqual(410);
-      expect(result.message).toEqual(constants.rantConstants.RANT_HAS_ALREADY_BEEN_DELETED);
+      expect(result.message).toEqual(rantConstants.RANT_HAS_ALREADY_BEEN_DELETED);
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalled();
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
     });
@@ -191,7 +191,7 @@ describe('PostRant [Unit]', () => {
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalled();
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
       expect(result.status).toEqual(404);
-      expect(result.message).toEqual(constants.rantConstants.RANT_REPLY_RANT_COMMENT_ID_INVALID);
+      expect(result.message).toEqual(rantConstants.RANT_REPLY_RANT_COMMENT_ID_INVALID);
     });
 
     it('should not return deleted rantcomments', async () => {
@@ -207,7 +207,7 @@ describe('PostRant [Unit]', () => {
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalled();
       expect(controller.postRantService.validateRantExistence).toHaveBeenCalledWith(req.params.rantId);
       expect(result.status).toEqual(410);
-      expect(result.message).toEqual(constants.rantConstants.RANT_REPLY_RANT_ALREADY_DELETED);
+      expect(result.message).toEqual(rantConstants.RANT_REPLY_RANT_ALREADY_DELETED);
     });
 
     it('should return reply read exhausted if getReplies returns null', async () => {
@@ -216,7 +216,7 @@ describe('PostRant [Unit]', () => {
       getRepliesSpy.and.resolveTo(null);
       const result = await controller.showReply(req,res,next);
       expect(result.status).toEqual(404);
-      expect(result.message).toEqual(constants.rantConstants.RANT_REPLY_COMMENT_READ_EXHAUSTED);
+      expect(result.message).toEqual(rantConstants.RANT_REPLY_COMMENT_READ_EXHAUSTED);
     });
 
 
@@ -226,7 +226,7 @@ describe('PostRant [Unit]', () => {
       getRepliesSpy.and.resolveTo({ replies: [] });
       const result = await controller.showReply(req,res,next);
       expect(result.status).toEqual(404);
-      expect(result.message).toEqual(constants.rantConstants.RANT_REPLY_COMMENT_READ_EXHAUSTED);
+      expect(result.message).toEqual(rantConstants.RANT_REPLY_COMMENT_READ_EXHAUSTED);
     });
 
 
@@ -275,7 +275,7 @@ describe('PostRant [Unit]', () => {
       validateRantCommentExistenceSpy.and.resolveTo(null);
       const result = await controller.deleteReply(req,res,next);
       expect(result.status).toEqual(404);
-      expect(result.message).toEqual(constants.rantConstants.RANT_REPLY_RANT_COMMENT_ID_INVALID);
+      expect(result.message).toEqual(rantConstants.RANT_REPLY_RANT_COMMENT_ID_INVALID);
       expect(controller.replyRantService.validateRantCommentExistence).toHaveBeenCalled();
       expect(controller.replyRantService.validateRantCommentExistence).toHaveBeenCalledWith(
         {
@@ -288,7 +288,7 @@ describe('PostRant [Unit]', () => {
       validateRantCommentExistenceSpy.and.resolveTo({ deleted: true });
       const result = await controller.deleteReply(req,res,next);
       expect(result.status).toEqual(410);
-      expect(result.message).toEqual(constants.rantConstants.RANT_REPLY_RANT_ALREADY_DELETED);
+      expect(result.message).toEqual(rantConstants.RANT_REPLY_RANT_ALREADY_DELETED);
       expect(controller.replyRantService.validateRantCommentExistence).toHaveBeenCalled();
       expect(controller.replyRantService.validateRantCommentExistence).toHaveBeenCalledWith(
         {
@@ -301,7 +301,7 @@ describe('PostRant [Unit]', () => {
       validateRantCommentExistenceSpy.and.returnValues({},null);
       const result = await controller.deleteReply(req,res,next);
       expect(result.status).toEqual(401);
-      expect(result.message).toEqual(constants.rantConstants.RANT_REPLY_UNAUTHORIZED_OPERATION);
+      expect(result.message).toEqual(rantConstants.RANT_REPLY_UNAUTHORIZED_OPERATION);
       expect(controller.replyRantService.validateRantCommentExistence).toHaveBeenCalled();
       expect(controller.replyRantService.validateRantCommentExistence).toHaveBeenCalledWith(
         {
@@ -316,7 +316,7 @@ describe('PostRant [Unit]', () => {
       deleteReplySpy.and.resolveTo(true)
       const result = JSON.parse(await controller.deleteReply(req,res,next));
       expect(result.status).toEqual(200);
-      expect(result.message).toEqual(constants.rantConstants.RANT_REPLY_SUCCESSFULLY_DELETED);
+      expect(result.message).toEqual(rantConstants.RANT_REPLY_SUCCESSFULLY_DELETED);
       expect(controller.replyRantService.validateRantCommentExistence).toHaveBeenCalled();
       expect(controller.replyRantService.validateRantCommentExistence).toHaveBeenCalledWith(
         {
@@ -362,7 +362,7 @@ describe('PostRant [Unit]', () => {
       validateRantCommentExistenceSpy.and.resolveTo(null);
       const result = await controller.editReply(req,res,next);
       expect(result.status).toEqual(404);
-      expect(result.message).toEqual(constants.rantConstants.RANT_REPLY_RANT_COMMENT_ID_INVALID);
+      expect(result.message).toEqual(rantConstants.RANT_REPLY_RANT_COMMENT_ID_INVALID);
       expect(controller.replyRantService.validateRantCommentExistence).toHaveBeenCalled();
       expect(controller.replyRantService.validateRantCommentExistence).toHaveBeenCalledWith(
         {
@@ -375,7 +375,7 @@ describe('PostRant [Unit]', () => {
       validateRantCommentExistenceSpy.and.resolveTo({ deleted: true });
       const result = await controller.editReply(req,res,next);
       expect(result.status).toEqual(410);
-      expect(result.message).toEqual(constants.rantConstants.RANT_REPLY_RANT_ALREADY_DELETED);
+      expect(result.message).toEqual(rantConstants.RANT_REPLY_RANT_ALREADY_DELETED);
       expect(controller.replyRantService.validateRantCommentExistence).toHaveBeenCalled();
       expect(controller.replyRantService.validateRantCommentExistence).toHaveBeenCalledWith(
         {
@@ -388,7 +388,7 @@ describe('PostRant [Unit]', () => {
       validateRantCommentExistenceSpy.and.returnValues({},null);
       const result = await controller.editReply(req,res,next);
       expect(result.status).toEqual(401);
-      expect(result.message).toEqual(constants.rantConstants.RANT_REPLY_UNAUTHORIZED_OPERATION);
+      expect(result.message).toEqual(rantConstants.RANT_REPLY_UNAUTHORIZED_OPERATION);
       expect(controller.replyRantService.validateRantCommentExistence).toHaveBeenCalled();
       expect(controller.replyRantService.validateRantCommentExistence).toHaveBeenCalledWith(
         {
@@ -403,7 +403,7 @@ describe('PostRant [Unit]', () => {
       editReplySpy.and.resolveTo(null)
       const result = await controller.editReply(req,res,next);
       expect(result.status).toEqual(404);
-      expect(result.message).toEqual(constants.rantConstants.RANT_COMMENT_CANNOT_EDIT);
+      expect(result.message).toEqual(rantConstants.RANT_COMMENT_CANNOT_EDIT);
       expect(controller.replyRantService.validateRantCommentExistence).toHaveBeenCalled();
     });
 

@@ -1,15 +1,15 @@
-import * as constants from '../constants/index.constant.js';
 import Trend from './trend.controller.js';
-import req from '../../__test__/fakes/req.fake.js';
-import res from '../../__test__/fakes/res.fake.js';
-import next from '../../__test__/fakes/next.fake.js';
+import rantConstants from '../rant.constant.js';
+import req from '../../../__test__/fakes/req.fake.js';
+import res from '../../../__test__/fakes/res.fake.js';
+import next from '../../../__test__/fakes/next.fake.js';
 import {
   TrendDbUtils,
   ReplyRantDbUtils,
   RantDbUtils,
   Collection,
   UserDbUtils
-} from '../../__test__/fakes/db.fakes.js';
+} from '../../../__test__/fakes/db.fakes.js';
 
 describe("Trends [Unit]", () => {
 
@@ -52,7 +52,7 @@ describe("Trends [Unit]", () => {
       expect(controller.trendingService.getPaginatedTrend).toHaveBeenCalledWith(req.params.trend, req.query.numRequest);
       expect(result.status).toEqual(404);
       expect(result.message).toEqual(
-        constants.rantConstants.RANT_READ_EXHAUSTED
+        rantConstants.RANT_READ_EXHAUSTED
       );
     });
 
@@ -66,7 +66,7 @@ describe("Trends [Unit]", () => {
       expect(controller.trendingService.getTrends).toHaveBeenCalledWith([ 'xxx', 'xxx', 'xxx'], req.params.trend);
       expect(result.status).toEqual(404);
       expect(result.message).toEqual(
-        constants.rantConstants.RANT_READ_EXHAUSTED
+        rantConstants.RANT_READ_EXHAUSTED
       );
     })
 

@@ -9,7 +9,7 @@
   },
   "scripts": {
     "coverage:e2e": "cross-env NODE_ENV=test c8 nodemon ./.jasmine-run-e2e.js ./.jasmine.e2e.json ./__test__/**/*.mjs",
-    "coverage:unit": "cross-env NODE_ENV=test c8 node ./.jasmine-run-unit.js ./.jasmine.unit.json './src/**/*.mjs'",
+    "coverage:unit": "cross-env NODE_ENV=test c8 nodemon ./.jasmine-run-unit.js ./.jasmine.unit.json './src/**/*.mjs'",
     "db:drop": "docker-compose -p dev -f docker/docker-compose.dev.yml down --remove-orphans",
     "db:start": "docker-compose -p dev -f docker/docker-compose.dev.yml start",
     "db:stop": "docker-compose -f docker/docker-compose.dev.yml stop",

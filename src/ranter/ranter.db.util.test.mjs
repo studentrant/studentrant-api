@@ -1,5 +1,5 @@
-import UserDbUtils from './user.db.util.js';
-import { Collection } from '../../../__test__/fakes/db.fakes.js';
+import UserDbUtils from './ranter.db.util.js';
+import { Collection } from '../../__test__/fakes/db.fakes.js';
 
 describe('UserdbUtils [Unit]', () => {
   const userdbUtils = new UserDbUtils(Collection);

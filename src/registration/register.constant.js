@@ -12,8 +12,6 @@ EMAIL_REGEXP: /^(?:[a-z0-9!#$%&"*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&"*+/=?^_`{|}~-]+
   NO_INTEREST_FIELD: 'interest field is empty',
   NO_ARRAY_INTERESTS: 'interest field is empty',
   NO_INTERESTS_LENGTH: 'interest field is empty',
-  COUNTRY_PROPERTY_UNDEFINED: 'country value is required',
-  INVALID_COUNTRY_LENGTH: 'specified country does not exists',
   NO_AVATAR_FIELD: 'kindly set an avatar',
 };
 

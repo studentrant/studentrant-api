@@ -2,7 +2,7 @@ import Auth from './auth.middleware.js';
 import req from '../../__test__/fakes/req.fake.js';
 import res from '../../__test__/fakes/res.fake.js';
 import next from '../../__test__/fakes/next.fake.js';
-import { authConstants } from '../constants/index.constant.js';
+import loginConstant from '../login/login.constant.js';
 
 describe('AuthMiddleware [Unit]', () => {
   describe('::IsLogin', () => {
@@ -23,7 +23,7 @@ describe('AuthMiddleware [Unit]', () => {
       delete req.session.user;
       expect(() => {
         Auth.IsLogin(req, res, nextValue);
-      }).toThrowError(authConstants.USER_NOT_LOGGED_IN);
+      }).toThrowError(loginConstant.USER_NOT_LOGGED_IN);
       expect(nextValue.next).not.toHaveBeenCalled();
     });
   });

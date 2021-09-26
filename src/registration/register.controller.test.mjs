@@ -1,11 +1,10 @@
-import * as constants from '../constants/index.constant.js';
+import registerConstants from './register.constant.js';
 import { Utils, PasswordUtils } from '../utils/index.util.js';
 import { Collection, UserDbUtils } from '../../__test__/fakes/db.fakes.js';
 import config from '../../__test__/fakes/utils.fake.js';
 import next   from '../../__test__/fakes/next.fake.js';
 import req    from '../../__test__/fakes/req.fake.js';
 import res    from '../../__test__/fakes/res.fake.js';
-import Email  from '../service/email.service.js';
 import Registration from './register.controller.js';
 
 const sucessfullyRegistered = {
@@ -16,6 +15,7 @@ const sucessfullyRegistered = {
 };
 
 describe('Registration [Unit]', () => {
+  
   const controller = new Registration(
     {
       Collections: { UsersCollection: Collection },
@@ -51,7 +51,7 @@ describe('Registration [Unit]', () => {
       checkUserExistenceSpy.and.resolveTo({ email: 'exists@example.com' });
       const result = await controller.firstRegStep(req, res, next);
       expect(result.status).toEqual(409);
-      expect(result.message).toEqual(constants.registerConstants.EMAIL_ALREADY_EXISTS);
+      expect(result.message).toEqual(registerConstants.EMAIL_ALREADY_EXISTS);
       expect(controller.registerService.checkUserExistence).toHaveBeenCalled();
       expect(
         controller.registerService.checkUserExistence,
@@ -64,7 +64,7 @@ describe('Registration [Unit]', () => {
       const register = await controller.firstRegStep(req, res, next);
       expect(register.status).toEqual(409);
       expect(register.message).toEqual(
-        constants.registerConstants.USERNAME_ALREADY_EXISTS,
+        registerConstants.USERNAME_ALREADY_EXISTS,
       );
       expect(
         controller.registerService.checkUserExistence,
