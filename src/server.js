@@ -2,7 +2,7 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import helmet from 'helmet';
 
-import { badExceptionConstants } from './constants/index.constant.js';
+import badExceptionConstants from './core/constants/bad-exception.constant.js';
 import {
   Config, Database, Session, Logger,
 } from './core/config/index.config.js';
@@ -10,7 +10,11 @@ import { NotFoundException } from './core/exceptions.service.js';
 import mountGlobalConfigurations from './mountGlobalConfigurations.js';
 import mountRoutes from './mountRoutes.js';
 
-import * as routes from './routes/index.route.js';
+import LoginRoute from './login/login.route.js';
+import RegisterRoute from './registration/register.route.js';
+import RantRoute from './rants/rant.route.js';
+import TrendRoute from './rants/trends/trends.route.js';
+import RanterRoute from './ranter/ranter.route.js';
 
 const app = express();
 
@@ -32,11 +36,11 @@ mountGlobalConfigurations(
 mountRoutes(
   app,
   [
-    routes.RegisterRoute,
-    routes.LoginRoute,
-    routes.RantRoute,
-    routes.RanterRoute,
-    routes.TrendRoute,
+    RegisterRoute,
+    LoginRoute,
+    RantRoute,
+    RanterRoute,
+    TrendRoute
   ],
 );
 
@@ -60,6 +64,9 @@ app.use((err, req, res, next) => {
     logger.setLogType('express');
     logger.log.fatal(message);
     logger.log.error(JSON.stringify(err));
+  }
+  if ( status === 500 ) {
+    console.log(err);
   }
   return res.status(status).json({ status, message });
 });

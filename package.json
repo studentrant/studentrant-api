@@ -8,7 +8,7 @@
     "node": "14.x.x"
   },
   "scripts": {
-    "coverage:e2e": "cross-env NODE_ENV=test c8 node ./.jasmine-run-e2e.js ./.jasmine.e2e.json ./__test__/**/*.mjs",
+    "coverage:e2e": "cross-env NODE_ENV=test c8 nodemon ./.jasmine-run-e2e.js ./.jasmine.e2e.json ./__test__/**/*.mjs",
     "coverage:unit": "cross-env NODE_ENV=test c8 node ./.jasmine-run-unit.js ./.jasmine.unit.json './src/**/*.mjs'",
     "db:drop": "docker-compose -p dev -f docker/docker-compose.dev.yml down --remove-orphans",
     "db:start": "docker-compose -p dev -f docker/docker-compose.dev.yml start",
@@ -19,7 +19,7 @@
     "doc:watch": "nodemon --watch doc/ --exec yarn doc",
     "lint": "eslint '**/*.js'",
     "lint:fix": "eslint --fix '**/*.js'",
-    "start:dev": "node src/server.js --env dev",
+    "start:dev": "nodemon src/server.js --env dev",
     "start:test": "node src/server.js --env test",
     "start:dev:watch": "nodemon --exec node src/server.js --env dev",
     "test": "docker-compose -p test -f docker/docker-compose.test.yml up -d && ./scripts/run-test.sh",
@@ -74,6 +74,7 @@
     "@babel/core": "^7.12.10",
     "@babel/eslint-parser": "^7.12.1",
     "@babel/plugin-syntax-class-properties": "^7.12.1",
+    "@types/jasmine": "^3.9.1",
     "apidoc": "^0.20.1",
     "async": "^3.2.0",
     "babel-eslint": "^11.0.0-beta.2",
@@ -89,6 +90,6 @@
     "jasmine-spec-reporter": "^4.2.1",
     "lint-staged": "^10.3.0",
     "lorem-ipsum": "^2.0.3",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.12"
   }
 }

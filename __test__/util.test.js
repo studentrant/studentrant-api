@@ -2,7 +2,7 @@
 import faker from 'faker';
 import loremIpsum from 'lorem-ipsum';
 
-import UsersCollection from '../src/models/dbmodels/user.model.js';
+import UsersCollection from '../src/ranter/ranter.model.js';
 
 export const login = (agent, cred, cb) => {
   let username; let password;

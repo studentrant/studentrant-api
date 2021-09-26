@@ -1,16 +1,11 @@
 import supertest from 'supertest';
 import app from '../src/server.js';
-import UsersCollection from '../src/models/dbmodels/user.model.js';
-
-import {
-  registerConstants,
-  loginConstants,
-  authConstants,
-} from '../src/constants/index.constant.js';
+import UsersCollection from '../src/ranter/ranter.model.js';
+import registerConstants from '../src/registration/register.constant.js';
+import loginConstants from '../src/login/login.constant.js';
 
 const agent = supertest(app);
-let cookie; let
-  verificationToken;
+let cookie; let verificationToken;
 
 describe('Register [Integration]', () => {
   describe('POST /reg-first-step', () => {
@@ -105,7 +100,7 @@ describe('Register [Integration]', () => {
         .send({ username: 'studentrant', password: '12345689234TesT$$' })
         .expect(412).end((err, res) => {
           expect(err).toBeNull();
-          expect(res.body.message).toEqual(authConstants.NO_EMAIL_FIELD);
+          expect(res.body.message).toEqual(registerConstants.NO_EMAIL_FIELD);
           done();
         });
     });
@@ -115,7 +110,7 @@ describe('Register [Integration]', () => {
         .send({ username: 'studentrant', password: '12345689234TesT$$', email: 'victory@' })
         .expect(412).end((err, res) => {
           expect(err).toBeNull();
-          expect(res.body.message).toEqual(authConstants.INVALID_EMAIL);
+          expect(res.body.message).toEqual(loginConstants.INVALID_EMAIL);
           done();
         });
     });
@@ -174,7 +169,7 @@ describe('Register [Integration]', () => {
         .expect(412)
         .end((err, res) => {
           expect(err).toBeNull();
-          expect(res.body.message).toEqual(authConstants.COUNTRY_PROPERTY_UNDEFINED);
+          expect(res.body.message).toEqual(registerConstants.COUNTRY_PROPERTY_UNDEFINED);
           expect(res.body.status).toEqual(412);
           done();
         });
@@ -187,7 +182,7 @@ describe('Register [Integration]', () => {
         .expect(412)
         .end((err, res) => {
           expect(err).toBeNull();
-          expect(res.body.message).toEqual(authConstants.INVALID_COUNTRY_LENGTH);
+          expect(res.body.message).toEqual(registerConstants.INVALID_COUNTRY_LENGTH);
           expect(res.body.status).toEqual(412);
           done();
         });
@@ -200,7 +195,7 @@ describe('Register [Integration]', () => {
         .expect(412)
         .end((err, res) => {
           expect(err).toBeNull();
-          expect(res.body.message).toEqual(authConstants.NO_INTEREST_FIELD);
+          expect(res.body.message).toEqual(registerConstants.NO_INTEREST_FIELD);
           expect(res.body.status).toEqual(412);
           done();
         });
@@ -213,7 +208,7 @@ describe('Register [Integration]', () => {
         .expect(412)
         .end((err, res) => {
           expect(err).toBeNull();
-          expect(res.body.message).toEqual(authConstants.NO_INTEREST_FIELD);
+          expect(res.body.message).toEqual(registerConstants.NO_INTEREST_FIELD);
           expect(res.body.status).toEqual(412);
           done();
         });
@@ -226,7 +221,7 @@ describe('Register [Integration]', () => {
         .expect(412)
         .end((err, res) => {
           expect(err).toBeNull();
-          expect(res.body.message).toEqual(authConstants.NO_INTEREST_FIELD);
+          expect(res.body.message).toEqual(registerConstants.NO_INTEREST_FIELD);
           expect(res.body.status).toEqual(412);
           done();
         });

@@ -1,7 +1,6 @@
 import supertest from 'supertest';
 import app from '../src/server.js';
-import { loginConstants, authConstants } from '../src/constants/index.constant.js';
-import { errors } from '@elastic/elasticsearch';
+import loginConstants from '../src/login/login.constant.js';
 
 const agent = supertest(app);
 
@@ -114,7 +113,7 @@ describe('Login [Integration]', () => {
       .send({ email: 'vosikwemhe@', password: '123456abcdefgh' })
       .expect(412).end((err, res) => {
         expect(err).toBeNull();
-        expect(res.body.message).toEqual(authConstants.INVALID_EMAIL);
+        expect(res.body.message).toEqual(loginConstants.INVALID_EMAIL);
         done();
       });
   });
