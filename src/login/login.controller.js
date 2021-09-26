@@ -1,7 +1,8 @@
 import bcrypt from 'bcryptjs';
 
-import loginConstants from './login.constant.js';
 import { NotFoundException } from '../core/exceptions.service.js';
+
+import loginConstants from './login.constant.js';
 
 export default class Login {
   constructor(Utils, usersCollection) {

@@ -1,5 +1,6 @@
-import rantConstants from './rant.constant.js';
 import { BadValueException } from '../core/exceptions.service.js';
+
+import rantConstants from './rant.constant.js';
 
 export default class RantValidators {
   verifyRant(req, res, next) {

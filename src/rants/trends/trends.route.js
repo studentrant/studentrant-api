@@ -1,13 +1,16 @@
-import Trend from './trend.controller.js';
-import RantMiddlewareValidators from '../rant.middleware.js';
-import RantsCollection from '../post-rant/post-rant.model.js';
-import ReplyRantCollection from '../reply-rant/reply-rant.model.js';
-import TrendsCollection from './trends.model.js';
-import UsersCollection from '../../ranter/ranter.model.js';
-import ReplyRantDbUtils from '../reply-rant/reply-rant.db.util.js';
-import RantDbUtils from '../post-rant/post-rant.db.util.js';
-import TrendDbUtils from './trends.db.util.js';
 import UserDbUtils from '../../ranter/ranter.db.util.js';
+import UsersCollection from '../../ranter/ranter.model.js';
+import RantDbUtils from '../post-rant/post-rant.db.util.js';
+import RantsCollection from '../post-rant/post-rant.model.js';
+import RantMiddlewareValidators from '../rant.middleware.js';
+
+import ReplyRantDbUtils from '../reply-rant/reply-rant.db.util.js';
+import ReplyRantCollection from '../reply-rant/reply-rant.model.js';
+
+import Trend from './trend.controller.js';
+
+import TrendDbUtils from './trends.db.util.js';
+import TrendsCollection from './trends.model.js';
 
 export default class TrendRoute {
   constructor(routeHandler) {

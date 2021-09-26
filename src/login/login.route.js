@@ -1,7 +1,9 @@
+import UsersCollection from '../ranter/ranter.model.js';
+
+import * as Utils from '../utils/index.util.js';
+
 import Login from './login.controller.js';
 import LoginMiddlewareValidator from './login.middleware-validator.js';
-import UsersCollection from '../ranter/ranter.model.js';
-import * as Utils from '../utils/index.util.js';
 
 export default class LoginRoute {
   constructor(routeHandler) {

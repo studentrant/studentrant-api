@@ -1,8 +1,10 @@
+import UserDbUtils from '../ranter/ranter.db.util.js';
+import UsersCollection from '../ranter/ranter.model.js';
+
+import { Utils, PasswordUtils } from '../utils/index.util.js';
+
 import Registration from './register.controller.js';
 import RegisterMiddlewarevValidator from './register.middleware-validator.js';
-import UsersCollection from '../ranter/ranter.model.js';
-import UserDbUtils from '../ranter/ranter.db.util.js';
-import { Utils, PasswordUtils } from '../utils/index.util.js';
 
 export default class RegisterRoute {
   constructor(routeHandler, config) {

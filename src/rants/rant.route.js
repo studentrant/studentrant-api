@@ -1,4 +1,5 @@
 import Auth from '../core/auth.middleware.js';
+
 import PostRantRoute from './post-rant/post-rant.route.js';
 import ReplyRantRoute from './reply-rant/reply-rant.route.js';
 

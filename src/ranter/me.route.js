@@ -1,8 +1,10 @@
-import User from './ranter.controller.js';
 import RantMiddlewareValidators from '../rants/rant.middleware.js';
-import UsersCollection from '../ranter/ranter.model.js';
-import UserDbUtils from '../ranter/ranter.db.util.js';
+
 import { Utils } from '../utils/index.util.js';
+
+import User from './ranter.controller.js';
+import UserDbUtils from './ranter.db.util.js';
+import UsersCollection from './ranter.model.js';
 
 export default class Me {
   constructor(routeHandler) {

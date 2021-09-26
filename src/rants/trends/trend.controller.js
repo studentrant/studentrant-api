@@ -1,7 +1,8 @@
-import rantConstants from '../rant.constant.js';
 import {
   NotFoundException,
 } from '../../core/exceptions.service.js';
+import rantConstants from '../rant.constant.js';
+
 import TrendingService from './trending.service.js';
 
 export default class Trend {

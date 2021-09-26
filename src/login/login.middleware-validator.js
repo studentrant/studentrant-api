@@ -1,6 +1,7 @@
-import loginConstants from './login.constant.js';
-import registerConstants from '../registration/register.constant.js';
 import { BadValueException } from '../core/exceptions.service.js';
+import registerConstants from '../registration/register.constant.js';
+
+import loginConstants from './login.constant.js';
 
 export default class LoginMiddlewareValidator {
   passwordValidator(req, res, next) {
@@ -72,7 +73,7 @@ export default class LoginMiddlewareValidator {
       );
     }
 
-    if (req.body.email && ! registerConstants.EMAIL_REGEXP.test(req.body.email)) {
+    if (req.body.email && !registerConstants.EMAIL_REGEXP.test(req.body.email)) {
       throw BadValueException(
         loginConstants.INVALID_EMAIL,
       );

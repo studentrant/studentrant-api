@@ -1,16 +1,17 @@
 import express from 'express';
 
-import PostRantController from './post-rant.controller.js';
+import UserDbUtils from '../../ranter/ranter.db.util.js';
+import UsersCollection from '../../ranter/ranter.model.js';
+import { Utils } from '../../utils/index.util.js';
 import RantValidators from '../rant.middleware.js';
 
-import RantsCollection from './post-rant.model.js';
-import TrendsCollection from '../trends/trends.model.js';
-import UsersCollection from '../../ranter/ranter.model.js';
-import RantDbUtils from './post-rant.db.util.js';
 import TrendDbUtils from '../trends/trends.db.util.js';
-import UserDbUtils from '../../ranter/ranter.db.util.js';
+import TrendsCollection from '../trends/trends.model.js';
 
-import { Utils } from '../../utils/index.util.js';
+import PostRantController from './post-rant.controller.js';
+
+import RantDbUtils from './post-rant.db.util.js';
+import RantsCollection from './post-rant.model.js';
 
 export default class PostRantRoute {
   constructor() {

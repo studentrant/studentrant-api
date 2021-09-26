@@ -1,9 +1,8 @@
+import { GoneException, NotFoundException, UnAuthorizedAccessException } from '../../core/exceptions.service.js';
+import PostRant from '../post-rant/post-rant.controller.js';
 import rantConstants from '../rant.constant.js';
 
-import { GoneException, NotFoundException, UnAuthorizedAccessException } from '../../core/exceptions.service.js';
 import ReplyRantService from './reply-rant.service.js';
-
-import PostRant from '../post-rant/post-rant.controller.js';
 
 export default class ReplyRant extends PostRant {
   constructor({ Collections, DBUtils, Utils }) {
@@ -24,7 +23,7 @@ export default class ReplyRant extends PostRant {
     );
   }
 
-  async #validateRantCommentForModification(username, replyRantId) {
+  async #validateRantCommentForModification (username, replyRantId) {
     await this.validateRantCommentId({ rantCommentId: replyRantId });
 
     // check if the reply to modify was created by the user
@@ -45,7 +44,7 @@ export default class ReplyRant extends PostRant {
 
   /* eslint-disable no-param-reassign , prefer-destructuring */
 
-  #replyVoteTransform(value) {
+  #replyVoteTransform (value) {
     value.childComment = value.childComments[0];
 
     delete value.childComments;
