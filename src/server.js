@@ -2,19 +2,19 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import helmet from 'helmet';
 
+import badExceptionConstants from './core/constants/bad-exception.constant.js';
 import {
   Config, Database, Session, Logger,
 } from './core/config/index.config.js';
-import badExceptionConstants from './core/constants/bad-exception.constant.js';
 import { NotFoundException } from './core/exceptions.service.js';
-import LoginRoute from './login/login.route.js';
 import mountGlobalConfigurations from './mountGlobalConfigurations.js';
 import mountRoutes from './mountRoutes.js';
 
-import RanterRoute from './ranter/ranter.route.js';
+import LoginRoute from './login/login.route.js';
+import RegisterRoute from './registration/register.route.js';
 import RantRoute from './rants/rant.route.js';
 import TrendRoute from './rants/trends/trends.route.js';
-import RegisterRoute from './registration/register.route.js';
+import RanterRoute from './ranter/ranter.route.js';
 
 const app = express();
 
@@ -40,7 +40,7 @@ mountRoutes(
     LoginRoute,
     RantRoute,
     RanterRoute,
-    TrendRoute,
+    TrendRoute
   ],
 );
 
@@ -65,7 +65,6 @@ app.use((err, req, res, next) => {
     logger.log.fatal(message);
     logger.log.error(JSON.stringify(err));
   }
-
   return res.status(status).json({ status, message });
 });
 
