@@ -1,14 +1,13 @@
-import * as constants from '../constants/index.constant.js';
-
 export default class PasswordUtils {
   constructor(bcrypt) {
+    this.BCRYPT_SALT = 10;
     this.bcrypt = bcrypt;
   }
 
   hashPassword(password) {
     return this.bcrypt.hashSync(
       password,
-      constants.registerConstants.BCRYPT_SALT,
+      this.BCRYPT_SALT,
     );
   }
 

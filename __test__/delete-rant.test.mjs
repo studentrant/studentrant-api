@@ -1,6 +1,7 @@
 import supertest from 'supertest';
 import app from '../src/server.js';
-import { authConstants, rantConstants } from '../src/constants/index.constant.js';
+import loginConstants from '../src/login/login.constant.js';
+import rantConstants from '../src/rants/rant.constant.js';
 
 import * as testUtils from './util.test.js';
 
@@ -16,7 +17,7 @@ describe('DeleteRant [Integration]', () => {
         .expect(401).end((err, res) => {
           expect(err).toBeNull();
           expect(res.body.status).toEqual(401);
-          expect(res.body.message).toEqual(authConstants.USER_NOT_LOGGED_IN);
+          expect(res.body.message).toEqual(loginConstants.USER_NOT_LOGGED_IN);
           done();
         });
     });

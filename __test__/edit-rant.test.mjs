@@ -1,7 +1,8 @@
 import supertest from 'supertest';
 import app from '../src/server.js';
-import { authConstants, rantConstants, httpStatusCodeConstants } from '../src/constants/index.constant.js';
-
+import loginConstants from '../src/login/login.constant.js';
+import rantConstants from '../src/rants/rant.constant.js';
+import httpStatusCodeConstants from '../src/core/constants/http-status-code.constant.js';
 import * as testUtils from './util.test.js';
 
 const agent = supertest(app);
@@ -16,7 +17,7 @@ describe('EditRant [Integrathion]', () => {
         .expect(401).end((err, res) => {
           expect(err).toBeNull();
           expect(res.body.status).toEqual(httpStatusCodeConstants.UNAUTHORIZED);
-          expect(res.body.message).toEqual(authConstants.USER_NOT_LOGGED_IN);
+          expect(res.body.message).toEqual(loginConstants.USER_NOT_LOGGED_IN);
           done();
         });
     });
