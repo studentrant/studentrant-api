@@ -64,7 +64,7 @@
     "helmet": "^3.23.3",
     "log4js": "^6.3.0",
     "mongoose": "^5.9.21",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^3.1.1",
     "sendgrid": "^5.2.3",
     "supertest": "^4.0.2",
     "uid-generator": "^2.0.0",
