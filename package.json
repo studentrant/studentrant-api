@@ -58,7 +58,7 @@
     "convict": "^6.2.2",
     "cors": "^2.8.5",
     "diff": "^4.0.2",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-session": "^1.17.1",
     "express-validator": "^6.6.0",
     "helmet": "^3.23.3",
